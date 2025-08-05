@@ -197,9 +197,6 @@ export const AnalystDashboard = () => {
         </Card>
       </div>
 
-      {/* Team Calendar - Always Visible */}
-      <TeamCalendar />
-
       {/* Main Content */}
       <Tabs defaultValue="tasks" className="space-y-4">
         <TabsList>
@@ -351,6 +348,9 @@ export const AnalystDashboard = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Team Calendar - Always Visible */}
+      <TeamCalendar />
 
       {/* Absence Request Form Modal */}
       {showRequestForm && (

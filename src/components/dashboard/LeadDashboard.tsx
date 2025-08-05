@@ -190,9 +190,6 @@ export const LeadDashboard = () => {
         </Card>
       </div>
 
-      {/* Team Calendar - Always Visible */}
-      <TeamCalendar />
-
       {/* Main Content */}
       <Tabs defaultValue="requests" className="space-y-4">
         <TabsList>
@@ -338,6 +335,9 @@ export const LeadDashboard = () => {
         </TabsContent>
 
       </Tabs>
+
+      {/* Team Calendar - Always Visible */}
+      <TeamCalendar />
 
       {/* Task Assignment Form Modal */}
       {showTaskForm && (
