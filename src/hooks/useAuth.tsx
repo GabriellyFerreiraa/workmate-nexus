@@ -96,14 +96,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     
     if (error) {
       toast({
-        title: "Error al registrarse",
+        title: "Registration error",
         description: error.message,
         variant: "destructive"
       });
     } else {
       toast({
-        title: "Registro exitoso",
-        description: "Revisa tu email para confirmar tu cuenta"
+        title: "Registration successful",
+        description: "Check your email to confirm your account"
       });
     }
     
@@ -118,7 +118,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     
     if (error) {
       toast({
-        title: "Error al iniciar sesión",
+        title: "Sign in error",
         description: error.message,
         variant: "destructive"
       });
@@ -131,7 +131,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const { error } = await supabase.auth.signOut();
     if (error) {
       toast({
-        title: "Error al cerrar sesión",
+        title: "Sign out error",
         description: error.message,
         variant: "destructive"
       });

@@ -11,7 +11,7 @@ const Dashboard = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-pulse text-lg">Cargando...</div>
+        <div className="animate-pulse text-lg">Loading...</div>
       </div>
     );
   }
@@ -20,13 +20,13 @@ const Dashboard = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Perfil no encontrado</h1>
+          <h1 className="text-2xl font-bold mb-4">Profile not found</h1>
           <p className="text-muted-foreground mb-4">
-            Por favor, contacta al administrador para configurar tu perfil.
+            Please contact the administrator to set up your profile.
           </p>
           <Button onClick={signOut}>
             <LogOut className="mr-2 h-4 w-4" />
-            Cerrar Sesión
+            Sign Out
           </Button>
         </div>
       </div>
@@ -41,7 +41,7 @@ const Dashboard = () => {
           <div className="flex items-center space-x-4">
             <h1 className="text-xl font-bold">DeskControl</h1>
             <div className="hidden md:block text-sm text-muted-foreground">
-              {userProfile.role === 'lead' ? 'Panel de Lead' : 'Panel de Analista'}
+              {userProfile.role === 'lead' ? 'Lead Dashboard' : 'Analyst Dashboard'}
             </div>
           </div>
           

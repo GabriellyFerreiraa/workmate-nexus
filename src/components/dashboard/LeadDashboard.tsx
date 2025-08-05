@@ -8,7 +8,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calendar, Users, CheckCircle, AlertCircle, Plus, Clock } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
 import { TaskAssignmentForm } from '@/components/forms/TaskAssignmentForm';
 import { AbsenceApprovalModal } from '@/components/modals/AbsenceApprovalModal';
 
@@ -51,7 +50,7 @@ export const LeadDashboard = () => {
       console.error('Error fetching data:', error);
       toast({
         title: "Error",
-        description: "No se pudieron cargar los datos",
+        description: "Could not load data",
         variant: "destructive"
       });
     } finally {
@@ -73,8 +72,8 @@ export const LeadDashboard = () => {
       if (error) throw error;
 
       toast({
-        title: "Solicitud aprobada",
-        description: "La solicitud de ausencia ha sido aprobada"
+        title: "Request approved",
+        description: "The absence request has been approved"
       });
 
       fetchData(); // Refresh data
@@ -82,7 +81,7 @@ export const LeadDashboard = () => {
       console.error('Error approving request:', error);
       toast({
         title: "Error",
-        description: "No se pudo aprobar la solicitud",
+        description: "Could not approve request",
         variant: "destructive"
       });
     }
@@ -101,8 +100,8 @@ export const LeadDashboard = () => {
       if (error) throw error;
 
       toast({
-        title: "Solicitud rechazada",
-        description: "La solicitud de ausencia ha sido rechazada"
+        title: "Request rejected",
+        description: "The absence request has been rejected"
       });
 
       fetchData(); // Refresh data
@@ -110,7 +109,7 @@ export const LeadDashboard = () => {
       console.error('Error rejecting request:', error);
       toast({
         title: "Error",
-        description: "No se pudo rechazar la solicitud",
+        description: "Could not reject request",
         variant: "destructive"
       });
     }
@@ -122,9 +121,9 @@ export const LeadDashboard = () => {
 
   const getTaskStatusBadge = (status: string) => {
     const statusConfig = {
-      pending: { label: 'Pendiente', variant: 'secondary' as const },
-      in_progress: { label: 'En progreso', variant: 'default' as const },
-      completed: { label: 'Completada', variant: 'default' as const }
+      pending: { label: 'Pending', variant: 'secondary' as const },
+      in_progress: { label: 'In progress', variant: 'default' as const },
+      completed: { label: 'Completed', variant: 'default' as const }
     };
     return statusConfig[status] || { label: status, variant: 'outline' as const };
   };
@@ -140,7 +139,7 @@ export const LeadDashboard = () => {
   const onlineAnalysts = getOnlineAnalysts();
 
   if (loading) {
-    return <div className="p-6">Cargando dashboard...</div>;
+    return <div className="p-6">Loading dashboard...</div>;
   }
 
   return (
@@ -149,7 +148,7 @@ export const LeadDashboard = () => {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Solicitudes Pendientes</CardTitle>
+            <CardTitle className="text-sm font-medium">Pending Requests</CardTitle>
             <AlertCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -159,7 +158,7 @@ export const LeadDashboard = () => {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Tareas Activas</CardTitle>
+            <CardTitle className="text-sm font-medium">Active Tasks</CardTitle>
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -171,7 +170,7 @@ export const LeadDashboard = () => {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Analistas Online</CardTitle>
+            <CardTitle className="text-sm font-medium">Online Analysts</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -181,7 +180,7 @@ export const LeadDashboard = () => {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Analistas</CardTitle>
+            <CardTitle className="text-sm font-medium">Total Analysts</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -193,24 +192,24 @@ export const LeadDashboard = () => {
       {/* Main Content */}
       <Tabs defaultValue="requests" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="requests">Solicitudes Pendientes</TabsTrigger>
-          <TabsTrigger value="tasks">Gestión de Tareas</TabsTrigger>
-          <TabsTrigger value="team">Equipo</TabsTrigger>
-          <TabsTrigger value="calendar">Calendario</TabsTrigger>
+          <TabsTrigger value="requests">Pending Requests</TabsTrigger>
+          <TabsTrigger value="tasks">Task Management</TabsTrigger>
+          <TabsTrigger value="team">Team</TabsTrigger>
+          <TabsTrigger value="calendar">Calendar</TabsTrigger>
         </TabsList>
 
         <TabsContent value="requests" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Solicitudes de Ausencia Pendientes</CardTitle>
+              <CardTitle>Pending Absence Requests</CardTitle>
               <CardDescription>
-                Solicitudes que requieren tu aprobación
+                Requests that require your approval
               </CardDescription>
             </CardHeader>
             <CardContent>
               {pendingRequests.length === 0 ? (
                 <p className="text-center text-muted-foreground py-4">
-                  No hay solicitudes pendientes
+                  No pending requests
                 </p>
               ) : (
                 <div className="space-y-4">
@@ -222,19 +221,19 @@ export const LeadDashboard = () => {
                             {request.analyst_profile?.name}
                           </h4>
                           <p className="text-sm text-muted-foreground">
-                            {format(new Date(request.start_date), 'PPP', { locale: es })} - {' '}
-                            {format(new Date(request.end_date), 'PPP', { locale: es })}
+                            {format(new Date(request.start_date), 'PPP')} - {' '}
+                            {format(new Date(request.end_date), 'PPP')}
                           </p>
                           <p className="text-sm mt-1">{request.reason}</p>
                         </div>
-                        <Badge variant="secondary">Pendiente</Badge>
+                        <Badge variant="secondary">Pending</Badge>
                       </div>
                       <div className="flex gap-2 mt-3">
                         <Button
                           size="sm"
                           onClick={() => setSelectedRequest(request)}
                         >
-                          Revisar
+                          Review
                         </Button>
                       </div>
                     </div>
@@ -249,20 +248,20 @@ export const LeadDashboard = () => {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
-                <CardTitle>Gestión de Tareas</CardTitle>
+                <CardTitle>Task Management</CardTitle>
                 <CardDescription>
-                  Asigna y supervisa tareas del equipo
+                  Assign and supervise team tasks
                 </CardDescription>
               </div>
               <Button onClick={() => setShowTaskForm(true)}>
                 <Plus className="h-4 w-4 mr-2" />
-                Asignar Tarea
+                Assign Task
               </Button>
             </CardHeader>
             <CardContent>
               {allTasks.length === 0 ? (
                 <p className="text-center text-muted-foreground py-4">
-                  No hay tareas asignadas
+                  No assigned tasks
                 </p>
               ) : (
                 <div className="space-y-4">
@@ -272,7 +271,7 @@ export const LeadDashboard = () => {
                         <div>
                           <h4 className="font-medium">{task.title}</h4>
                           <p className="text-sm text-muted-foreground">
-                            Asignado a: {task.assigned_to_profile?.name}
+                            Assigned to: {task.assigned_to_profile?.name}
                           </p>
                           {task.description && (
                             <p className="text-sm mt-1">{task.description}</p>
@@ -284,7 +283,7 @@ export const LeadDashboard = () => {
                       </div>
                       {task.due_date && (
                         <p className="text-xs text-muted-foreground">
-                          Vence: {format(new Date(task.due_date), 'PPp', { locale: es })}
+                          Due: {format(new Date(task.due_date), 'PPp')}
                         </p>
                       )}
                     </div>
@@ -298,9 +297,9 @@ export const LeadDashboard = () => {
         <TabsContent value="team" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Estado del Equipo</CardTitle>
+              <CardTitle>Team Status</CardTitle>
               <CardDescription>
-                Vista general del equipo de analistas
+                General view of the analyst team
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -317,14 +316,14 @@ export const LeadDashboard = () => {
                         <div>
                           <p className="font-medium">{analyst.name}</p>
                           <p className="text-xs text-muted-foreground">
-                            {isOnline ? 'En línea' : 'Desconectado'}
+                            {isOnline ? 'Online' : 'Offline'}
                           </p>
                         </div>
                       </div>
                       {todaySchedule?.active && (
                         <div className="text-sm text-muted-foreground">
-                          <p>Horario: {analyst.start_time} - {analyst.end_time}</p>
-                          <p>Modalidad: {todaySchedule.mode === 'home' ? 'Casa' : 'Oficina'}</p>
+                          <p>Schedule: {analyst.start_time} - {analyst.end_time}</p>
+                          <p>Mode: {todaySchedule.mode === 'home' ? 'Home' : 'Office'}</p>
                         </div>
                       )}
                     </div>
@@ -338,14 +337,14 @@ export const LeadDashboard = () => {
         <TabsContent value="calendar" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Calendario de Ausencias</CardTitle>
+              <CardTitle>Absence Calendar</CardTitle>
               <CardDescription>
-                Vista de ausencias aprobadas del equipo
+                View of approved team absences
               </CardDescription>
             </CardHeader>
             <CardContent>
               <p className="text-center text-muted-foreground py-8">
-                Calendario en desarrollo - próximamente
+                Calendar in development - coming soon
               </p>
             </CardContent>
           </Card>

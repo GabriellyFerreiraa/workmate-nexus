@@ -20,21 +20,21 @@ const Index = () => {
                   DeskControl
                 </h1>
                 <p className="text-xl text-muted-foreground mb-8">
-                  Sistema integral de gestión para analistas de Service Desk. 
-                  Gestiona ausencias, asigna tareas y supervisa tu equipo de manera eficiente.
+                  Comprehensive management system for Service Desk analysts. 
+                  Manage absences, assign tasks and supervise your team efficiently.
                 </p>
               </div>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button asChild size="lg" className="text-lg px-8 py-6">
                   <Link to="/auth">
-                    Comenzar
+                    Get Started
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
                 <Button asChild variant="outline" size="lg" className="text-lg px-8 py-6">
                   <Link to="/auth">
-                    Iniciar Sesión
+                    Sign In
                   </Link>
                 </Button>
               </div>
@@ -46,10 +46,10 @@ const Index = () => {
       {/* Features Section */}
       <div className="container mx-auto px-4 py-20">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold mb-4">Funcionalidades Principales</h2>
+          <h2 className="text-3xl font-bold mb-4">Main Features</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Una solución completa para la gestión de equipos de Service Desk con herramientas 
-            especializadas para analistas y leads.
+            A complete solution for Service Desk team management with specialized 
+            tools for analysts and leads.
           </p>
         </div>
         
@@ -59,9 +59,9 @@ const Index = () => {
               <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                 <Calendar className="h-6 w-6 text-primary" />
               </div>
-              <CardTitle>Gestión de Ausencias</CardTitle>
+              <CardTitle>Absence Management</CardTitle>
               <CardDescription>
-                Solicita y aprueba ausencias de manera eficiente con un sistema de comentarios y seguimiento.
+                Request and approve absences efficiently with a commenting and tracking system.
               </CardDescription>
             </CardHeader>
           </Card>
@@ -71,9 +71,9 @@ const Index = () => {
               <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                 <Users className="h-6 w-6 text-primary" />
               </div>
-              <CardTitle>Asignación de Tareas</CardTitle>
+              <CardTitle>Task Assignment</CardTitle>
               <CardDescription>
-                Asigna y supervisa tareas del equipo con prioridades, fechas límite y seguimiento de progreso.
+                Assign and supervise team tasks with priorities, deadlines and progress tracking.
               </CardDescription>
             </CardHeader>
           </Card>
@@ -83,9 +83,9 @@ const Index = () => {
               <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                 <Clock className="h-6 w-6 text-primary" />
               </div>
-              <CardTitle>Control de Turnos</CardTitle>
+              <CardTitle>Shift Control</CardTitle>
               <CardDescription>
-                Gestiona horarios, modalidades de trabajo (oficina/casa) y visualiza el estado del equipo.
+                Manage schedules, work modalities (office/home) and visualize team status.
               </CardDescription>
             </CardHeader>
           </Card>
@@ -96,43 +96,43 @@ const Index = () => {
       <div className="bg-muted/30 py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Dashboards Especializados</h2>
+            <h2 className="text-3xl font-bold mb-4">Specialized Dashboards</h2>
             <p className="text-muted-foreground">
-              Diferentes interfaces optimizadas para cada rol en tu equipo.
+              Different interfaces optimized for each role in your team.
             </p>
           </div>
           
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <Card className="p-8">
               <CardHeader className="text-center">
-                <CardTitle className="text-2xl mb-4">Dashboard de Analista</CardTitle>
+                <CardTitle className="text-2xl mb-4">Analyst Dashboard</CardTitle>
                 <CardDescription>
-                  Herramientas para gestionar tu trabajo diario de manera eficiente.
+                  Tools to manage your daily work efficiently.
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2 text-sm">
-                  <li>• Visualizar solicitudes de ausencia</li>
-                  <li>• Gestionar tareas asignadas</li>
-                  <li>• Ver turno actual y modalidad</li>
-                  <li>• Estado del equipo en tiempo real</li>
+                  <li>• View absence requests</li>
+                  <li>• Manage assigned tasks</li>
+                  <li>• See current shift and modality</li>
+                  <li>• Real-time team status</li>
                 </ul>
               </CardContent>
             </Card>
 
             <Card className="p-8">
               <CardHeader className="text-center">
-                <CardTitle className="text-2xl mb-4">Dashboard de Lead</CardTitle>
+                <CardTitle className="text-2xl mb-4">Lead Dashboard</CardTitle>
                 <CardDescription>
-                  Control total para supervisar y gestionar tu equipo.
+                  Complete control to supervise and manage your team.
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2 text-sm">
-                  <li>• Aprobar/rechazar ausencias</li>
-                  <li>• Asignar tareas a analistas</li>
-                  <li>• Gestionar horarios del equipo</li>
-                  <li>• Calendario de ausencias</li>
+                  <li>• Approve/reject absences</li>
+                  <li>• Assign tasks to analysts</li>
+                  <li>• Manage team schedules</li>
+                  <li>• Absence calendar</li>
                 </ul>
               </CardContent>
             </Card>
@@ -143,14 +143,14 @@ const Index = () => {
       {/* CTA Section */}
       <div className="py-20">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">¿Listo para optimizar tu Service Desk?</h2>
+          <h2 className="text-3xl font-bold mb-4">Ready to optimize your Service Desk?</h2>
           <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Comienza a usar DeskControl hoy y transforma la gestión de tu equipo con herramientas 
-            profesionales y una interfaz intuitiva.
+            Start using DeskControl today and transform your team management with 
+            professional tools and an intuitive interface.
           </p>
           <Button asChild size="lg" className="text-lg px-8 py-6">
             <Link to="/auth">
-              Comenzar Ahora
+              Get Started Now
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
           </Button>

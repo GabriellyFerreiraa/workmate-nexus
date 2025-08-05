@@ -14,14 +14,14 @@ import { toast } from '@/hooks/use-toast';
 import { User, Lock, Mail, Shield } from 'lucide-react';
 
 const loginSchema = z.object({
-  email: z.string().email('Email inválido'),
-  password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres')
+  email: z.string().email('Invalid email'),
+  password: z.string().min(6, 'Password must be at least 6 characters')
 });
 
 const signupSchema = z.object({
-  name: z.string().min(2, 'El nombre debe tener al menos 2 caracteres'),
-  email: z.string().email('Email inválido'),
-  password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres'),
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().email('Invalid email'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
   role: z.enum(['analyst', 'lead'])
 });
 
@@ -75,7 +75,7 @@ const Auth = () => {
       if (!error) {
         toast({
           title: "Cuenta creada",
-          description: "Revisa tu email para confirmar tu cuenta antes de iniciar sesión"
+          description: "Check your email to confirm your account before logging in"
         });
       }
     } catch (error) {
@@ -94,14 +94,14 @@ const Auth = () => {
           </div>
           <CardTitle className="text-2xl font-bold">DeskControl</CardTitle>
           <CardDescription>
-            Sistema de gestión para analistas de Service Desk
+            Management system for Service Desk analysts
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">Iniciar Sesión</TabsTrigger>
-              <TabsTrigger value="signup">Registrarse</TabsTrigger>
+              <TabsTrigger value="login">Sign In</TabsTrigger>
+              <TabsTrigger value="signup">Sign Up</TabsTrigger>
             </TabsList>
             
             <TabsContent value="login" className="space-y-4">
@@ -113,7 +113,7 @@ const Auth = () => {
                     <Input
                       id="login-email"
                       type="email"
-                      placeholder="tu@email.com"
+                      placeholder="your@email.com"
                       className="pl-10"
                       {...loginForm.register('email')}
                     />
@@ -126,7 +126,7 @@ const Auth = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="login-password">Contraseña</Label>
+                  <Label htmlFor="login-password">Password</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -145,7 +145,7 @@ const Auth = () => {
                 </div>
                 
                 <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
+                  {isLoading ? 'Signing in...' : 'Sign In'}
                 </Button>
               </form>
             </TabsContent>
@@ -153,12 +153,12 @@ const Auth = () => {
             <TabsContent value="signup" className="space-y-4">
               <form onSubmit={signupForm.handleSubmit(onSignup)} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="signup-name">Nombre completo</Label>
+                  <Label htmlFor="signup-name">Full Name</Label>
                   <div className="relative">
                     <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
                       id="signup-name"
-                      placeholder="Tu nombre completo"
+                      placeholder="Your full name"
                       className="pl-10"
                       {...signupForm.register('name')}
                     />
@@ -177,7 +177,7 @@ const Auth = () => {
                     <Input
                       id="signup-email"
                       type="email"
-                      placeholder="tu@email.com"
+                      placeholder="your@email.com"
                       className="pl-10"
                       {...signupForm.register('email')}
                     />
@@ -190,7 +190,7 @@ const Auth = () => {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="signup-password">Contraseña</Label>
+                  <Label htmlFor="signup-password">Password</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -208,14 +208,14 @@ const Auth = () => {
                   )}
                 </div>
                 
-                <div className="space-y-2">
-                  <Label htmlFor="signup-role">Rol</Label>
+                 <div className="space-y-2">
+                  <Label htmlFor="signup-role">Role</Label>
                   <Select onValueChange={(value) => signupForm.setValue('role', value as 'analyst' | 'lead')}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Selecciona tu rol" />
+                      <SelectValue placeholder="Select your role" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="analyst">Analista</SelectItem>
+                      <SelectItem value="analyst">Analyst</SelectItem>
                       <SelectItem value="lead">Lead</SelectItem>
                     </SelectContent>
                   </Select>
@@ -227,7 +227,7 @@ const Auth = () => {
                 </div>
                 
                 <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? 'Creando cuenta...' : 'Crear Cuenta'}
+                  {isLoading ? 'Creating account...' : 'Create Account'}
                 </Button>
               </form>
             </TabsContent>

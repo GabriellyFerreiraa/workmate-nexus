@@ -9,7 +9,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calendar, Clock, Home, Building, Users, CheckCircle, AlertCircle, Plus } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
 import { AbsenceRequestForm } from '@/components/forms/AbsenceRequestForm';
 
 export const AnalystDashboard = () => {
@@ -51,7 +50,7 @@ export const AnalystDashboard = () => {
       console.error('Error fetching data:', error);
       toast({
         title: "Error",
-        description: "No se pudieron cargar los datos",
+        description: "Could not load data",
         variant: "destructive"
       });
     } finally {
@@ -72,8 +71,8 @@ export const AnalystDashboard = () => {
       if (error) throw error;
 
       toast({
-        title: "Tarea completada",
-        description: "La tarea ha sido marcada como completada"
+        title: "Task completed",
+        description: "The task has been marked as completed"
       });
 
       fetchData(); // Refresh data
@@ -81,7 +80,7 @@ export const AnalystDashboard = () => {
       console.error('Error updating task:', error);
       toast({
         title: "Error",
-        description: "No se pudo actualizar la tarea",
+        description: "Could not update task",
         variant: "destructive"
       });
     }
@@ -93,20 +92,20 @@ export const AnalystDashboard = () => {
 
   const getStatusBadge = (status: string) => {
     const statusConfig = {
-      pending: { label: 'Pendiente', variant: 'secondary' as const },
-      approved: { label: 'Aprobada', variant: 'default' as const },
-      rejected: { label: 'Rechazada', variant: 'destructive' as const },
-      cancel_requested: { label: 'Cancelación solicitada', variant: 'secondary' as const },
-      cancelled: { label: 'Cancelada', variant: 'outline' as const }
+      pending: { label: 'Pending', variant: 'secondary' as const },
+      approved: { label: 'Approved', variant: 'default' as const },
+      rejected: { label: 'Rejected', variant: 'destructive' as const },
+      cancel_requested: { label: 'Cancellation requested', variant: 'secondary' as const },
+      cancelled: { label: 'Cancelled', variant: 'outline' as const }
     };
     return statusConfig[status] || { label: status, variant: 'outline' as const };
   };
 
   const getTaskStatusBadge = (status: string) => {
     const statusConfig = {
-      pending: { label: 'Pendiente', variant: 'secondary' as const },
-      in_progress: { label: 'En progreso', variant: 'default' as const },
-      completed: { label: 'Completada', variant: 'default' as const }
+      pending: { label: 'Pending', variant: 'secondary' as const },
+      in_progress: { label: 'In progress', variant: 'default' as const },
+      completed: { label: 'Completed', variant: 'default' as const }
     };
     return statusConfig[status] || { label: status, variant: 'outline' as const };
   };
@@ -131,7 +130,7 @@ export const AnalystDashboard = () => {
   const shiftInfo = getCurrentShiftInfo();
 
   if (loading) {
-    return <div className="p-6">Cargando dashboard...</div>;
+    return <div className="p-6">Loading dashboard...</div>;
   }
 
   return (
@@ -140,12 +139,12 @@ export const AnalystDashboard = () => {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Turno Actual</CardTitle>
+            <CardTitle className="text-sm font-medium">Current Shift</CardTitle>
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {shiftInfo?.isWorkDay ? shiftInfo.shift : 'Día libre'}
+              {shiftInfo?.isWorkDay ? shiftInfo.shift : 'Day off'}
             </div>
             {shiftInfo?.isWorkDay && (
               <div className="flex items-center mt-2">
@@ -155,7 +154,7 @@ export const AnalystDashboard = () => {
                   <Building className="h-4 w-4 mr-1" />
                 )}
                 <span className="text-sm text-muted-foreground capitalize">
-                  {shiftInfo.mode === 'home' ? 'Casa' : 'Oficina'}
+                  {shiftInfo.mode === 'home' ? 'Home' : 'Office'}
                 </span>
               </div>
             )}
@@ -164,7 +163,7 @@ export const AnalystDashboard = () => {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Tareas Pendientes</CardTitle>
+            <CardTitle className="text-sm font-medium">Pending Tasks</CardTitle>
             <AlertCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -176,7 +175,7 @@ export const AnalystDashboard = () => {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Solicitudes Pendientes</CardTitle>
+            <CardTitle className="text-sm font-medium">Pending Requests</CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -188,7 +187,7 @@ export const AnalystDashboard = () => {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Analistas Online</CardTitle>
+            <CardTitle className="text-sm font-medium">Online Analysts</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -200,23 +199,23 @@ export const AnalystDashboard = () => {
       {/* Main Content */}
       <Tabs defaultValue="tasks" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="tasks">Mis Tareas</TabsTrigger>
-          <TabsTrigger value="absences">Solicitudes de Ausencia</TabsTrigger>
-          <TabsTrigger value="team">Equipo</TabsTrigger>
+          <TabsTrigger value="tasks">My Tasks</TabsTrigger>
+          <TabsTrigger value="absences">Absence Requests</TabsTrigger>
+          <TabsTrigger value="team">Team</TabsTrigger>
         </TabsList>
 
         <TabsContent value="tasks" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Tareas Asignadas</CardTitle>
+              <CardTitle>Assigned Tasks</CardTitle>
               <CardDescription>
-                Tareas asignadas a ti por los leads del equipo
+                Tasks assigned to you by team leads
               </CardDescription>
             </CardHeader>
             <CardContent>
               {tasks.length === 0 ? (
                 <p className="text-center text-muted-foreground py-4">
-                  No tienes tareas asignadas
+                  You have no assigned tasks
                 </p>
               ) : (
                 <div className="space-y-4">
@@ -235,7 +234,7 @@ export const AnalystDashboard = () => {
                           </Badge>
                           {task.due_date && (
                             <span className="text-xs text-muted-foreground">
-                              Vence: {format(new Date(task.due_date), 'PPp', { locale: es })}
+                              Due: {format(new Date(task.due_date), 'PPp')}
                             </span>
                           )}
                         </div>
@@ -247,7 +246,7 @@ export const AnalystDashboard = () => {
                           className="ml-4"
                         >
                           <CheckCircle className="h-4 w-4 mr-1" />
-                          Completar
+                          Complete
                         </Button>
                       )}
                     </div>
@@ -262,20 +261,20 @@ export const AnalystDashboard = () => {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
-                <CardTitle>Solicitudes de Ausencia</CardTitle>
+                <CardTitle>Absence Requests</CardTitle>
                 <CardDescription>
-                  Gestiona tus solicitudes de ausencia
+                  Manage your absence requests
                 </CardDescription>
               </div>
               <Button onClick={() => setShowRequestForm(true)}>
                 <Plus className="h-4 w-4 mr-2" />
-                Nueva Solicitud
+                New Request
               </Button>
             </CardHeader>
             <CardContent>
               {absenceRequests.length === 0 ? (
                 <p className="text-center text-muted-foreground py-4">
-                  No tienes solicitudes de ausencia
+                  You have no absence requests
                 </p>
               ) : (
                 <div className="space-y-4">
@@ -284,8 +283,8 @@ export const AnalystDashboard = () => {
                       <div className="flex justify-between items-start mb-2">
                         <div>
                           <h4 className="font-medium">
-                            {format(new Date(request.start_date), 'PPP', { locale: es })} - {' '}
-                            {format(new Date(request.end_date), 'PPP', { locale: es })}
+                            {format(new Date(request.start_date), 'PPP')} - {' '}
+                            {format(new Date(request.end_date), 'PPP')}
                           </h4>
                           <p className="text-sm text-muted-foreground mt-1">
                             {request.reason}
@@ -298,7 +297,7 @@ export const AnalystDashboard = () => {
                       {request.lead_comment && (
                         <div className="mt-3 p-3 bg-muted rounded">
                           <p className="text-sm">
-                            <strong>Comentario del Lead:</strong> {request.lead_comment}
+                            <strong>Lead Comment:</strong> {request.lead_comment}
                           </p>
                         </div>
                       )}
@@ -313,15 +312,15 @@ export const AnalystDashboard = () => {
         <TabsContent value="team" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Equipo Online</CardTitle>
+              <CardTitle>Online Team</CardTitle>
               <CardDescription>
-                Analistas actualmente conectados
+                Currently connected analysts
               </CardDescription>
             </CardHeader>
             <CardContent>
               {onlineAnalysts.length === 0 ? (
                 <p className="text-center text-muted-foreground py-4">
-                  No hay otros analistas conectados
+                  No other analysts connected
                 </p>
               ) : (
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
