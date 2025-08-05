@@ -1,0 +1,364 @@
+import { useState, useEffect } from 'react';
+import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Calendar, Clock, Home, Building, Users, CheckCircle, AlertCircle, Plus } from 'lucide-react';
+import { toast } from '@/hooks/use-toast';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
+import { AbsenceRequestForm } from '@/components/forms/AbsenceRequestForm';
+
+export const AnalystDashboard = () => {
+  const { userProfile, user } = useAuth();
+  const [absenceRequests, setAbsenceRequests] = useState([]);
+  const [tasks, setTasks] = useState([]);
+  const [onlineAnalysts, setOnlineAnalysts] = useState([]);
+  const [showRequestForm, setShowRequestForm] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const fetchData = async () => {
+    if (!user) return;
+
+    try {
+      // Fetch absence requests
+      const { data: absences } = await supabase
+        .from('absence_requests')
+        .select('*')
+        .eq('analyst_id', user.id)
+        .order('created_at', { ascending: false });
+
+      // Fetch tasks
+      const { data: userTasks } = await supabase
+        .from('tasks')
+        .select('*, assigned_by_profile:profiles!tasks_assigned_by_fkey(name)')
+        .eq('assigned_to', user.id)
+        .order('created_at', { ascending: false });
+
+      // Fetch online analysts (simplified for now)
+      const { data: analysts } = await supabase
+        .from('profiles')
+        .select('*')
+        .neq('user_id', user.id);
+
+      setAbsenceRequests(absences || []);
+      setTasks(userTasks || []);
+      setOnlineAnalysts(analysts || []);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      toast({
+        title: "Error",
+        description: "No se pudieron cargar los datos",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const markTaskCompleted = async (taskId: string) => {
+    try {
+      const { error } = await supabase
+        .from('tasks')
+        .update({ 
+          status: 'completed',
+          completed_at: new Date().toISOString()
+        })
+        .eq('id', taskId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Tarea completada",
+        description: "La tarea ha sido marcada como completada"
+      });
+
+      fetchData(); // Refresh data
+    } catch (error) {
+      console.error('Error updating task:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo actualizar la tarea",
+        variant: "destructive"
+      });
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [user]);
+
+  const getStatusBadge = (status: string) => {
+    const statusConfig = {
+      pending: { label: 'Pendiente', variant: 'secondary' as const },
+      approved: { label: 'Aprobada', variant: 'default' as const },
+      rejected: { label: 'Rechazada', variant: 'destructive' as const },
+      cancel_requested: { label: 'Cancelación solicitada', variant: 'secondary' as const },
+      cancelled: { label: 'Cancelada', variant: 'outline' as const }
+    };
+    return statusConfig[status] || { label: status, variant: 'outline' as const };
+  };
+
+  const getTaskStatusBadge = (status: string) => {
+    const statusConfig = {
+      pending: { label: 'Pendiente', variant: 'secondary' as const },
+      in_progress: { label: 'En progreso', variant: 'default' as const },
+      completed: { label: 'Completada', variant: 'default' as const }
+    };
+    return statusConfig[status] || { label: status, variant: 'outline' as const };
+  };
+
+  const getCurrentShiftInfo = () => {
+    if (!userProfile?.work_days) return null;
+    
+    const today = new Date().toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase();
+    const todaySchedule = userProfile.work_days[today];
+    
+    if (!todaySchedule?.active) {
+      return { isWorkDay: false, mode: null, shift: null };
+    }
+
+    return {
+      isWorkDay: true,
+      mode: todaySchedule.mode,
+      shift: `${userProfile.start_time} - ${userProfile.end_time}`
+    };
+  };
+
+  const shiftInfo = getCurrentShiftInfo();
+
+  if (loading) {
+    return <div className="p-6">Cargando dashboard...</div>;
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Quick Stats */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Turno Actual</CardTitle>
+            <Clock className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {shiftInfo?.isWorkDay ? shiftInfo.shift : 'Día libre'}
+            </div>
+            {shiftInfo?.isWorkDay && (
+              <div className="flex items-center mt-2">
+                {shiftInfo.mode === 'home' ? (
+                  <Home className="h-4 w-4 mr-1" />
+                ) : (
+                  <Building className="h-4 w-4 mr-1" />
+                )}
+                <span className="text-sm text-muted-foreground capitalize">
+                  {shiftInfo.mode === 'home' ? 'Casa' : 'Oficina'}
+                </span>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Tareas Pendientes</CardTitle>
+            <AlertCircle className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {tasks.filter(task => task.status !== 'completed').length}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Solicitudes Pendientes</CardTitle>
+            <Calendar className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {absenceRequests.filter(req => req.status === 'pending').length}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Analistas Online</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{onlineAnalysts.length}</div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Main Content */}
+      <Tabs defaultValue="tasks" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="tasks">Mis Tareas</TabsTrigger>
+          <TabsTrigger value="absences">Solicitudes de Ausencia</TabsTrigger>
+          <TabsTrigger value="team">Equipo</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="tasks" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Tareas Asignadas</CardTitle>
+              <CardDescription>
+                Tareas asignadas a ti por los leads del equipo
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {tasks.length === 0 ? (
+                <p className="text-center text-muted-foreground py-4">
+                  No tienes tareas asignadas
+                </p>
+              ) : (
+                <div className="space-y-4">
+                  {tasks.map((task) => (
+                    <div key={task.id} className="flex items-center justify-between p-4 border rounded-lg">
+                      <div className="flex-1">
+                        <h4 className="font-medium">{task.title}</h4>
+                        {task.description && (
+                          <p className="text-sm text-muted-foreground mt-1">
+                            {task.description}
+                          </p>
+                        )}
+                        <div className="flex items-center gap-2 mt-2">
+                          <Badge {...getTaskStatusBadge(task.status)}>
+                            {getTaskStatusBadge(task.status).label}
+                          </Badge>
+                          {task.due_date && (
+                            <span className="text-xs text-muted-foreground">
+                              Vence: {format(new Date(task.due_date), 'PPp', { locale: es })}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      {task.status !== 'completed' && (
+                        <Button
+                          size="sm"
+                          onClick={() => markTaskCompleted(task.id)}
+                          className="ml-4"
+                        >
+                          <CheckCircle className="h-4 w-4 mr-1" />
+                          Completar
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="absences" className="space-y-4">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle>Solicitudes de Ausencia</CardTitle>
+                <CardDescription>
+                  Gestiona tus solicitudes de ausencia
+                </CardDescription>
+              </div>
+              <Button onClick={() => setShowRequestForm(true)}>
+                <Plus className="h-4 w-4 mr-2" />
+                Nueva Solicitud
+              </Button>
+            </CardHeader>
+            <CardContent>
+              {absenceRequests.length === 0 ? (
+                <p className="text-center text-muted-foreground py-4">
+                  No tienes solicitudes de ausencia
+                </p>
+              ) : (
+                <div className="space-y-4">
+                  {absenceRequests.map((request) => (
+                    <div key={request.id} className="p-4 border rounded-lg">
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <h4 className="font-medium">
+                            {format(new Date(request.start_date), 'PPP', { locale: es })} - {' '}
+                            {format(new Date(request.end_date), 'PPP', { locale: es })}
+                          </h4>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            {request.reason}
+                          </p>
+                        </div>
+                        <Badge {...getStatusBadge(request.status)}>
+                          {getStatusBadge(request.status).label}
+                        </Badge>
+                      </div>
+                      {request.lead_comment && (
+                        <div className="mt-3 p-3 bg-muted rounded">
+                          <p className="text-sm">
+                            <strong>Comentario del Lead:</strong> {request.lead_comment}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="team" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Equipo Online</CardTitle>
+              <CardDescription>
+                Analistas actualmente conectados
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {onlineAnalysts.length === 0 ? (
+                <p className="text-center text-muted-foreground py-4">
+                  No hay otros analistas conectados
+                </p>
+              ) : (
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                  {onlineAnalysts.map((analyst) => (
+                    <div key={analyst.id} className="p-3 border rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <div className="h-8 w-8 rounded-full bg-green-500 flex items-center justify-center">
+                          <span className="text-xs font-medium text-white">
+                            {analyst.name.charAt(0).toUpperCase()}
+                          </span>
+                        </div>
+                        <div>
+                          <p className="font-medium">{analyst.name}</p>
+                          <p className="text-xs text-muted-foreground capitalize">
+                            {analyst.role}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+
+      {/* Absence Request Form Modal */}
+      {showRequestForm && (
+        <AbsenceRequestForm
+          onClose={() => setShowRequestForm(false)}
+          onSuccess={() => {
+            setShowRequestForm(false);
+            fetchData();
+          }}
+        />
+      )}
+    </div>
+  );
+};
