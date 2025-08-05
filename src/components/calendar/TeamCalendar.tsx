@@ -86,18 +86,9 @@ export const TeamCalendar = ({
   };
   const modifiersStyles = {
     hasAbsence: {
-      position: 'relative' as const,
-      '&:after': {
-        content: '""',
-        position: 'absolute',
-        bottom: '2px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        width: '4px',
-        height: '4px',
-        borderRadius: '50%',
-        backgroundColor: 'hsl(var(--primary))'
-      }
+      backgroundColor: 'hsl(var(--primary) / 0.1)',
+      color: 'hsl(var(--primary))',
+      fontWeight: '600'
     }
   };
   if (loading) {

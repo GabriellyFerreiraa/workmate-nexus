@@ -121,10 +121,12 @@ export const AnalystDashboard = () => {
       return { isWorkDay: false, mode: null, shift: null };
     }
 
+    const formatTime = (time: string) => time.slice(0, 5); // Remove seconds
+
     return {
       isWorkDay: true,
       mode: todaySchedule.mode,
-      shift: `${userProfile.start_time} - ${userProfile.end_time}`
+      shift: `${formatTime(userProfile.start_time)} - ${formatTime(userProfile.end_time)}`
     };
   };
 
