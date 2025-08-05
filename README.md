@@ -84,26 +84,4 @@
 
 ---
 
-## 📂 Project Structure
 
-```plaintext
-desk-control/
-├── public/
-│   ├── favicon.ico
-│   ├── placeholder.svg
-│   └── robots.txt
-├── src/
-│   ├── components/       # UI & form components
-│   ├── pages/            # Route components: Auth, Dashboard, Settings, etc.
-│   ├── integrations/     # Supabase client & types
-│   ├── lib/              # Shared utilities
-│   ├── App.tsx           # Main application component
-│   └── main.tsx          # React & Tailwind bootstrap
-├── supabase/
-│   ├── config.toml       # Supabase CLI config
-│   └── migrations/       # SQL migration files
-├── .env                  # Environment variables (ignored by git)
-├── tailwind.config.ts
-├── tsconfig.json
-├── vite.config.ts
-└── package.json
