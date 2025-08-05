@@ -1,4 +1,5 @@
 import { useAuth } from '@/hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 import { AnalystDashboard } from '@/components/dashboard/AnalystDashboard';
 import { LeadDashboard } from '@/components/dashboard/LeadDashboard';
 import { Button } from '@/components/ui/button';
@@ -8,6 +9,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 
 const Dashboard = () => {
   const { userProfile, signOut, loading } = useAuth();
+  const navigate = useNavigate();
 
   if (loading) {
     return (
@@ -75,7 +77,10 @@ const Dashboard = () => {
               
               <DropdownMenuSeparator />
               
-              <DropdownMenuItem className="cursor-pointer">
+              <DropdownMenuItem 
+                className="cursor-pointer"
+                onClick={() => navigate('/settings')}
+              >
                 <Settings className="mr-2 h-4 w-4" />
                 Settings
               </DropdownMenuItem>
