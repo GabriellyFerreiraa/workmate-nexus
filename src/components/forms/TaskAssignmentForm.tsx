@@ -13,9 +13,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 const schema = z.object({
-  title: z.string().min(3, 'Title must be at least 3 characters'),
+  title: z.string().min(3, 'El título debe tener al menos 3 caracteres'),
   description: z.string().optional(),
-  assignedTo: z.string().min(1, 'Must select an analyst'),
+  assignedTo: z.string().min(1, 'Debe seleccionar un analista'),
   priority: z.number().min(1).max(5),
   dueDate: z.string().optional()
 });
@@ -61,8 +61,8 @@ export const TaskAssignmentForm = ({ analysts, onClose, onSuccess }: TaskAssignm
       if (error) throw error;
 
       toast({
-        title: "Task assigned",
-        description: "The task has been assigned successfully"
+        title: "Tarea asignada",
+        description: "La tarea ha sido asignada exitosamente"
       });
 
       onSuccess();
@@ -70,7 +70,7 @@ export const TaskAssignmentForm = ({ analysts, onClose, onSuccess }: TaskAssignm
       console.error('Error creating task:', error);
       toast({
         title: "Error",
-        description: "Could not assign task",
+        description: "No se pudo asignar la tarea",
         variant: "destructive"
       });
     } finally {
@@ -82,18 +82,18 @@ export const TaskAssignmentForm = ({ analysts, onClose, onSuccess }: TaskAssignm
     <Dialog open onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Assign New Task</DialogTitle>
+          <DialogTitle>Asignar Nueva Tarea</DialogTitle>
           <DialogDescription>
-            Assign a new task to a team analyst
+            Asigna una nueva tarea a un analista del equipo
           </DialogDescription>
         </DialogHeader>
         
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="title">Task Title</Label>
+            <Label htmlFor="title">Título de la tarea</Label>
             <Input
               id="title"
-              placeholder="Descriptive task title"
+              placeholder="Título descriptivo de la tarea"
               {...register('title')}
             />
             {errors.title && (
@@ -102,19 +102,19 @@ export const TaskAssignmentForm = ({ analysts, onClose, onSuccess }: TaskAssignm
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="description">Description (optional)</Label>
+            <Label htmlFor="description">Descripción (opcional)</Label>
             <Textarea
               id="description"
-              placeholder="Additional details about the task..."
+              placeholder="Detalles adicionales sobre la tarea..."
               {...register('description')}
             />
           </div>
           
           <div className="space-y-2">
-            <Label>Assign to</Label>
+            <Label>Asignar a</Label>
             <Select onValueChange={(value) => setValue('assignedTo', value)}>
               <SelectTrigger>
-                <SelectValue placeholder="Select an analyst" />
+                <SelectValue placeholder="Selecciona un analista" />
               </SelectTrigger>
               <SelectContent>
                 {analysts.map((analyst) => (
@@ -131,23 +131,23 @@ export const TaskAssignmentForm = ({ analysts, onClose, onSuccess }: TaskAssignm
           
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="priority">Priority</Label>
+              <Label htmlFor="priority">Prioridad</Label>
               <Select onValueChange={(value) => setValue('priority', parseInt(value))}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Priority" />
+                  <SelectValue placeholder="Prioridad" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="1">1 - Low</SelectItem>
+                  <SelectItem value="1">1 - Baja</SelectItem>
                   <SelectItem value="2">2 - Normal</SelectItem>
-                  <SelectItem value="3">3 - Medium</SelectItem>
-                  <SelectItem value="4">4 - High</SelectItem>
-                  <SelectItem value="5">5 - Critical</SelectItem>
+                  <SelectItem value="3">3 - Media</SelectItem>
+                  <SelectItem value="4">4 - Alta</SelectItem>
+                  <SelectItem value="5">5 - Crítica</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="dueDate">Due Date (optional)</Label>
+              <Label htmlFor="dueDate">Fecha límite (opcional)</Label>
               <Input
                 id="dueDate"
                 type="datetime-local"
@@ -158,10 +158,10 @@ export const TaskAssignmentForm = ({ analysts, onClose, onSuccess }: TaskAssignm
           
           <div className="flex justify-end gap-2">
             <Button type="button" variant="outline" onClick={onClose}>
-              Cancel
+              Cancelar
             </Button>
             <Button type="submit" disabled={isLoading}>
-              {isLoading ? 'Assigning...' : 'Assign Task'}
+              {isLoading ? 'Asignando...' : 'Asignar Tarea'}
             </Button>
           </div>
         </form>
