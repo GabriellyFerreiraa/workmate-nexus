@@ -10,6 +10,7 @@ import { Calendar, Clock, Home, Building, Users, CheckCircle, AlertCircle, Plus 
 import { toast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
 import { AbsenceRequestForm } from '@/components/forms/AbsenceRequestForm';
+import { TeamCalendar } from '@/components/calendar/TeamCalendar';
 
 export const AnalystDashboard = () => {
   const { userProfile, user } = useAuth();
@@ -195,6 +196,9 @@ export const AnalystDashboard = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Team Calendar - Always Visible */}
+      <TeamCalendar />
 
       {/* Main Content */}
       <Tabs defaultValue="tasks" className="space-y-4">

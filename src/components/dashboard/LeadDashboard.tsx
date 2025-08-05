@@ -10,6 +10,7 @@ import { toast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
 import { TaskAssignmentForm } from '@/components/forms/TaskAssignmentForm';
 import { AbsenceApprovalModal } from '@/components/modals/AbsenceApprovalModal';
+import { TeamCalendar } from '@/components/calendar/TeamCalendar';
 
 export const LeadDashboard = () => {
   const { user } = useAuth();
@@ -189,13 +190,15 @@ export const LeadDashboard = () => {
         </Card>
       </div>
 
+      {/* Team Calendar - Always Visible */}
+      <TeamCalendar />
+
       {/* Main Content */}
       <Tabs defaultValue="requests" className="space-y-4">
         <TabsList>
           <TabsTrigger value="requests">Pending Requests</TabsTrigger>
           <TabsTrigger value="tasks">Task Management</TabsTrigger>
           <TabsTrigger value="team">Team</TabsTrigger>
-          <TabsTrigger value="calendar">Calendar</TabsTrigger>
         </TabsList>
 
         <TabsContent value="requests" className="space-y-4">
@@ -334,21 +337,6 @@ export const LeadDashboard = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="calendar" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Absence Calendar</CardTitle>
-              <CardDescription>
-                View of approved team absences
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-center text-muted-foreground py-8">
-                Calendar in development - coming soon
-              </p>
-            </CardContent>
-          </Card>
-        </TabsContent>
       </Tabs>
 
       {/* Task Assignment Form Modal */}
