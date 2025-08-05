@@ -18,6 +18,7 @@ export const LeadDashboard = () => {
   const [pendingRequests, setPendingRequests] = useState([]);
   const [allTasks, setAllTasks] = useState([]);
   const [analysts, setAnalysts] = useState([]);
+  const [approvedAbsences, setApprovedAbsences] = useState([]);
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [selectedAnalyst, setSelectedAnalyst] = useState(null);
@@ -34,6 +35,15 @@ export const LeadDashboard = () => {
         .eq('status', 'pending')
         .order('created_at', { ascending: false });
 
+      // Fetch approved absences for today
+      const today = new Date().toISOString().split('T')[0];
+      const { data: absences } = await supabase
+        .from('absence_requests')
+        .select('*')
+        .eq('status', 'approved')
+        .lte('start_date', today)
+        .gte('end_date', today);
+
       // Fetch all tasks
       const { data: tasks } = await supabase
         .from('tasks')
@@ -47,6 +57,7 @@ export const LeadDashboard = () => {
         .eq('role', 'analyst');
 
       setPendingRequests(requests || []);
+      setApprovedAbsences(absences || []);
       setAllTasks(tasks || []);
       setAnalysts(allAnalysts || []);
     } catch (error) {
@@ -131,12 +142,30 @@ export const LeadDashboard = () => {
     return statusConfig[status] || { label: status, variant: 'outline' as const };
   };
 
+  const isAnalystOnline = (analyst: any) => {
+    const now = new Date();
+    const today = now.toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase();
+    const todaySchedule = analyst.work_days?.[today];
+    
+    // Check if analyst is scheduled to work today
+    if (!todaySchedule?.active) return false;
+    
+    // Check if analyst has an approved absence for today
+    const hasAbsenceToday = approvedAbsences.some(absence => 
+      absence.analyst_id === analyst.user_id
+    );
+    if (hasAbsenceToday) return false;
+    
+    // Check if current time is within work hours
+    const currentTime = now.toTimeString().slice(0, 5); // HH:MM format
+    const startTime = analyst.start_time || '09:00';
+    const endTime = analyst.end_time || '18:00';
+    
+    return currentTime >= startTime && currentTime <= endTime;
+  };
+
   const getOnlineAnalysts = () => {
-    // Simplified logic for demo - in real app would check actual schedule and time
-    return analysts.filter(analyst => {
-      const today = new Date().toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase();
-      return analyst.work_days?.[today]?.active;
-    });
+    return analysts.filter(analyst => isAnalystOnline(analyst));
   };
 
   const onlineAnalysts = getOnlineAnalysts();
@@ -311,33 +340,38 @@ export const LeadDashboard = () => {
                   const today = new Date().toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase();
                   const todaySchedule = analyst.work_days?.[today];
                   
-                  return (
-                    <div key={analyst.id} className="p-4 border rounded-lg">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className={`h-3 w-3 rounded-full ${isOnline ? 'bg-green-500' : 'bg-gray-400'}`} />
-                        <div>
-                          <p className="font-medium">{analyst.name}</p>
-                          <p className="text-xs text-muted-foreground">
-                            {isOnline ? 'Online' : 'Offline'}
-                          </p>
-                        </div>
-                      </div>
+                   return (
+                     <div key={analyst.id} className={`p-4 border rounded-lg ${!isOnline ? 'opacity-50' : ''}`}>
+                       <div className="flex items-center gap-3 mb-3">
+                         <div className={`h-3 w-3 rounded-full ${isOnline ? 'bg-green-500' : 'bg-gray-400'}`} />
+                         <div>
+                           <p className="font-medium">{analyst.name}</p>
+                           <p className="text-xs text-muted-foreground">
+                             {isOnline ? 'Online' : 'Offline'}
+                           </p>
+                         </div>
+                       </div>
                        {todaySchedule?.active && (
-                        <div className="text-sm text-muted-foreground mb-3">
-                          <p>Schedule: {analyst.start_time} - {analyst.end_time}</p>
-                          <p>Mode: {todaySchedule.mode === 'home' ? 'Home' : 'Office'}</p>
-                        </div>
-                      )}
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => setSelectedAnalyst(analyst)}
-                        className="w-full"
-                      >
-                        Edit Schedule
-                      </Button>
-                    </div>
-                  );
+                         <div className="text-sm text-muted-foreground mb-3">
+                           <p>Schedule: {analyst.start_time} - {analyst.end_time}</p>
+                           <p>Mode: {todaySchedule.mode === 'home' ? 'Home' : 'Office'}</p>
+                         </div>
+                       )}
+                       {!todaySchedule?.active && (
+                         <div className="text-sm text-muted-foreground mb-3">
+                           <p>Not scheduled today</p>
+                         </div>
+                       )}
+                       <Button
+                         size="sm"
+                         variant="outline"
+                         onClick={() => setSelectedAnalyst(analyst)}
+                         className="w-full"
+                       >
+                         Edit Schedule
+                       </Button>
+                     </div>
+                   );
                 })}
               </div>
             </CardContent>
