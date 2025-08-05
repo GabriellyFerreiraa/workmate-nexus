@@ -58,9 +58,12 @@ export const TeamCalendar = ({
   }, [user]);
   const getAbsencesForDate = (date: Date) => {
     return absenceRequests.filter(request => {
-      const startDate = parseISO(request.start_date);
-      const endDate = parseISO(request.end_date);
-      return date >= startDate && date <= endDate;
+      const startDate = new Date(request.start_date + 'T00:00:00');
+      const endDate = new Date(request.end_date + 'T23:59:59');
+      const checkDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      
+      return checkDate >= new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()) && 
+             checkDate <= new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
     });
   };
   const getSelectedDateAbsences = () => {
