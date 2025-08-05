@@ -2,8 +2,9 @@ import { useAuth } from '@/hooks/useAuth';
 import { AnalystDashboard } from '@/components/dashboard/AnalystDashboard';
 import { LeadDashboard } from '@/components/dashboard/LeadDashboard';
 import { Button } from '@/components/ui/button';
-import { LogOut, User } from 'lucide-react';
+import { LogOut, User, Settings, ChevronDown } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 const Dashboard = () => {
   const { userProfile, signOut, loading } = useAuth();
@@ -45,26 +46,51 @@ const Dashboard = () => {
             </div>
           </div>
           
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
-              <Avatar className="h-8 w-8">
-                <AvatarImage src={userProfile.avatar_url} />
-                <AvatarFallback>
-                  <User className="h-4 w-4" />
-                </AvatarFallback>
-              </Avatar>
-              <div className="hidden md:block">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="flex items-center space-x-2 h-auto p-2">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={userProfile.avatar_url} />
+                  <AvatarFallback>
+                    <User className="h-4 w-4" />
+                  </AvatarFallback>
+                </Avatar>
+                <div className="hidden md:block text-left">
+                  <p className="text-sm font-medium">{userProfile.name}</p>
+                  <p className="text-xs text-muted-foreground capitalize">
+                    {userProfile.role}
+                  </p>
+                </div>
+                <ChevronDown className="h-4 w-4 text-muted-foreground" />
+              </Button>
+            </DropdownMenuTrigger>
+            
+            <DropdownMenuContent align="end" className="w-56 bg-background border shadow-lg">
+              <div className="px-2 py-1.5">
                 <p className="text-sm font-medium">{userProfile.name}</p>
                 <p className="text-xs text-muted-foreground capitalize">
                   {userProfile.role}
                 </p>
               </div>
-            </div>
-            
-            <Button variant="ghost" size="sm" onClick={signOut}>
-              <LogOut className="h-4 w-4" />
-            </Button>
-          </div>
+              
+              <DropdownMenuSeparator />
+              
+              <DropdownMenuItem className="cursor-pointer">
+                <Settings className="mr-2 h-4 w-4" />
+                Settings
+              </DropdownMenuItem>
+              
+              <DropdownMenuSeparator />
+              
+              <DropdownMenuItem 
+                className="cursor-pointer text-destructive hover:text-destructive"
+                onClick={signOut}
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </header>
 
