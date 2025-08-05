@@ -1,73 +1,109 @@
-# Welcome to your Lovable project
+[![Supabase](https://img.shields.io/badge/Backend-Supabase-blue.svg)](https://supabase.com)
 
-## Project info
+# Desk Control
 
-**URL**: https://lovable.dev/projects/a1ce0b82-a18c-43b4-a24c-67f205998af8
+**Desk Control** is a web platform for managing shifts and absence requests within Service Desk teams, featuring role-based approval flows (Analyst, Lead, Admin).
 
-## How can I edit this code?
 
-There are several ways of editing your application.
+## 🔑 Key Features
 
-**Use Lovable**
+- **Authentication & Roles**: Support for Analyst, Lead, and optional Admin accounts.
+- **Analyst Dashboard**: View assigned shifts, pending tickets, and absence requests with statuses.
+- **Lead Dashboard**: Approve or reject absence requests, assign shifts, and delegate tasks to Analysts.
+- **Absence Request Form**: Create and track leave requests with Lead comments.
+- **Collaborative Calendar**: Display approved absences and shifts in a shared calendar view.
+- **Task Assignment**: Leads can assign courses or tasks; Analysts can mark them as completed.
+- **Real-time Integration**: Powered by Supabase for database, authentication, and real-time updates.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/a1ce0b82-a18c-43b4-a24c-67f205998af8) and start prompting.
+---
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🛠 Technology Stack
 
-**Use your preferred IDE**
+| Layer    | Technology                                            |
+| -------- | ----------------------------------------------------- |
+| Frontend | React · TypeScript · Vite · Tailwind CSS · shadcn/ui    |
+| Backend  | Supabase (PostgreSQL · Auth · Realtime)               |
+| Tooling  | Git · ESLint · PostCSS · Bun/Vite                       |
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+---
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 🔧 Prerequisites
 
-Follow these steps:
+- **Node.js** v18+ or **Bun**
+- A **Supabase** account and a configured project
+- A package manager: `npm`, `yarn`, or `bun`
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+---
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## 🚀 Installation & Setup
 
-# Step 3: Install the necessary dependencies.
-npm i
+1.  **Clone the repository**
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+    *REMEMBER to replace `your-username` with your actual GitHub username.*
 
-**Edit a file directly in GitHub**
+    ```bash
+    git clone [https://github.com/your-username/desk-control.git](https://github.com/your-username/desk-control.git)
+    cd desk-control
+    ```
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+2.  **Install dependencies**
 
-**Use GitHub Codespaces**
+    Use your preferred package manager:
+    ```bash
+    # With npm
+    npm install
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+    # Or with Bun
+    bun install
+    ```
 
-## What technologies are used for this project?
+3.  **Configure environment variables**
 
-This project is built with:
+    Create a `.env` file in the root of the project and add your Supabase project credentials. You can find these in your Supabase project's dashboard under `Project Settings > API`.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+    ```env
+    VITE_SUPABASE_URL="your_supabase_url"
+    VITE_SUPABASE_ANON_KEY="your_supabase_anon_key"
+    ```
 
-## How can I deploy this project?
+4.  **Apply database migrations**
 
-Simply open [Lovable](https://lovable.dev/projects/a1ce0b82-a18c-43b4-a24c-67f205998af8) and click on Share -> Publish.
+    If you are using the Supabase CLI for local development, push the database schema:
+    ```bash
+    supabase db push
+    ```
 
-## Can I connect a custom domain to my Lovable project?
+---
 
-Yes, you can!
+## 📜 Available Scripts
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+-   `npm run dev`: Starts the development server using Vite.
+-   `npm run build`: Creates a production-ready build of the application.
+-   `npm run preview`: Serves the production build locally for previewing.
+-   `supabase start`: Starts the local Supabase emulation for testing purposes.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+---
+
+## 📂 Project Structure
+
+```plaintext
+desk-control/
+├── public/
+│   ├── favicon.ico
+│   ├── placeholder.svg
+│   └── robots.txt
+├── src/
+│   ├── components/       # UI & form components
+│   ├── pages/            # Route components: Auth, Dashboard, Settings, etc.
+│   ├── integrations/     # Supabase client & types
+│   ├── lib/              # Shared utilities
+│   ├── App.tsx           # Main application component
+│   └── main.tsx          # React & Tailwind bootstrap
+├── supabase/
+│   ├── config.toml       # Supabase CLI config
+│   └── migrations/       # SQL migration files
+├── .env                  # Environment variables (ignored by git)
+├── tailwind.config.ts
+├── tsconfig.json
+├── vite.config.ts
+└── package.json
