@@ -75,6 +75,10 @@ export type Database = {
         Row: {
           area: string | null
           avatar_url: string | null
+          break1_end: string | null
+          break1_start: string | null
+          break2_end: string | null
+          break2_start: string | null
           created_at: string
           end_time: string
           id: string
@@ -90,6 +94,10 @@ export type Database = {
         Insert: {
           area?: string | null
           avatar_url?: string | null
+          break1_end?: string | null
+          break1_start?: string | null
+          break2_end?: string | null
+          break2_start?: string | null
           created_at?: string
           end_time?: string
           id?: string
@@ -105,6 +113,10 @@ export type Database = {
         Update: {
           area?: string | null
           avatar_url?: string | null
+          break1_end?: string | null
+          break1_start?: string | null
+          break2_end?: string | null
+          break2_start?: string | null
           created_at?: string
           end_time?: string
           id?: string

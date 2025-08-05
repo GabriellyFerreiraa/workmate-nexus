@@ -11,6 +11,7 @@ import { format } from 'date-fns';
 import { TaskAssignmentForm } from '@/components/forms/TaskAssignmentForm';
 import { AbsenceApprovalModal } from '@/components/modals/AbsenceApprovalModal';
 import { TeamCalendar } from '@/components/calendar/TeamCalendar';
+import { ShiftEditForm } from '@/components/forms/ShiftEditForm';
 
 export const LeadDashboard = () => {
   const { user } = useAuth();
@@ -19,6 +20,7 @@ export const LeadDashboard = () => {
   const [analysts, setAnalysts] = useState([]);
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState(null);
+  const [selectedAnalyst, setSelectedAnalyst] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
@@ -320,12 +322,20 @@ export const LeadDashboard = () => {
                           </p>
                         </div>
                       </div>
-                      {todaySchedule?.active && (
-                        <div className="text-sm text-muted-foreground">
+                       {todaySchedule?.active && (
+                        <div className="text-sm text-muted-foreground mb-3">
                           <p>Schedule: {analyst.start_time} - {analyst.end_time}</p>
                           <p>Mode: {todaySchedule.mode === 'home' ? 'Home' : 'Office'}</p>
                         </div>
                       )}
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setSelectedAnalyst(analyst)}
+                        className="w-full"
+                      >
+                        Edit Schedule
+                      </Button>
                     </div>
                   );
                 })}
@@ -363,6 +373,18 @@ export const LeadDashboard = () => {
           onReject={(comment) => {
             rejectRequest(selectedRequest.id, comment);
             setSelectedRequest(null);
+          }}
+        />
+      )}
+
+      {/* Shift Edit Modal */}
+      {selectedAnalyst && (
+        <ShiftEditForm
+          analyst={selectedAnalyst}
+          onClose={() => setSelectedAnalyst(null)}
+          onSuccess={() => {
+            setSelectedAnalyst(null);
+            fetchData();
           }}
         />
       )}
