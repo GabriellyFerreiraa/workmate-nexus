@@ -14,16 +14,195 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      absence_requests: {
+        Row: {
+          analyst_id: string
+          approved_by: string | null
+          cancel_reason: string | null
+          created_at: string
+          end_date: string
+          id: string
+          lead_comment: string | null
+          reason: string
+          start_date: string
+          status: Database["public"]["Enums"]["absence_status"]
+          updated_at: string
+        }
+        Insert: {
+          analyst_id: string
+          approved_by?: string | null
+          cancel_reason?: string | null
+          created_at?: string
+          end_date: string
+          id?: string
+          lead_comment?: string | null
+          reason: string
+          start_date: string
+          status?: Database["public"]["Enums"]["absence_status"]
+          updated_at?: string
+        }
+        Update: {
+          analyst_id?: string
+          approved_by?: string | null
+          cancel_reason?: string | null
+          created_at?: string
+          end_date?: string
+          id?: string
+          lead_comment?: string | null
+          reason?: string
+          start_date?: string
+          status?: Database["public"]["Enums"]["absence_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "absence_requests_analyst_id_fkey"
+            columns: ["analyst_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "absence_requests_approved_by_fkey"
+            columns: ["approved_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          area: string | null
+          avatar_url: string | null
+          created_at: string
+          end_time: string
+          id: string
+          lunch_end: string | null
+          lunch_start: string | null
+          name: string
+          role: Database["public"]["Enums"]["app_role"]
+          start_time: string
+          updated_at: string
+          user_id: string
+          work_days: Json
+        }
+        Insert: {
+          area?: string | null
+          avatar_url?: string | null
+          created_at?: string
+          end_time?: string
+          id?: string
+          lunch_end?: string | null
+          lunch_start?: string | null
+          name: string
+          role?: Database["public"]["Enums"]["app_role"]
+          start_time?: string
+          updated_at?: string
+          user_id: string
+          work_days?: Json
+        }
+        Update: {
+          area?: string | null
+          avatar_url?: string | null
+          created_at?: string
+          end_time?: string
+          id?: string
+          lunch_end?: string | null
+          lunch_start?: string | null
+          name?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          start_time?: string
+          updated_at?: string
+          user_id?: string
+          work_days?: Json
+        }
+        Relationships: []
+      }
+      tasks: {
+        Row: {
+          assigned_by: string
+          assigned_to: string
+          completed_at: string | null
+          created_at: string
+          description: string | null
+          due_date: string | null
+          id: string
+          priority: number | null
+          status: Database["public"]["Enums"]["task_status"]
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_by: string
+          assigned_to: string
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          priority?: number | null
+          status?: Database["public"]["Enums"]["task_status"]
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_by?: string
+          assigned_to?: string
+          completed_at?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          priority?: number | null
+          status?: Database["public"]["Enums"]["task_status"]
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tasks_assigned_by_fkey"
+            columns: ["assigned_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "tasks_assigned_to_fkey"
+            columns: ["assigned_to"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_role: {
+        Args: { _user_id: string }
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
+      has_role: {
+        Args: {
+          _user_id: string
+          _role: Database["public"]["Enums"]["app_role"]
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      absence_status:
+        | "pending"
+        | "approved"
+        | "rejected"
+        | "cancel_requested"
+        | "cancelled"
+      app_role: "admin" | "lead" | "analyst"
+      task_status: "pending" | "in_progress" | "completed"
+      work_mode: "office" | "home"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +329,17 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      absence_status: [
+        "pending",
+        "approved",
+        "rejected",
+        "cancel_requested",
+        "cancelled",
+      ],
+      app_role: ["admin", "lead", "analyst"],
+      task_status: ["pending", "in_progress", "completed"],
+      work_mode: ["office", "home"],
+    },
   },
 } as const
