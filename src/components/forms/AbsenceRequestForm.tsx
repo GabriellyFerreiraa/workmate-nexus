@@ -6,17 +6,33 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from '@/hooks/use-toast';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
+const absenceReasons = [
+  'Service Desk Day',
+  'Examen Leave',
+  'Recognition (ScoreCard)',
+  'Vacation Leave',
+  'Moving Leave',
+  'Sick Leave',
+  'Marriage Leave',
+  'Unpaid Leave'
+] as const;
+
 const schema = z.object({
-  startDate: z.string().min(1, 'La fecha de inicio es requerida'),
-  endDate: z.string().min(1, 'La fecha de fin es requerida'),
-  reason: z.string().min(10, 'El motivo debe tener al menos 10 caracteres')
+  startDate: z.string().min(1, 'Start date is required'),
+  endDate: z.string().min(1, 'End date is required'),
+  reason: z.enum(absenceReasons).refine(
+    (val) => absenceReasons.includes(val),
+    { message: 'Please select a valid reason' }
+  ),
+  details: z.string().min(10, 'Details must be at least 10 characters')
 }).refine((data) => new Date(data.endDate) >= new Date(data.startDate), {
-  message: "La fecha de fin debe ser posterior o igual a la fecha de inicio",
+  message: "End date must be after or equal to start date",
   path: ["endDate"]
 });
 
@@ -31,7 +47,7 @@ export const AbsenceRequestForm = ({ onClose, onSuccess }: AbsenceRequestFormPro
   const [isLoading, setIsLoading] = useState(false);
   const { user } = useAuth();
 
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+  const { register, handleSubmit, control, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema)
   });
 
@@ -46,15 +62,15 @@ export const AbsenceRequestForm = ({ onClose, onSuccess }: AbsenceRequestFormPro
           analyst_id: user.id,
           start_date: data.startDate,
           end_date: data.endDate,
-          reason: data.reason,
+          reason: `${data.reason} - ${data.details}`,
           status: 'pending'
         });
 
       if (error) throw error;
 
       toast({
-        title: "Solicitud enviada",
-        description: "Tu solicitud de ausencia ha sido enviada para revisión"
+        title: "Request submitted",
+        description: "Your absence request has been submitted for review"
       });
 
       onSuccess();
@@ -62,7 +78,7 @@ export const AbsenceRequestForm = ({ onClose, onSuccess }: AbsenceRequestFormPro
       console.error('Error creating absence request:', error);
       toast({
         title: "Error",
-        description: "No se pudo enviar la solicitud",
+        description: "Could not submit request",
         variant: "destructive"
       });
     } finally {
@@ -74,16 +90,16 @@ export const AbsenceRequestForm = ({ onClose, onSuccess }: AbsenceRequestFormPro
     <Dialog open onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Nueva Solicitud de Ausencia</DialogTitle>
+          <DialogTitle>New Absence Request</DialogTitle>
           <DialogDescription>
-            Completa los datos para enviar tu solicitud de ausencia
+            Complete the form to submit your absence request
           </DialogDescription>
         </DialogHeader>
         
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="startDate">Fecha de inicio</Label>
+              <Label htmlFor="startDate">Start Date</Label>
               <Input
                 id="startDate"
                 type="date"
@@ -95,7 +111,7 @@ export const AbsenceRequestForm = ({ onClose, onSuccess }: AbsenceRequestFormPro
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="endDate">Fecha de fin</Label>
+              <Label htmlFor="endDate">End Date</Label>
               <Input
                 id="endDate"
                 type="date"
@@ -108,23 +124,48 @@ export const AbsenceRequestForm = ({ onClose, onSuccess }: AbsenceRequestFormPro
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="reason">Motivo</Label>
-            <Textarea
-              id="reason"
-              placeholder="Describe el motivo de tu ausencia..."
-              {...register('reason')}
+            <Label htmlFor="reason">Reason</Label>
+            <Controller
+              name="reason"
+              control={control}
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select absence reason" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {absenceReasons.map((reason) => (
+                      <SelectItem key={reason} value={reason}>
+                        {reason}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
             />
             {errors.reason && (
               <p className="text-sm text-destructive">{errors.reason.message}</p>
             )}
           </div>
           
+          <div className="space-y-2">
+            <Label htmlFor="details">Details</Label>
+            <Textarea
+              id="details"
+              placeholder="Provide additional details about your absence request..."
+              {...register('details')}
+            />
+            {errors.details && (
+              <p className="text-sm text-destructive">{errors.details.message}</p>
+            )}
+          </div>
+          
           <div className="flex justify-end gap-2">
             <Button type="button" variant="outline" onClick={onClose}>
-              Cancelar
+              Cancel
             </Button>
             <Button type="submit" disabled={isLoading}>
-              {isLoading ? 'Enviando...' : 'Enviar Solicitud'}
+              {isLoading ? 'Submitting...' : 'Submit Request'}
             </Button>
           </div>
         </form>
