@@ -178,7 +178,7 @@ export const LeadDashboard = () => {
     const statusConfig = {
       pending: { label: 'Pending', variant: 'secondary' as const },
       in_progress: { label: 'In progress', variant: 'default' as const },
-      completed: { label: 'Completed', variant: 'default' as const }
+      completed: { label: 'Completed', variant: 'success' as const }
     };
     return statusConfig[status] || { label: status, variant: 'outline' as const };
   };

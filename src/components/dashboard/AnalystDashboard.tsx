@@ -144,7 +144,7 @@ export const AnalystDashboard = () => {
   const getStatusBadge = (status: string) => {
     const statusConfig = {
       pending: { label: 'Pending', variant: 'secondary' as const },
-      approved: { label: 'Approved', variant: 'default' as const },
+      approved: { label: 'Approved', variant: 'success' as const },
       rejected: { label: 'Rejected', variant: 'destructive' as const },
       cancel_requested: { label: 'Cancellation requested', variant: 'secondary' as const },
       cancelled: { label: 'Cancelled', variant: 'outline' as const }
@@ -156,7 +156,7 @@ export const AnalystDashboard = () => {
     const statusConfig = {
       pending: { label: 'Pending', variant: 'secondary' as const },
       in_progress: { label: 'In progress', variant: 'default' as const },
-      completed: { label: 'Completed', variant: 'default' as const }
+      completed: { label: 'Completed', variant: 'success' as const }
     };
     return statusConfig[status] || { label: status, variant: 'outline' as const };
   };
