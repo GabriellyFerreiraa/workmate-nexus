@@ -109,8 +109,37 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 
-  /* Landing and auth pages use darker background */
+  /* Landing and auth pages use Cognizant-inspired dark theme */
   .landing-theme {
-    --background: 222.2 84% 4.9%;
+    --background: 240 59% 15%;           /* Deep navy #10103D */
+    --foreground: 0 0% 100%;             /* Pure white #FFFFFF */
+    
+    --card: 240 59% 18%;                 /* Slightly lighter navy for cards */
+    --card-foreground: 0 0% 100%;        /* Pure white text */
+    
+    --popover: 240 59% 18%;
+    --popover-foreground: 0 0% 100%;
+    
+    --primary: 198 100% 47%;             /* Electric blue #00B0F0 */
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 265 67% 51%;            /* Accent violet #6D28D9 */
+    --secondary-foreground: 0 0% 100%;
+    
+    --muted: 240 59% 20%;                /* Muted navy */
+    --muted-foreground: 198 100% 62%;    /* Soft cyan #3DC1FF */
+    
+    --accent: 322 100% 32%;              /* Deep magenta #A1006B */
+    --accent-foreground: 0 0% 100%;
+    
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 198 100% 62%;              /* Soft cyan borders #3DC1FF */
+    --input: 240 59% 20%;                /* Navy input backgrounds */
+    --ring: 198 100% 47%;                /* Electric blue focus rings */
+    
+    /* Gradient tokens for special effects */
+    --gradient-highlight: linear-gradient(135deg, hsl(62, 85%, 64%), hsl(160, 58%, 77%), hsl(270, 59%, 62%));
   }
 }
