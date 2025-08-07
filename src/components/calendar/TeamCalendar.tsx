@@ -61,9 +61,7 @@ export const TeamCalendar = ({
       const startDate = new Date(request.start_date + 'T00:00:00');
       const endDate = new Date(request.end_date + 'T23:59:59');
       const checkDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-      
-      return checkDate >= new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()) && 
-             checkDate <= new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+      return checkDate >= new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate()) && checkDate <= new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
     });
   };
   const getSelectedDateAbsences = () => {
@@ -151,23 +149,7 @@ export const TeamCalendar = ({
         </div>
 
         {/* Legend for analyst colors */}
-        {absenceRequests.length > 0 && <div className="border-t pt-3">
-            <p className="text-xs font-medium mb-2">Analyst Colors</p>
-            <div className="flex flex-wrap gap-2">
-              {Array.from(new Set(absenceRequests.map(r => r.analyst_id))).slice(0, 8).map((analystId, index) => {
-            const request = absenceRequests.find(r => r.analyst_id === analystId);
-            const color = getAnalystColor(analystId, index);
-            return <div key={analystId} className="flex items-center gap-1">
-                      <div className="w-3 h-3 rounded-full" style={{
-                backgroundColor: color
-              }} />
-                      <span className="text-xs">
-                        {request?.analyst_profile?.name || 'Analyst'}
-                      </span>
-                    </div>;
-          })}
-            </div>
-          </div>}
+        {absenceRequests.length > 0}
       </CardContent>
     </Card>;
 };
