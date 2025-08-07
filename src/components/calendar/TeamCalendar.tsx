@@ -182,28 +182,28 @@ export const TeamCalendar = ({
                   const workDay = analyst.work_days && typeof analyst.work_days === 'object' ? analyst.work_days[dayName] : null;
                   const color = getAnalystColor(analyst.user_id, index);
                   
-                  // Format time without seconds
-                  const formatTime = (time: string) => {
-                    return time ? time.substring(0, 5) : '';
-                  };
-                  
                   return (
-                    <div key={analyst.id} className="p-3 rounded-lg border bg-card/50 space-y-1">
-                      <p className="font-medium text-sm" style={{ color }}>
-                        {analyst.name}
-                      </p>
+                    <div key={analyst.id} className="p-3 rounded-lg border bg-card/50 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <p className="font-medium text-sm" style={{ color }}>
+                          {analyst.name}
+                        </p>
+                        <Badge variant="outline" className="text-xs">
+                          {analyst.role}
+                        </Badge>
+                      </div>
                       
-                      <Badge variant="outline" className="text-xs w-fit">
-                        {analyst.role}
-                      </Badge>
+                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <Clock className="h-3 w-3" />
+                        <span>{analyst.start_time} - {analyst.end_time}</span>
+                      </div>
                       
-                      <p className="text-xs text-muted-foreground">
-                        {formatTime(analyst.start_time)} - {formatTime(analyst.end_time)}
-                      </p>
-                      
-                      <p className="text-xs text-muted-foreground">
-                        {getWorkModeIcon(workDay?.mode || 'office')} {formatWorkMode(workDay?.mode || 'office')}
-                      </p>
+                      <div className="flex items-center gap-1 text-xs">
+                        <MapPin className="h-3 w-3" />
+                        <span className="text-muted-foreground">
+                          {getWorkModeIcon(workDay?.mode || 'office')} {formatWorkMode(workDay?.mode || 'office')}
+                        </span>
+                      </div>
                     </div>
                   );
                 })}
