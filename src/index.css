@@ -59,36 +59,36 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 240 100% 14%;
-    --foreground: 0 0% 100%;
+    --background: 222 47% 13%;
+    --foreground: 210 40% 98%;
 
-    --card: 240 100% 14%;
-    --card-foreground: 0 0% 100%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 240 100% 14%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 182 94% 42%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
 
-    --secondary: 210 63% 74%;
-    --secondary-foreground: 240 100% 14%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 240 20% 20%;
-    --muted-foreground: 210 20% 70%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 238 50% 37%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
 
     --success: 142 71% 35%;
-    --success-foreground: 0 0% 100%;
+    --success-foreground: 210 40% 98%;
 
-    --border: 240 20% 25%;
-    --input: 240 20% 25%;
-    --ring: 182 94% 42%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -107,49 +107,10 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Inter', 'Gellix', Arial, sans-serif;
   }
 
-  /* Landing and auth pages use Cognizant theme */
+  /* Landing and auth pages use darker background */
   .landing-theme {
-    --background: 240 100% 14%;
-    --foreground: 0 0% 100%;
-    background: linear-gradient(135deg, 
-      hsl(240, 100%, 14%) 0%, 
-      hsl(235, 70%, 25%) 35%, 
-      hsl(238, 50%, 37%) 100%);
-    animation: gradientShift 10s ease-in-out infinite;
-  }
-
-  .cognizant-card {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(109, 201, 204, 0.3);
-    backdrop-filter: blur(10px);
-  }
-
-  .cognizant-input {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(109, 201, 204, 0.3);
-    color: white;
-  }
-
-  .cognizant-input:focus {
-    border-color: hsl(182, 94%, 42%);
-    box-shadow: 0 0 0 2px rgba(109, 201, 204, 0.2);
-  }
-
-  @keyframes gradientShift {
-    0%, 100% {
-      background: linear-gradient(135deg, 
-        hsl(240, 100%, 14%) 0%, 
-        hsl(235, 70%, 25%) 35%, 
-        hsl(238, 50%, 37%) 100%);
-    }
-    50% {
-      background: linear-gradient(135deg, 
-        hsl(238, 50%, 37%) 0%, 
-        hsl(235, 70%, 25%) 35%, 
-        hsl(240, 100%, 14%) 100%);
-    }
+    --background: 222.2 84% 4.9%;
   }
 }
