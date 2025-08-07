@@ -157,7 +157,7 @@ export const TeamCalendar = ({
         <div className="grid lg:grid-cols-3 gap-4">
           {/* Calendar */}
           <div className="flex justify-center">
-            <Calendar mode="single" selected={selectedDate} onSelect={date => date && setSelectedDate(date)} modifiers={modifiers} modifiersStyles={modifiersStyles} className={cn("p-4 pointer-events-auto border rounded-md scale-110")} />
+            <Calendar mode="single" selected={selectedDate} onSelect={date => date && setSelectedDate(date)} modifiers={modifiers} modifiersStyles={modifiersStyles} className={cn("p-3 pointer-events-auto border rounded-md")} />
           </div>
 
           {/* Analysts Working Today */}
