@@ -195,7 +195,7 @@ export const TeamCalendar = ({
                       
                       <div className="flex items-center gap-1 text-xs text-muted-foreground">
                         <Clock className="h-3 w-3" />
-                        <span>{analyst.start_time} - {analyst.end_time}</span>
+                        <span>{analyst.start_time?.substring(0, 5)} - {analyst.end_time?.substring(0, 5)}</span>
                       </div>
                       
                       <div className="flex items-center gap-1 text-xs">
