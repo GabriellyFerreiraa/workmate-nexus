@@ -5,7 +5,7 @@ import { Shield, Users, Clock, Calendar, ArrowRight } from 'lucide-react';
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background landing-theme">
       {/* Hero Section */}
       <div className="relative">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-primary/5 to-background" />

@@ -108,4 +108,9 @@ All colors MUST be HSL.
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Landing and auth pages use darker background */
+  .landing-theme {
+    --background: 222.2 84% 4.9%;
+  }
 }
