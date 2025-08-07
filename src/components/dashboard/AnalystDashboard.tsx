@@ -11,39 +11,37 @@ import { toast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
 import { AbsenceRequestForm } from '@/components/forms/AbsenceRequestForm';
 import { TeamCalendar } from '@/components/calendar/TeamCalendar';
-
 export const AnalystDashboard = () => {
-  const { userProfile, user } = useAuth();
+  const {
+    userProfile,
+    user
+  } = useAuth();
   const [absenceRequests, setAbsenceRequests] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [onlineAnalysts, setOnlineAnalysts] = useState([]);
   const [showRequestForm, setShowRequestForm] = useState(false);
   const [loading, setLoading] = useState(true);
-
   const fetchData = async () => {
     if (!user) return;
-
     try {
       // Fetch absence requests
-      const { data: absences } = await supabase
-        .from('absence_requests')
-        .select('*')
-        .eq('analyst_id', user.id)
-        .order('created_at', { ascending: false });
+      const {
+        data: absences
+      } = await supabase.from('absence_requests').select('*').eq('analyst_id', user.id).order('created_at', {
+        ascending: false
+      });
 
       // Fetch tasks
-      const { data: userTasks } = await supabase
-        .from('tasks')
-        .select('*, assigned_by_profile:profiles!tasks_assigned_by_fkey(name)')
-        .eq('assigned_to', user.id)
-        .order('created_at', { ascending: false });
+      const {
+        data: userTasks
+      } = await supabase.from('tasks').select('*, assigned_by_profile:profiles!tasks_assigned_by_fkey(name)').eq('assigned_to', user.id).order('created_at', {
+        ascending: false
+      });
 
       // Fetch online analysts (simplified for now)
-      const { data: analysts } = await supabase
-        .from('profiles')
-        .select('*')
-        .neq('user_id', user.id);
-
+      const {
+        data: analysts
+      } = await supabase.from('profiles').select('*').neq('user_id', user.id);
       setAbsenceRequests(absences || []);
       setTasks(userTasks || []);
       setOnlineAnalysts(analysts || []);
@@ -58,24 +56,19 @@ export const AnalystDashboard = () => {
       setLoading(false);
     }
   };
-
   const markTaskCompleted = async (taskId: string) => {
     try {
-      const { error } = await supabase
-        .from('tasks')
-        .update({ 
-          status: 'completed',
-          completed_at: new Date().toISOString()
-        })
-        .eq('id', taskId);
-
+      const {
+        error
+      } = await supabase.from('tasks').update({
+        status: 'completed',
+        completed_at: new Date().toISOString()
+      }).eq('id', taskId);
       if (error) throw error;
-
       toast({
         title: "Task completed",
         description: "The task has been marked as completed"
       });
-
       fetchData(); // Refresh data
     } catch (error) {
       console.error('Error updating task:', error);
@@ -86,21 +79,16 @@ export const AnalystDashboard = () => {
       });
     }
   };
-
   const deleteTask = async (taskId: string) => {
     try {
-      const { error } = await supabase
-        .from('tasks')
-        .delete()
-        .eq('id', taskId);
-
+      const {
+        error
+      } = await supabase.from('tasks').delete().eq('id', taskId);
       if (error) throw error;
-
       toast({
         title: "Task removed",
         description: "The task notification has been removed"
       });
-
       fetchData(); // Refresh data
     } catch (error) {
       console.error('Error deleting task:', error);
@@ -111,21 +99,16 @@ export const AnalystDashboard = () => {
       });
     }
   };
-
   const deleteAbsenceRequest = async (requestId: string) => {
     try {
-      const { error } = await supabase
-        .from('absence_requests')
-        .delete()
-        .eq('id', requestId);
-
+      const {
+        error
+      } = await supabase.from('absence_requests').delete().eq('id', requestId);
       if (error) throw error;
-
       toast({
         title: "Request removed",
         description: "The absence request notification has been removed"
       });
-
       fetchData(); // Refresh data
     } catch (error) {
       console.error('Error deleting absence request:', error);
@@ -136,41 +119,70 @@ export const AnalystDashboard = () => {
       });
     }
   };
-
   useEffect(() => {
     fetchData();
   }, [user]);
-
   const getStatusBadge = (status: string) => {
     const statusConfig = {
-      pending: { label: 'Pending', variant: 'secondary' as const },
-      approved: { label: 'Approved', variant: 'success' as const },
-      rejected: { label: 'Rejected', variant: 'destructive' as const },
-      cancel_requested: { label: 'Cancellation requested', variant: 'secondary' as const },
-      cancelled: { label: 'Cancelled', variant: 'outline' as const }
+      pending: {
+        label: 'Pending',
+        variant: 'secondary' as const
+      },
+      approved: {
+        label: 'Approved',
+        variant: 'default' as const
+      },
+      rejected: {
+        label: 'Rejected',
+        variant: 'destructive' as const
+      },
+      cancel_requested: {
+        label: 'Cancellation requested',
+        variant: 'secondary' as const
+      },
+      cancelled: {
+        label: 'Cancelled',
+        variant: 'outline' as const
+      }
     };
-    return statusConfig[status] || { label: status, variant: 'outline' as const };
+    return statusConfig[status] || {
+      label: status,
+      variant: 'outline' as const
+    };
   };
-
   const getTaskStatusBadge = (status: string) => {
     const statusConfig = {
-      pending: { label: 'Pending', variant: 'secondary' as const },
-      in_progress: { label: 'In progress', variant: 'default' as const },
-      completed: { label: 'Completed', variant: 'success' as const }
+      pending: {
+        label: 'Pending',
+        variant: 'secondary' as const
+      },
+      in_progress: {
+        label: 'In progress',
+        variant: 'default' as const
+      },
+      completed: {
+        label: 'Completed',
+        variant: 'default' as const
+      }
     };
-    return statusConfig[status] || { label: status, variant: 'outline' as const };
+    return statusConfig[status] || {
+      label: status,
+      variant: 'outline' as const
+    };
   };
-
   const getCurrentShiftInfo = () => {
     if (!userProfile?.work_days) return null;
-    
-    const today = new Date().toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase();
+    const today = new Date().toLocaleDateString('en-US', {
+      weekday: 'short'
+    }).toLowerCase();
     const todaySchedule = userProfile.work_days[today];
-    
     if (!todaySchedule?.active) {
-      return { isWorkDay: false, mode: null, shift: null };
+      return {
+        isWorkDay: false,
+        mode: null,
+        shift: null
+      };
     }
-
     const formatTime = (time: string) => time.slice(0, 5); // Remove seconds
 
     return {
@@ -179,15 +191,11 @@ export const AnalystDashboard = () => {
       shift: `${formatTime(userProfile.start_time)} - ${formatTime(userProfile.end_time)}`
     };
   };
-
   const shiftInfo = getCurrentShiftInfo();
-
   if (loading) {
     return <div className="p-6">Loading dashboard...</div>;
   }
-
-  return (
-    <div className="space-y-6">
+  return <div className="space-y-6">
       {/* Quick Stats */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
@@ -199,18 +207,12 @@ export const AnalystDashboard = () => {
             <div className="text-2xl font-bold">
               {shiftInfo?.isWorkDay ? shiftInfo.shift : 'Day off'}
             </div>
-            {shiftInfo?.isWorkDay && (
-              <div className="flex items-center mt-2">
-                {shiftInfo.mode === 'home' ? (
-                  <Home className="h-4 w-4 mr-1" />
-                ) : (
-                  <Building className="h-4 w-4 mr-1" />
-                )}
+            {shiftInfo?.isWorkDay && <div className="flex items-center mt-2">
+                {shiftInfo.mode === 'home' ? <Home className="h-4 w-4 mr-1" /> : <Building className="h-4 w-4 mr-1" />}
                 <span className="text-sm text-muted-foreground capitalize">
                   {shiftInfo.mode === 'home' ? 'Home' : 'Office'}
                 </span>
-              </div>
-            )}
+              </div>}
           </CardContent>
         </Card>
 
@@ -266,57 +268,36 @@ export const AnalystDashboard = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {tasks.length === 0 ? (
-                <p className="text-center text-muted-foreground py-4">
+              {tasks.length === 0 ? <p className="text-center text-muted-foreground py-4">
                   You have no assigned tasks
-                </p>
-              ) : (
-                <div className="space-y-4">
-                  {tasks.map((task) => (
-                    <div key={task.id} className="flex items-center justify-between p-4 border rounded-lg">
+                </p> : <div className="space-y-4">
+                  {tasks.map(task => <div key={task.id} className="flex items-center justify-between p-4 border rounded-lg">
                       <div className="flex-1">
                         <h4 className="font-medium">{task.title}</h4>
-                        {task.description && (
-                          <p className="text-sm text-muted-foreground mt-1">
+                        {task.description && <p className="text-sm text-muted-foreground mt-1">
                             {task.description}
-                          </p>
-                        )}
+                          </p>}
                         <div className="flex items-center gap-2 mt-2">
-                          <Badge {...getTaskStatusBadge(task.status)}>
+                          <Badge className="bg-green-600">
                             {getTaskStatusBadge(task.status).label}
                           </Badge>
-                          {task.due_date && (
-                            <span className="text-xs text-muted-foreground">
+                          {task.due_date && <span className="text-xs text-muted-foreground">
                               Due: {format(new Date(task.due_date), 'PPp')}
-                            </span>
-                          )}
+                            </span>}
                         </div>
                       </div>
                       <div className="flex gap-2 ml-4">
-                        {task.status !== 'completed' && (
-                          <Button
-                            size="sm"
-                            onClick={() => markTaskCompleted(task.id)}
-                          >
+                        {task.status !== 'completed' && <Button size="sm" onClick={() => markTaskCompleted(task.id)}>
                             <CheckCircle className="h-4 w-4 mr-1" />
                             Complete
-                          </Button>
-                        )}
-                        {task.status === 'completed' && (
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => deleteTask(task.id)}
-                          >
+                          </Button>}
+                        {task.status === 'completed' && <Button size="sm" variant="outline" onClick={() => deleteTask(task.id)}>
                             <X className="h-4 w-4 mr-1" />
                             Remove
-                          </Button>
-                        )}
+                          </Button>}
                       </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+                    </div>)}
+                </div>}
             </CardContent>
           </Card>
         </TabsContent>
@@ -336,14 +317,10 @@ export const AnalystDashboard = () => {
               </Button>
             </CardHeader>
             <CardContent>
-              {absenceRequests.length === 0 ? (
-                <p className="text-center text-muted-foreground py-4">
+              {absenceRequests.length === 0 ? <p className="text-center text-muted-foreground py-4">
                   You have no absence requests
-                </p>
-              ) : (
-                <div className="space-y-4">
-                  {absenceRequests.map((request) => (
-                    <div key={request.id} className="p-4 border rounded-lg">
+                </p> : <div className="space-y-4">
+                  {absenceRequests.map(request => <div key={request.id} className="p-4 border rounded-lg">
                       <div className="flex justify-between items-start mb-2">
                         <div className="flex-1">
                           <h4 className="font-medium">
@@ -358,29 +335,19 @@ export const AnalystDashboard = () => {
                           <Badge {...getStatusBadge(request.status)}>
                             {getStatusBadge(request.status).label}
                           </Badge>
-                          {(request.status === 'approved' || request.status === 'rejected') && (
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => deleteAbsenceRequest(request.id)}
-                            >
+                          {(request.status === 'approved' || request.status === 'rejected') && <Button size="sm" variant="outline" onClick={() => deleteAbsenceRequest(request.id)}>
                               <X className="h-4 w-4 mr-1" />
                               Remove
-                            </Button>
-                          )}
+                            </Button>}
                         </div>
                       </div>
-                      {request.lead_comment && (
-                        <div className="mt-3 p-3 bg-muted rounded">
+                      {request.lead_comment && <div className="mt-3 p-3 bg-muted rounded">
                           <p className="text-sm">
                             <strong>Lead Comment:</strong> {request.lead_comment}
                           </p>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
+                        </div>}
+                    </div>)}
+                </div>}
             </CardContent>
           </Card>
         </TabsContent>
@@ -394,14 +361,10 @@ export const AnalystDashboard = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {onlineAnalysts.length === 0 ? (
-                <p className="text-center text-muted-foreground py-4">
+              {onlineAnalysts.length === 0 ? <p className="text-center text-muted-foreground py-4">
                   No other analysts connected
-                </p>
-              ) : (
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {onlineAnalysts.map((analyst) => (
-                    <div key={analyst.id} className="p-3 border rounded-lg">
+                </p> : <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                  {onlineAnalysts.map(analyst => <div key={analyst.id} className="p-3 border rounded-lg">
                       <div className="flex items-center gap-3">
                         <div className="h-8 w-8 rounded-full bg-green-500 flex items-center justify-center">
                           <span className="text-xs font-medium text-white">
@@ -415,10 +378,8 @@ export const AnalystDashboard = () => {
                           </p>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+                    </div>)}
+                </div>}
             </CardContent>
           </Card>
         </TabsContent>
@@ -428,15 +389,9 @@ export const AnalystDashboard = () => {
       <TeamCalendar />
 
       {/* Absence Request Form Modal */}
-      {showRequestForm && (
-        <AbsenceRequestForm
-          onClose={() => setShowRequestForm(false)}
-          onSuccess={() => {
-            setShowRequestForm(false);
-            fetchData();
-          }}
-        />
-      )}
-    </div>
-  );
+      {showRequestForm && <AbsenceRequestForm onClose={() => setShowRequestForm(false)} onSuccess={() => {
+      setShowRequestForm(false);
+      fetchData();
+    }} />}
+    </div>;
 };
