@@ -130,7 +130,7 @@ export const AnalystDashboard = () => {
       },
       approved: {
         label: 'Approved',
-        variant: 'default' as const
+        variant: 'success' as const
       },
       rejected: {
         label: 'Rejected',
