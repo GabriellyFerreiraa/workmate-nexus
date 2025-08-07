@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Calendar, Clock, Home, Building, Users, CheckCircle, AlertCircle, Plus } from 'lucide-react';
+import { Calendar, Clock, Home, Building, Users, CheckCircle, AlertCircle, Plus, X } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
 import { AbsenceRequestForm } from '@/components/forms/AbsenceRequestForm';
@@ -82,6 +82,56 @@ export const AnalystDashboard = () => {
       toast({
         title: "Error",
         description: "Could not update task",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const deleteTask = async (taskId: string) => {
+    try {
+      const { error } = await supabase
+        .from('tasks')
+        .delete()
+        .eq('id', taskId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Task removed",
+        description: "The task notification has been removed"
+      });
+
+      fetchData(); // Refresh data
+    } catch (error) {
+      console.error('Error deleting task:', error);
+      toast({
+        title: "Error",
+        description: "Could not remove task",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const deleteAbsenceRequest = async (requestId: string) => {
+    try {
+      const { error } = await supabase
+        .from('absence_requests')
+        .delete()
+        .eq('id', requestId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Request removed",
+        description: "The absence request notification has been removed"
+      });
+
+      fetchData(); // Refresh data
+    } catch (error) {
+      console.error('Error deleting absence request:', error);
+      toast({
+        title: "Error",
+        description: "Could not remove request",
         variant: "destructive"
       });
     }
@@ -242,16 +292,27 @@ export const AnalystDashboard = () => {
                           )}
                         </div>
                       </div>
-                      {task.status !== 'completed' && (
-                        <Button
-                          size="sm"
-                          onClick={() => markTaskCompleted(task.id)}
-                          className="ml-4"
-                        >
-                          <CheckCircle className="h-4 w-4 mr-1" />
-                          Complete
-                        </Button>
-                      )}
+                      <div className="flex gap-2 ml-4">
+                        {task.status !== 'completed' && (
+                          <Button
+                            size="sm"
+                            onClick={() => markTaskCompleted(task.id)}
+                          >
+                            <CheckCircle className="h-4 w-4 mr-1" />
+                            Complete
+                          </Button>
+                        )}
+                        {task.status === 'completed' && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => deleteTask(task.id)}
+                          >
+                            <X className="h-4 w-4 mr-1" />
+                            Remove
+                          </Button>
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -284,7 +345,7 @@ export const AnalystDashboard = () => {
                   {absenceRequests.map((request) => (
                     <div key={request.id} className="p-4 border rounded-lg">
                       <div className="flex justify-between items-start mb-2">
-                        <div>
+                        <div className="flex-1">
                           <h4 className="font-medium">
                             {format(new Date(request.start_date), 'PPP')} - {' '}
                             {format(new Date(request.end_date), 'PPP')}
@@ -293,9 +354,21 @@ export const AnalystDashboard = () => {
                             {request.reason}
                           </p>
                         </div>
-                        <Badge {...getStatusBadge(request.status)}>
-                          {getStatusBadge(request.status).label}
-                        </Badge>
+                        <div className="flex items-center gap-2">
+                          <Badge {...getStatusBadge(request.status)}>
+                            {getStatusBadge(request.status).label}
+                          </Badge>
+                          {(request.status === 'approved' || request.status === 'rejected') && (
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => deleteAbsenceRequest(request.id)}
+                            >
+                              <X className="h-4 w-4 mr-1" />
+                              Remove
+                            </Button>
+                          )}
+                        </div>
                       </div>
                       {request.lead_comment && (
                         <div className="mt-3 p-3 bg-muted rounded">
