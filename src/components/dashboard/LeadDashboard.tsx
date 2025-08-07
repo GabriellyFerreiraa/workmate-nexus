@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Calendar, Users, CheckCircle, AlertCircle, Plus, Clock } from 'lucide-react';
+import { Calendar, Users, CheckCircle, AlertCircle, Plus, Clock, Trash2 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
 import { TaskAssignmentForm } from '@/components/forms/TaskAssignmentForm';
@@ -124,6 +124,47 @@ export const LeadDashboard = () => {
       toast({
         title: "Error",
         description: "Could not reject request",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const deleteAnalyst = async (analystId: string, analystName: string) => {
+    if (!confirm(`Are you sure you want to delete ${analystName}? This will permanently remove all their data including tasks and absence requests.`)) {
+      return;
+    }
+
+    try {
+      // Delete all related data first
+      await supabase
+        .from('tasks')
+        .delete()
+        .eq('assigned_to', analystId);
+
+      await supabase
+        .from('absence_requests')
+        .delete()
+        .eq('analyst_id', analystId);
+
+      // Finally delete the profile
+      const { error } = await supabase
+        .from('profiles')
+        .delete()
+        .eq('user_id', analystId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Analyst deleted",
+        description: `${analystName} has been successfully removed from the system`
+      });
+
+      fetchData(); // Refresh data
+    } catch (error) {
+      console.error('Error deleting analyst:', error);
+      toast({
+        title: "Error",
+        description: "Could not delete analyst",
         variant: "destructive"
       });
     }
@@ -362,14 +403,25 @@ export const LeadDashboard = () => {
                            <p>Not scheduled today</p>
                          </div>
                        )}
-                       <Button
-                         size="sm"
-                         variant="outline"
-                         onClick={() => setSelectedAnalyst(analyst)}
-                         className="w-full"
-                       >
-                         Edit Schedule
-                       </Button>
+                        <div className="space-y-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => setSelectedAnalyst(analyst)}
+                            className="w-full"
+                          >
+                            Edit Schedule
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={() => deleteAnalyst(analyst.user_id, analyst.name)}
+                            className="w-full"
+                          >
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            Delete Analyst
+                          </Button>
+                        </div>
                      </div>
                    );
                 })}
