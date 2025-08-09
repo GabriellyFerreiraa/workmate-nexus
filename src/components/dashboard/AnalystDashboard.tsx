@@ -287,7 +287,7 @@ export const AnalystDashboard = () => {
                                 {task.description}
                               </p>}
                             <div className="flex items-center gap-2 mt-2">
-                              <Badge {...getTaskStatusBadge(task.status)}>
+                              <Badge className="bg-orange-500">
                                 {getTaskStatusBadge(task.status).label}
                               </Badge>
                               {task.assigned_by === task.assigned_to ? <Badge variant="outline">Self-assigned</Badge> : <Badge variant="outline">{`Lead-assigned${task.assigned_by_profile?.name ? ` by ${task.assigned_by_profile.name}` : ''}`}</Badge>}
