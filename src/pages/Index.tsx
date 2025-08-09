@@ -101,7 +101,7 @@ const Index = () => {
           </div>
           
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <Card className="p-8 bg-[#0a1069]/[0.31]">
+            <Card className="p-8 bg-[#160331]/[0.31]">
               <CardHeader className="text-center">
                 <CardTitle className="text-2xl mb-4">Analyst Dashboard</CardTitle>
                 <CardDescription>
@@ -118,7 +118,7 @@ const Index = () => {
               </CardContent>
             </Card>
 
-            <Card className="p-8 bg-[#0a1069]/[0.31]">
+            <Card className="p-8 bg-[#160331]/[0.31]">
               <CardHeader className="text-center">
                 <CardTitle className="text-2xl mb-4">Lead Dashboard</CardTitle>
                 <CardDescription>
