@@ -338,7 +338,7 @@ export const LeadDashboard = () => {
               ) : (
                 <div className="space-y-4">
                   {allTasks.map((task) => (
-                    <div key={task.id} className="p-4 border rounded-lg">
+                    <div key={task.id} className="p-4 border rounded-lg bg-background">
                       <div className="flex justify-between items-start mb-2">
                         <div>
                           <h4 className="font-medium">{task.title}</h4>

@@ -273,7 +273,7 @@ export const AnalystDashboard = () => {
               ) : (
                 <div className="space-y-4">
                   {tasks.map((task) => (
-                    <div key={task.id} className="flex items-center justify-between p-4 border rounded-lg">
+                    <div key={task.id} className="flex items-center justify-between p-4 border rounded-lg bg-background">
                       <div className="flex-1">
                         <h4 className="font-medium">{task.title}</h4>
                         {task.description && (

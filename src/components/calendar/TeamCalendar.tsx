@@ -183,7 +183,7 @@ export const TeamCalendar = ({
                   const color = getAnalystColor(analyst.user_id, index);
                   
                   return (
-                    <div key={analyst.id} className="p-3 rounded-lg border bg-card/50 space-y-2">
+                    <div key={analyst.id} className="p-3 rounded-lg border bg-background space-y-2">
                       <div className="flex items-center justify-between">
                         <p className="font-medium text-sm" style={{ color }}>
                           {analyst.name}
