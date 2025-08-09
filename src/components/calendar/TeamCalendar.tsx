@@ -153,7 +153,7 @@ export const TeamCalendar = ({
       <CardContent className="space-y-4 bg-[#160331]/[0.31]">
         <div className="grid lg:grid-cols-3 gap-4">
           {/* Calendar */}
-          <div className="flex justify-center bg-[#291c40]/[0.31]">
+          <div className="flex justify-center bg-[#160331]/0">
             <Calendar mode="single" selected={selectedDate} onSelect={date => date && setSelectedDate(date)} modifiers={modifiers} modifiersStyles={modifiersStyles} className={cn("p-3 pointer-events-auto border rounded-md")} />
           </div>
 
