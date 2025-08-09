@@ -356,7 +356,7 @@ export const LeadDashboard = () => {
                            <p>Not scheduled today</p>
                          </div>}
                         <div className="space-y-2">
-                          <Button size="sm" variant="outline" onClick={() => setSelectedAnalyst(analyst)} className="w-full">
+                          <Button size="sm" variant="outline" onClick={() => setSelectedAnalyst(analyst)} className="w-full bg-slate-800 hover:bg-slate-700">
                             Edit Schedule
                           </Button>
                           <Button size="sm" variant="destructive" onClick={() => deleteAnalyst(analyst.user_id, analyst.name)} className="w-full">
