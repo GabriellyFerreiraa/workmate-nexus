@@ -89,13 +89,13 @@ export const AbsenceRequestForm = ({
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="startDate">Start Date</Label>
-              <Input id="startDate" type="date" {...register('startDate')} />
+              <Input id="startDate" type="date" className="bg-slate-800" />
               {errors.startDate && <p className="text-sm text-destructive">{errors.startDate.message}</p>}
             </div>
             
             <div className="space-y-2">
               <Label htmlFor="endDate">End Date</Label>
-              <Input id="endDate" type="date" {...register('endDate')} />
+              <Input id="endDate" type="date" className="bg-slate-800" />
               {errors.endDate && <p className="text-sm text-destructive">{errors.endDate.message}</p>}
             </div>
           </div>
@@ -119,12 +119,12 @@ export const AbsenceRequestForm = ({
           
           <div className="space-y-2">
             <Label htmlFor="details">Details</Label>
-            <Textarea id="details" placeholder="Provide additional details about your absence request..." {...register('details')} />
+            <Textarea id="details" placeholder="Provide additional details about your absence request..." className="bg-slate-800" />
             {errors.details && <p className="text-sm text-destructive">{errors.details.message}</p>}
           </div>
           
           <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={onClose}>
+            <Button type="button" variant="outline" onClick={onClose} className="bg-slate-800 hover:bg-slate-700">
               Cancel
             </Button>
             <Button type="submit" disabled={isLoading}>
