@@ -364,7 +364,7 @@ export const AnalystDashboard = () => {
               {onlineAnalysts.length === 0 ? <p className="text-center text-muted-foreground py-4">
                   No other analysts connected
                 </p> : <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {onlineAnalysts.map(analyst => <div key={analyst.id} className="p-3 border rounded-lg bg-background">
+                  {onlineAnalysts.map(analyst => <div key={analyst.id} className="p-3 border rounded-lg bg-[#01012b]">
                       <div className="flex items-center gap-3">
                         <div className="h-8 w-8 rounded-full bg-green-500 flex items-center justify-center">
                           <span className="text-xs font-medium text-white">
