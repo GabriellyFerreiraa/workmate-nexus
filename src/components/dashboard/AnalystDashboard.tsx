@@ -320,7 +320,7 @@ export const AnalystDashboard = () => {
                   {absenceRequests.length === 0 ? <p className="text-center text-muted-foreground py-4">
                   You have no absence requests
                 </p> : <div className="space-y-4">
-                  {absenceRequests.map(request => <div key={request.id} className="p-4 border rounded-lg bg-background">
+                  {absenceRequests.map(request => <div key={request.id} className="p-4 border rounded-lg bg-slate-900">
                       <div className="flex justify-between items-start mb-2">
                         <div className="flex-1">
                           <h4 className="font-medium">
