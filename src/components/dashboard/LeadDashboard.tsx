@@ -309,9 +309,14 @@ export const LeadDashboard = () => {
                           </p>
                           {task.description && <p className="text-sm mt-1">{task.description}</p>}
                         </div>
-                        <Badge {...getTaskStatusBadge(task.status)}>
-                          {getTaskStatusBadge(task.status).label}
-                        </Badge>
+                        <div className="flex items-center gap-2">
+                          <Badge {...getTaskStatusBadge(task.status)}>
+                            {getTaskStatusBadge(task.status).label}
+                          </Badge>
+                          <Badge variant="outline">
+                            {task.assigned_by === task.assigned_to ? 'Self-assigned' : 'Lead-assigned'}
+                          </Badge>
+                        </div>
                       </div>
                       {task.due_date && <p className="text-xs text-muted-foreground">
                           Due: {format(new Date(task.due_date), 'PPp')}

@@ -10,6 +10,7 @@ import { Calendar, Clock, Home, Building, Users, CheckCircle, AlertCircle, Plus,
 import { toast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
 import { AbsenceRequestForm } from '@/components/forms/AbsenceRequestForm';
+import { SelfAssignTaskForm } from '@/components/forms/SelfAssignTaskForm';
 import { TeamCalendar } from '@/components/calendar/TeamCalendar';
 export const AnalystDashboard = () => {
   const {
@@ -20,6 +21,7 @@ export const AnalystDashboard = () => {
   const [tasks, setTasks] = useState([]);
   const [onlineAnalysts, setOnlineAnalysts] = useState([]);
   const [showRequestForm, setShowRequestForm] = useState(false);
+  const [showSelfTaskForm, setShowSelfTaskForm] = useState(false);
   const [loading, setLoading] = useState(true);
   const fetchData = async () => {
     if (!user) return;
@@ -261,11 +263,17 @@ export const AnalystDashboard = () => {
 
         <TabsContent value="tasks" className="space-y-4">
           <Card>
-            <CardHeader>
-              <CardTitle>Assigned Tasks</CardTitle>
-              <CardDescription>
-                Tasks assigned to you by team leads
-              </CardDescription>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle>My Tasks</CardTitle>
+                <CardDescription>
+                  Tasks assigned to you or self-assigned
+                </CardDescription>
+              </div>
+              <Button onClick={() => setShowSelfTaskForm(true)}>
+                <Plus className="h-4 w-4 mr-2" />
+                Self-assign task
+              </Button>
             </CardHeader>
             <CardContent>
               {tasks.length === 0 ? <p className="text-center text-muted-foreground py-4">
@@ -281,9 +289,16 @@ export const AnalystDashboard = () => {
                           <Badge {...getTaskStatusBadge(task.status)}>
                             {getTaskStatusBadge(task.status).label}
                           </Badge>
-                          {task.due_date && <span className="text-xs text-muted-foreground">
+                          {task.assigned_by === task.assigned_to ? (
+                            <Badge variant="outline">Self-assigned</Badge>
+                          ) : (
+                            <Badge variant="outline">{`Lead-assigned${task.assigned_by_profile?.name ? ` by ${task.assigned_by_profile.name}` : ''}`}</Badge>
+                          )}
+                          {task.due_date && (
+                            <span className="text-xs text-muted-foreground">
                               Due: {format(new Date(task.due_date), 'PPp')}
-                            </span>}
+                            </span>
+                          )}
                         </div>
                       </div>
                       <div className="flex gap-2 ml-4">
@@ -389,9 +404,25 @@ export const AnalystDashboard = () => {
       <TeamCalendar />
 
       {/* Absence Request Form Modal */}
-      {showRequestForm && <AbsenceRequestForm onClose={() => setShowRequestForm(false)} onSuccess={() => {
-      setShowRequestForm(false);
-      fetchData();
-    }} />}
+      {showRequestForm && (
+        <AbsenceRequestForm
+          onClose={() => setShowRequestForm(false)}
+          onSuccess={() => {
+            setShowRequestForm(false);
+            fetchData();
+          }}
+        />
+      )}
+
+      {/* Self-Assign Task Form Modal */}
+      {showSelfTaskForm && (
+        <SelfAssignTaskForm
+          onClose={() => setShowSelfTaskForm(false)}
+          onSuccess={() => {
+            setShowSelfTaskForm(false);
+            fetchData();
+          }}
+        />
+      )}
     </div>;
 };
