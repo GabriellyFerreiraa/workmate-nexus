@@ -77,7 +77,7 @@ export const AbsenceRequestForm = ({
     }
   };
   return <Dialog open onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md bg-[#01012b]">
+      <DialogContent className="sm:max-w-md bg-slate-900">
         <DialogHeader>
           <DialogTitle>New Absence Request</DialogTitle>
           <DialogDescription>
