@@ -290,7 +290,7 @@ export const ShiftEditForm = ({
                     field
                   }) => <FormItem className="flex items-center gap-2">
                             <FormControl>
-                              <Switch checked={field.value} onCheckedChange={field.onChange} className="bg-slate-500 hover:bg-slate-500" />
+                              <Switch checked={field.value} onCheckedChange={field.onChange} className="bg-slate-400 hover:bg-slate-500" />
                             </FormControl>
                             <Label className="min-w-[80px]">{day.label}</Label>
                           </FormItem>} />
