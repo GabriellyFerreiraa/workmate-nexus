@@ -20,6 +20,7 @@ export const LeadDashboard = () => {
   const [allTasks, setAllTasks] = useState([]);
   const [analysts, setAnalysts] = useState([]);
   const [approvedAbsences, setApprovedAbsences] = useState([]);
+  const [processedRequests, setProcessedRequests] = useState([]);
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [selectedAnalyst, setSelectedAnalyst] = useState(null);
@@ -28,30 +29,42 @@ export const LeadDashboard = () => {
     if (!user) return;
     try {
       // Fetch pending absence requests
-      const {
-        data: requests
-      } = await supabase.from('absence_requests').select('*, analyst_profile:profiles!absence_requests_analyst_id_fkey(name)').eq('status', 'pending').order('created_at', {
-        ascending: false
-      });
+      const { data: requests } = await supabase
+        .from('absence_requests')
+        .select('*, analyst_profile:profiles!absence_requests_analyst_id_fkey(name)')
+        .eq('status', 'pending')
+        .order('created_at', { ascending: false });
+
+      // Fetch processed (non-pending) absence requests
+      const { data: processed } = await supabase
+        .from('absence_requests')
+        .select('*, analyst_profile:profiles!absence_requests_analyst_id_fkey(name)')
+        .neq('status', 'pending')
+        .order('updated_at', { ascending: false });
 
       // Fetch approved absences for today
       const today = new Date().toISOString().split('T')[0];
-      const {
-        data: absences
-      } = await supabase.from('absence_requests').select('*').eq('status', 'approved').lte('start_date', today).gte('end_date', today);
+      const { data: absences } = await supabase
+        .from('absence_requests')
+        .select('*')
+        .eq('status', 'approved')
+        .lte('start_date', today)
+        .gte('end_date', today);
 
       // Fetch all tasks
-      const {
-        data: tasks
-      } = await supabase.from('tasks').select('*, assigned_to_profile:profiles!tasks_assigned_to_fkey(name)').order('created_at', {
-        ascending: false
-      });
+      const { data: tasks } = await supabase
+        .from('tasks')
+        .select('*, assigned_to_profile:profiles!tasks_assigned_to_fkey(name)')
+        .order('created_at', { ascending: false });
 
       // Fetch all analysts
-      const {
-        data: allAnalysts
-      } = await supabase.from('profiles').select('*').eq('role', 'analyst');
+      const { data: allAnalysts } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('role', 'analyst');
+      
       setPendingRequests(requests || []);
+      setProcessedRequests(processed || []);
       setApprovedAbsences(absences || []);
       setAllTasks(tasks || []);
       setAnalysts(allAnalysts || []);
@@ -243,6 +256,7 @@ export const LeadDashboard = () => {
           <TabsTrigger value="requests">Pending Requests</TabsTrigger>
           <TabsTrigger value="tasks">Task Management</TabsTrigger>
           <TabsTrigger value="team">Team</TabsTrigger>
+          <TabsTrigger value="reports">Reports</TabsTrigger>
         </TabsList>
 
         <TabsContent value="requests" className="space-y-4">
@@ -254,15 +268,15 @@ export const LeadDashboard = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {pendingRequests.length === 0 ? <p className="text-center text-muted-foreground py-4">
-                  No pending requests
-                </p> : <div className="space-y-4">
-                  {pendingRequests.map(request => <div key={request.id} className="p-4 border rounded-lg bg-slate-900">
+              {pendingRequests.length === 0 ? (
+                <p className="text-center text-muted-foreground py-4">No pending requests</p>
+              ) : (
+                <div className="space-y-4">
+                  {pendingRequests.map(request => (
+                    <div key={request.id} className="p-4 border rounded-lg bg-slate-900">
                       <div className="flex justify-between items-start mb-2">
                         <div>
-                          <h4 className="font-medium">
-                            {request.analyst_profile?.name}
-                          </h4>
+                          <h4 className="font-medium">{request.analyst_profile?.name}</h4>
                           <p className="text-sm text-muted-foreground">
                             {format(new Date(request.start_date), 'PPP')} - {' '}
                             {format(new Date(request.end_date), 'PPP')}
@@ -276,8 +290,10 @@ export const LeadDashboard = () => {
                           Review
                         </Button>
                       </div>
-                    </div>)}
-                </div>}
+                    </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -372,6 +388,88 @@ export const LeadDashboard = () => {
                      </div>;
               })}
               </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="reports" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Completed Tasks</CardTitle>
+              <CardDescription>All tasks marked as completed</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {allTasks.filter(task => task.status === 'completed').length === 0 ? (
+                <p className="text-center text-muted-foreground py-4">No completed tasks</p>
+              ) : (
+                <div className="space-y-4">
+                  {allTasks
+                    .filter(task => task.status === 'completed')
+                    .map(task => (
+                      <div key={task.id} className="p-4 border rounded-lg bg-slate-900">
+                        <div className="flex justify-between items-start mb-2">
+                          <div>
+                            <h4 className="font-medium">{task.title}</h4>
+                            <p className="text-sm text-muted-foreground">
+                              Assigned to: {task.assigned_to_profile?.name}
+                            </p>
+                            {task.description && <p className="text-sm mt-1">{task.description}</p>}
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Badge {...getTaskStatusBadge(task.status)}>
+                              {getTaskStatusBadge(task.status).label}
+                            </Badge>
+                            <Badge variant="outline">
+                              {task.assigned_by === task.assigned_to ? 'Self-assigned' : 'Lead-assigned'}
+                            </Badge>
+                          </div>
+                        </div>
+                        {task.due_date && (
+                          <p className="text-xs text-muted-foreground">
+                            Due: {format(new Date(task.due_date), 'PPp')}
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Processed Absence Requests</CardTitle>
+              <CardDescription>Approved, rejected or cancelled</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {processedRequests.length === 0 ? (
+                <p className="text-center text-muted-foreground py-4">No processed requests</p>
+              ) : (
+                <div className="space-y-4">
+                  {processedRequests.map(request => (
+                    <div key={request.id} className="p-4 border rounded-lg bg-slate-900">
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <h4 className="font-medium">{request.analyst_profile?.name}</h4>
+                          <p className="text-sm text-muted-foreground">
+                            {format(new Date(request.start_date), 'PPP')} - {' '}
+                            {format(new Date(request.end_date), 'PPP')}
+                          </p>
+                          <p className="text-sm mt-1">{request.reason}</p>
+                        </div>
+                        <Badge variant="outline">{request.status}</Badge>
+                      </div>
+                      {request.lead_comment && (
+                        <div className="mt-3 p-3 bg-muted rounded">
+                          <p className="text-sm">
+                            <strong>Lead Comment:</strong> {request.lead_comment}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

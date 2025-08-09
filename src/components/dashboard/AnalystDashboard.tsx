@@ -259,6 +259,7 @@ export const AnalystDashboard = () => {
           <TabsTrigger value="tasks">My Tasks</TabsTrigger>
           <TabsTrigger value="absences">Absence Requests</TabsTrigger>
           <TabsTrigger value="team">Team</TabsTrigger>
+          <TabsTrigger value="reports">Reports</TabsTrigger>
         </TabsList>
 
         <TabsContent value="tasks" className="space-y-4">
@@ -276,43 +277,62 @@ export const AnalystDashboard = () => {
               </Button>
             </CardHeader>
             <CardContent>
-              {tasks.length === 0 ? <p className="text-center text-muted-foreground py-4">
-                  You have no assigned tasks
-                </p> : <div className="space-y-4">
-                  {tasks.map(task => <div key={task.id} className="flex items-center justify-between p-4 border rounded-lg bg-slate-900">
-                      <div className="flex-1">
-                        <h4 className="font-medium">{task.title}</h4>
-                        {task.description && <p className="text-sm text-muted-foreground mt-1">
-                            {task.description}
-                          </p>}
-                        <div className="flex items-center gap-2 mt-2">
-                          <Badge {...getTaskStatusBadge(task.status)}>
-                            {getTaskStatusBadge(task.status).label}
-                          </Badge>
-                          {task.assigned_by === task.assigned_to ? (
-                            <Badge variant="outline">Self-assigned</Badge>
-                          ) : (
-                            <Badge variant="outline">{`Lead-assigned${task.assigned_by_profile?.name ? ` by ${task.assigned_by_profile.name}` : ''}`}</Badge>
-                          )}
-                          {task.due_date && (
-                            <span className="text-xs text-muted-foreground">
-                              Due: {format(new Date(task.due_date), 'PPp')}
-                            </span>
-                          )}
+              {tasks.filter(task => task.status !== 'completed').length === 0 ? (
+                  <p className="text-center text-muted-foreground py-4">
+                    You have no active tasks
+                  </p>
+                ) : (
+                  <div className="space-y-4">
+                    {tasks
+                      .filter(task => task.status !== 'completed')
+                      .map(task => (
+                        <div key={task.id} className="flex items-center justify-between p-4 border rounded-lg bg-slate-900">
+                          <div className="flex-1">
+                            <h4 className="font-medium">{task.title}</h4>
+                            {task.description && (
+                              <p className="text-sm text-muted-foreground mt-1">
+                                {task.description}
+                              </p>
+                            )}
+                            <div className="flex items-center gap-2 mt-2">
+                              <Badge {...getTaskStatusBadge(task.status)}>
+                                {getTaskStatusBadge(task.status).label}
+                              </Badge>
+                              {task.assigned_by === task.assigned_to ? (
+                                <Badge variant="outline">Self-assigned</Badge>
+                              ) : (
+                                <Badge variant="outline">{`Lead-assigned${task.assigned_by_profile?.name ? ` by ${task.assigned_by_profile.name}` : ''}`}</Badge>
+                              )}
+                              {task.due_date && (
+                                <span className="text-xs text-muted-foreground">
+                                  Due: {format(new Date(task.due_date), 'PPp')}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex gap-2 ml-4">
+                            {task.status !== 'completed' && (
+                              <Button size="sm" onClick={() => markTaskCompleted(task.id)}>
+                                <CheckCircle className="h-4 w-4 mr-1" />
+                                Complete
+                              </Button>
+                            )}
+                            {task.status === 'completed' && (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => deleteTask(task.id)}
+                                className="bg-slate-900 hover:bg-slate-800"
+                              >
+                                <X className="h-4 w-4 mr-1" />
+                                Remove
+                              </Button>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex gap-2 ml-4">
-                        {task.status !== 'completed' && <Button size="sm" onClick={() => markTaskCompleted(task.id)}>
-                            <CheckCircle className="h-4 w-4 mr-1" />
-                            Complete
-                          </Button>}
-                        {task.status === 'completed' && <Button size="sm" variant="outline" onClick={() => deleteTask(task.id)} className="bg-slate-900 hover:bg-slate-800">
-                            <X className="h-4 w-4 mr-1" />
-                            Remove
-                          </Button>}
-                      </div>
-                    </div>)}
-                </div>}
+                      ))}
+                  </div>
+                )
             </CardContent>
           </Card>
         </TabsContent>
@@ -395,6 +415,102 @@ export const AnalystDashboard = () => {
                       </div>
                     </div>)}
                 </div>}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="reports" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Completed Tasks</CardTitle>
+              <CardDescription>Tasks you have completed</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {tasks.filter(task => task.status === 'completed').length === 0 ? (
+                <p className="text-center text-muted-foreground py-4">No completed tasks</p>
+              ) : (
+                <div className="space-y-4">
+                  {tasks
+                    .filter(task => task.status === 'completed')
+                    .map(task => (
+                      <div key={task.id} className="flex items-center justify-between p-4 border rounded-lg bg-slate-900">
+                        <div className="flex-1">
+                          <h4 className="font-medium">{task.title}</h4>
+                          {task.description && (
+                            <p className="text-sm text-muted-foreground mt-1">{task.description}</p>
+                          )}
+                          <div className="flex items-center gap-2 mt-2">
+                            <Badge {...getTaskStatusBadge(task.status)}>
+                              {getTaskStatusBadge(task.status).label}
+                            </Badge>
+                            {task.assigned_by === task.assigned_to ? (
+                              <Badge variant="outline">Self-assigned</Badge>
+                            ) : (
+                              <Badge variant="outline">{`Lead-assigned${task.assigned_by_profile?.name ? ` by ${task.assigned_by_profile.name}` : ''}`}</Badge>
+                            )}
+                            {task.due_date && (
+                              <span className="text-xs text-muted-foreground">
+                                Due: {format(new Date(task.due_date), 'PPp')}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex gap-2 ml-4">
+                          <Button size="sm" variant="outline" onClick={() => deleteTask(task.id)} className="bg-slate-900 hover:bg-slate-800">
+                            <X className="h-4 w-4 mr-1" />
+                            Remove
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Processed Absence Requests</CardTitle>
+              <CardDescription>Approved, rejected or cancelled</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {absenceRequests.filter(req => ['approved','rejected','cancelled'].includes(req.status)).length === 0 ? (
+                <p className="text-center text-muted-foreground py-4">No processed requests</p>
+              ) : (
+                <div className="space-y-4">
+                  {absenceRequests
+                    .filter(req => ['approved','rejected','cancelled'].includes(req.status))
+                    .map(request => (
+                      <div key={request.id} className="p-4 border rounded-lg bg-slate-900">
+                        <div className="flex justify-between items-start mb-2">
+                          <div className="flex-1">
+                            <h4 className="font-medium">
+                              {format(new Date(request.start_date), 'PPP')} - {' '}
+                              {format(new Date(request.end_date), 'PPP')}
+                            </h4>
+                            <p className="text-sm text-muted-foreground mt-1">{request.reason}</p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Badge {...getStatusBadge(request.status)}>
+                              {getStatusBadge(request.status).label}
+                            </Badge>
+                            <Button size="sm" variant="outline" onClick={() => deleteAbsenceRequest(request.id)} className="bg-slate-900 hover:bg-slate-800">
+                              <X className="h-4 w-4 mr-1" />
+                              Remove
+                            </Button>
+                          </div>
+                        </div>
+                        {request.lead_comment && (
+                          <div className="mt-3 p-3 bg-muted rounded">
+                            <p className="text-sm">
+                              <strong>Lead Comment:</strong> {request.lead_comment}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
