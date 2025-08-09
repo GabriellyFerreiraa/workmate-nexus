@@ -10,6 +10,7 @@ import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import BackgroundFX from "@/components/background/BackgroundFX";
 
 const queryClient = new QueryClient();
 
@@ -58,33 +59,37 @@ const App = () => (
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <div className="landing-theme min-h-screen">
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={
-                  <PublicRoute>
-                    <Index />
-                  </PublicRoute>
-                } />
-                <Route path="/auth" element={
-                  <PublicRoute>
-                    <Auth />
-                  </PublicRoute>
-                } />
-                <Route path="/dashboard" element={
-                  <ProtectedRoute>
-                    <Dashboard />
-                  </ProtectedRoute>
-                } />
-                <Route path="/settings" element={
-                  <ProtectedRoute>
-                    <Settings />
-                  </ProtectedRoute>
-                } />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </BrowserRouter>
+          <div className="landing-theme min-h-screen relative">
+            {/* Interactive background behind all content */}
+            <BackgroundFX />
+            <div className="relative z-10">
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={
+                    <PublicRoute>
+                      <Index />
+                    </PublicRoute>
+                  } />
+                  <Route path="/auth" element={
+                    <PublicRoute>
+                      <Auth />
+                    </PublicRoute>
+                  } />
+                  <Route path="/dashboard" element={
+                    <ProtectedRoute>
+                      <Dashboard />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/settings" element={
+                    <ProtectedRoute>
+                      <Settings />
+                    </ProtectedRoute>
+                  } />
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </BrowserRouter>
+            </div>
           </div>
         </TooltipProvider>
       </AuthProvider>

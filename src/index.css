@@ -175,6 +175,43 @@ All colors MUST be HSL.
   }
 }
 
+/* Interactive mouse-follow background overlays */
+@layer components {
+  .interactive-bg { /* container only */ }
+
+  .interactive-bg .mouse-blur {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    /* Only blur near cursor using a mask */
+    backdrop-filter: blur(10px) saturate(110%);
+    -webkit-backdrop-filter: blur(10px) saturate(110%);
+    /* Mask to limit the blur region */
+    mask-image: radial-gradient(180px 180px at var(--x, -1000px) var(--y, -1000px), rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 45%, rgba(0,0,0,0.3) 60%, transparent 70%);
+    -webkit-mask-image: radial-gradient(180px 180px at var(--x, -1000px) var(--y, -1000px), rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 45%, rgba(0,0,0,0.3) 60%, transparent 70%);
+  }
+
+  .interactive-bg .mouse-color {
+    position: fixed;
+    left: var(--x, -1000px);
+    top: var(--y, -1000px);
+    width: 360px;
+    height: 360px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    filter: blur(32px) saturate(120%);
+    will-change: transform, opacity;
+    background: radial-gradient(
+      circle at center,
+      hsl(var(--brand-hi1) / 0.22) 0%,
+      hsl(var(--brand-hi2) / 0.18) 35%,
+      hsl(var(--brand-hi3) / 0.22) 60%,
+      transparent 75%
+    );
+    mix-blend-mode: screen;
+  }
+}
+
 @keyframes brand-gradient-shift {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
