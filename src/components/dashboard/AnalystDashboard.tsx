@@ -335,7 +335,7 @@ export const AnalystDashboard = () => {
                           <Badge {...getStatusBadge(request.status)}>
                             {getStatusBadge(request.status).label}
                           </Badge>
-                          {(request.status === 'approved' || request.status === 'rejected') && <Button size="sm" variant="outline" onClick={() => deleteAbsenceRequest(request.id)}>
+                          {(request.status === 'approved' || request.status === 'rejected') && <Button size="sm" variant="outline" onClick={() => deleteAbsenceRequest(request.id)} className="bg-[#01012b]">
                               <X className="h-4 w-4 mr-1" />
                               Remove
                             </Button>}
