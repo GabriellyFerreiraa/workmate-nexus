@@ -181,7 +181,7 @@ export const ShiftEditForm = ({
               }) => <FormItem>
                       <FormLabel>Start Time</FormLabel>
                       <FormControl>
-                        <Input type="time" {...field} />
+                        <Input type="time" className="bg-slate-700" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>} />
@@ -191,7 +191,7 @@ export const ShiftEditForm = ({
               }) => <FormItem>
                       <FormLabel>End Time</FormLabel>
                       <FormControl>
-                        <Input type="time" {...field} />
+                        <Input type="time" className="bg-slate-700" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>} />
@@ -209,7 +209,7 @@ export const ShiftEditForm = ({
               }) => <FormItem>
                       <FormLabel>Lunch Start</FormLabel>
                       <FormControl>
-                        <Input type="time" {...field} />
+                        <Input type="time" className="bg-slate-700" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>} />
@@ -219,7 +219,7 @@ export const ShiftEditForm = ({
               }) => <FormItem>
                       <FormLabel>Lunch End</FormLabel>
                       <FormControl>
-                        <Input type="time" {...field} />
+                        <Input type="time" className="bg-slate-700" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>} />
@@ -238,7 +238,7 @@ export const ShiftEditForm = ({
                 }) => <FormItem>
                         <FormLabel>Break 1 Start</FormLabel>
                         <FormControl>
-                          <Input type="time" {...field} />
+                          <Input type="time" className="bg-slate-700" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>} />
@@ -248,7 +248,7 @@ export const ShiftEditForm = ({
                 }) => <FormItem>
                         <FormLabel>Break 1 End</FormLabel>
                         <FormControl>
-                          <Input type="time" {...field} />
+                          <Input type="time" className="bg-slate-700" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>} />
@@ -260,7 +260,7 @@ export const ShiftEditForm = ({
                 }) => <FormItem>
                         <FormLabel>Break 2 Start</FormLabel>
                         <FormControl>
-                          <Input type="time" {...field} />
+                          <Input type="time" className="bg-slate-700" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>} />
@@ -270,7 +270,7 @@ export const ShiftEditForm = ({
                 }) => <FormItem>
                         <FormLabel>Break 2 End</FormLabel>
                         <FormControl>
-                          <Input type="time" {...field} />
+                          <Input type="time" className="bg-slate-700" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>} />
@@ -316,7 +316,7 @@ export const ShiftEditForm = ({
             </Card>
 
             <div className="flex justify-end gap-2">
-              <Button type="button" variant="outline" onClick={onClose}>
+              <Button type="button" variant="outline" onClick={onClose} className="bg-slate-700 hover:bg-slate-600">
                 Cancel
               </Button>
               <Button type="submit" disabled={loading}>
