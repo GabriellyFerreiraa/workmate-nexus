@@ -18,7 +18,6 @@ interface AbsenceRequest {
     name: string;
   };
 }
-
 interface Analyst {
   id: string;
   user_id: string;
@@ -65,7 +64,9 @@ export const TeamCalendar = ({
       const {
         data: analystData,
         error: analystError
-      } = await supabase.from('profiles').select('*').order('name', { ascending: true });
+      } = await supabase.from('profiles').select('*').order('name', {
+        ascending: true
+      });
       if (analystError) throw analystError;
       setAnalysts(analystData || []);
     } catch (error) {
@@ -103,27 +104,23 @@ export const TeamCalendar = ({
       };
     }
   };
-
   const getWorkingAnalysts = (date: Date) => {
     const dayNames = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
     const dayName = dayNames[getDay(date)];
     const absentsOnDate = getAbsencesForDate(date);
     const absentAnalystIds = absentsOnDate.map(absence => absence.analyst_id);
-
     return analysts.filter(analyst => {
       // Check if analyst is not absent on this date
       if (absentAnalystIds.includes(analyst.user_id)) return false;
-      
+
       // Check if analyst is scheduled to work on this day
       const workDay = analyst.work_days && typeof analyst.work_days === 'object' ? analyst.work_days[dayName] : null;
       return workDay && workDay.active === true;
     });
   };
-
   const formatWorkMode = (mode: string) => {
     return mode === 'home' ? 'Work from Home' : 'Office';
   };
-
   const getWorkModeIcon = (mode: string) => {
     return mode === 'home' ? '🏠' : '🏢';
   };
@@ -150,13 +147,13 @@ export const TeamCalendar = ({
       </Card>;
   }
   return <Card className={className}>
-      <CardHeader>
+      <CardHeader className="bg-[#160331]/[0.31]">
         <CardTitle>Calendar</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 bg-[#160331]/[0.31]">
         <div className="grid lg:grid-cols-3 gap-4">
           {/* Calendar */}
-          <div className="flex justify-center">
+          <div className="flex justify-center bg-[#291c40]/[0.31]">
             <Calendar mode="single" selected={selectedDate} onSelect={date => date && setSelectedDate(date)} modifiers={modifiers} modifiersStyles={modifiersStyles} className={cn("p-3 pointer-events-auto border rounded-md")} />
           </div>
 
@@ -170,22 +167,19 @@ export const TeamCalendar = ({
               {format(selectedDate, 'EEEE, MMMM d, yyyy')}
             </p>
             
-            {getWorkingAnalysts(selectedDate).length === 0 ? (
-              <p className="text-sm text-muted-foreground">
+            {getWorkingAnalysts(selectedDate).length === 0 ? <p className="text-sm text-muted-foreground">
                 No analysts scheduled to work today
-              </p>
-            ) : (
-              <div className="space-y-2 max-h-64 overflow-y-auto">
+              </p> : <div className="space-y-2 max-h-64 overflow-y-auto">
                 {getWorkingAnalysts(selectedDate).map((analyst, index) => {
-                  const dayNames = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-                  const dayName = dayNames[getDay(selectedDate)];
-                  const workDay = analyst.work_days && typeof analyst.work_days === 'object' ? analyst.work_days[dayName] : null;
-                  const color = getAnalystColor(analyst.user_id, index);
-                  
-                  return (
-                    <div key={analyst.id} className="p-3 rounded-lg border bg-background space-y-2">
+              const dayNames = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+              const dayName = dayNames[getDay(selectedDate)];
+              const workDay = analyst.work_days && typeof analyst.work_days === 'object' ? analyst.work_days[dayName] : null;
+              const color = getAnalystColor(analyst.user_id, index);
+              return <div key={analyst.id} className="p-3 rounded-lg border bg-background space-y-2">
                       <div className="flex items-center justify-between">
-                        <p className="font-medium text-sm" style={{ color }}>
+                        <p className="font-medium text-sm" style={{
+                    color
+                  }}>
                           {analyst.name}
                         </p>
                         <Badge variant="outline" className="text-xs">
@@ -204,11 +198,9 @@ export const TeamCalendar = ({
                           {getWorkModeIcon(workDay?.mode || 'office')} {formatWorkMode(workDay?.mode || 'office')}
                         </span>
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+                    </div>;
+            })}
+              </div>}
           </div>
 
           {/* Absences Today */}
@@ -217,19 +209,15 @@ export const TeamCalendar = ({
               Absences Today
             </h3>
             
-            {getSelectedDateAbsences().length === 0 ? (
-              <p className="text-sm text-muted-foreground">
+            {getSelectedDateAbsences().length === 0 ? <p className="text-sm text-muted-foreground">
                 No absences scheduled for this day
-              </p>
-            ) : (
-              <div className="space-y-2 max-h-64 overflow-y-auto">
+              </p> : <div className="space-y-2 max-h-64 overflow-y-auto">
                 {getSelectedDateAbsences().map((request, index) => {
-                  const displayInfo = formatAbsenceDisplay(request);
-                  const color = getAnalystColor(request.analyst_id, index);
-                  return (
-                    <div key={request.id} className="p-2 rounded-md border-l-4 bg-muted/30" style={{
-                      borderLeftColor: color
-                    }}>
+              const displayInfo = formatAbsenceDisplay(request);
+              const color = getAnalystColor(request.analyst_id, index);
+              return <div key={request.id} className="p-2 rounded-md border-l-4 bg-muted/30" style={{
+                borderLeftColor: color
+              }}>
                       <p className="text-sm font-medium">
                         {displayInfo.title}
                       </p>
@@ -239,11 +227,9 @@ export const TeamCalendar = ({
                       <p className="text-xs text-muted-foreground">
                         {format(parseISO(request.start_date), 'MMM d')} - {format(parseISO(request.end_date), 'MMM d')}
                       </p>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+                    </div>;
+            })}
+              </div>}
           </div>
         </div>
 
