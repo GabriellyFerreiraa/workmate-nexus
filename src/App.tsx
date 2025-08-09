@@ -58,32 +58,34 @@ const App = () => (
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={
-                <PublicRoute>
-                  <Index />
-                </PublicRoute>
-              } />
-              <Route path="/auth" element={
-                <PublicRoute>
-                  <Auth />
-                </PublicRoute>
-              } />
-              <Route path="/dashboard" element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              } />
-              <Route path="/settings" element={
-                <ProtectedRoute>
-                  <Settings />
-                </ProtectedRoute>
-              } />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
+          <div className="landing-theme min-h-screen">
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={
+                  <PublicRoute>
+                    <Index />
+                  </PublicRoute>
+                } />
+                <Route path="/auth" element={
+                  <PublicRoute>
+                    <Auth />
+                  </PublicRoute>
+                } />
+                <Route path="/dashboard" element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                } />
+                <Route path="/settings" element={
+                  <ProtectedRoute>
+                    <Settings />
+                  </ProtectedRoute>
+                } />
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </div>
         </TooltipProvider>
       </AuthProvider>
     </ThemeProvider>
