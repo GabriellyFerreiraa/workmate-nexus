@@ -85,7 +85,7 @@ const Auth = () => {
   };
   return <div className="min-h-screen flex items-center justify-center bg-background p-4 landing-theme">
       <Card className="w-full max-w-md">
-        <CardHeader className="text-center bg-[#0a1069]/[0.31]">
+        <CardHeader className="text-center bg-slate-900">
           <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary">
             <Shield className="h-6 w-6 text-primary-foreground" />
           </div>
@@ -94,7 +94,7 @@ const Auth = () => {
             Management system for Service Desk analysts
           </CardDescription>
         </CardHeader>
-        <CardContent className="bg-[#0a1069]/[0.31]">
+        <CardContent className="bg-slate-900">
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="login">Sign In</TabsTrigger>
