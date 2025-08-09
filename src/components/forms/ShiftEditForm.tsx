@@ -12,7 +12,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { toast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-
 const shiftFormSchema = z.object({
   start_time: z.string().min(1, 'Start time is required'),
   end_time: z.string().min(1, 'End time is required'),
@@ -53,18 +52,18 @@ const shiftFormSchema = z.object({
     })
   })
 });
-
 type ShiftFormData = z.infer<typeof shiftFormSchema>;
-
 interface ShiftEditFormProps {
   analyst: any;
   onClose: () => void;
   onSuccess: () => void;
 }
-
-export const ShiftEditForm = ({ analyst, onClose, onSuccess }: ShiftEditFormProps) => {
+export const ShiftEditForm = ({
+  analyst,
+  onClose,
+  onSuccess
+}: ShiftEditFormProps) => {
   const [loading, setLoading] = useState(false);
-
   const form = useForm<ShiftFormData>({
     resolver: zodResolver(shiftFormSchema),
     defaultValues: {
@@ -77,42 +76,58 @@ export const ShiftEditForm = ({ analyst, onClose, onSuccess }: ShiftEditFormProp
       break2_start: analyst.break2_start || '15:00',
       break2_end: analyst.break2_end || '15:15',
       work_days: analyst.work_days || {
-        mon: { active: true, mode: 'office' },
-        tue: { active: true, mode: 'office' },
-        wed: { active: true, mode: 'office' },
-        thu: { active: true, mode: 'office' },
-        fri: { active: true, mode: 'office' },
-        sat: { active: false, mode: 'office' },
-        sun: { active: false, mode: 'office' }
+        mon: {
+          active: true,
+          mode: 'office'
+        },
+        tue: {
+          active: true,
+          mode: 'office'
+        },
+        wed: {
+          active: true,
+          mode: 'office'
+        },
+        thu: {
+          active: true,
+          mode: 'office'
+        },
+        fri: {
+          active: true,
+          mode: 'office'
+        },
+        sat: {
+          active: false,
+          mode: 'office'
+        },
+        sun: {
+          active: false,
+          mode: 'office'
+        }
       }
     }
   });
-
   const onSubmit = async (data: ShiftFormData) => {
     setLoading(true);
     try {
-      const { error } = await supabase
-        .from('profiles')
-        .update({
-          start_time: data.start_time,
-          end_time: data.end_time,
-          lunch_start: data.lunch_start,
-          lunch_end: data.lunch_end,
-          break1_start: data.break1_start,
-          break1_end: data.break1_end,
-          break2_start: data.break2_start,
-          break2_end: data.break2_end,
-          work_days: data.work_days
-        })
-        .eq('id', analyst.id);
-
+      const {
+        error
+      } = await supabase.from('profiles').update({
+        start_time: data.start_time,
+        end_time: data.end_time,
+        lunch_start: data.lunch_start,
+        lunch_end: data.lunch_end,
+        break1_start: data.break1_start,
+        break1_end: data.break1_end,
+        break2_start: data.break2_start,
+        break2_end: data.break2_end,
+        work_days: data.work_days
+      }).eq('id', analyst.id);
       if (error) throw error;
-
       toast({
         title: "Success",
         description: "Shift schedule updated successfully"
       });
-
       onSuccess();
     } catch (error) {
       console.error('Error updating shift:', error);
@@ -125,20 +140,30 @@ export const ShiftEditForm = ({ analyst, onClose, onSuccess }: ShiftEditFormProp
       setLoading(false);
     }
   };
-
-  const days = [
-    { key: 'mon', label: 'Monday' },
-    { key: 'tue', label: 'Tuesday' },
-    { key: 'wed', label: 'Wednesday' },
-    { key: 'thu', label: 'Thursday' },
-    { key: 'fri', label: 'Friday' },
-    { key: 'sat', label: 'Saturday' },
-    { key: 'sun', label: 'Sunday' }
-  ];
-
-  return (
-    <Dialog open={true} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+  const days = [{
+    key: 'mon',
+    label: 'Monday'
+  }, {
+    key: 'tue',
+    label: 'Tuesday'
+  }, {
+    key: 'wed',
+    label: 'Wednesday'
+  }, {
+    key: 'thu',
+    label: 'Thursday'
+  }, {
+    key: 'fri',
+    label: 'Friday'
+  }, {
+    key: 'sat',
+    label: 'Saturday'
+  }, {
+    key: 'sun',
+    label: 'Sunday'
+  }];
+  return <Dialog open={true} onOpenChange={onClose}>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-slate-900">
         <DialogHeader>
           <DialogTitle>Edit Shift Schedule - {analyst.name}</DialogTitle>
         </DialogHeader>
@@ -151,33 +176,25 @@ export const ShiftEditForm = ({ analyst, onClose, onSuccess }: ShiftEditFormProp
                 <CardTitle className="text-lg">Work Hours</CardTitle>
               </CardHeader>
               <CardContent className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="start_time"
-                  render={({ field }) => (
-                    <FormItem>
+                <FormField control={form.control} name="start_time" render={({
+                field
+              }) => <FormItem>
                       <FormLabel>Start Time</FormLabel>
                       <FormControl>
                         <Input type="time" {...field} />
                       </FormControl>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    </FormItem>} />
 
-                <FormField
-                  control={form.control}
-                  name="end_time"
-                  render={({ field }) => (
-                    <FormItem>
+                <FormField control={form.control} name="end_time" render={({
+                field
+              }) => <FormItem>
                       <FormLabel>End Time</FormLabel>
                       <FormControl>
                         <Input type="time" {...field} />
                       </FormControl>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    </FormItem>} />
               </CardContent>
             </Card>
 
@@ -187,33 +204,25 @@ export const ShiftEditForm = ({ analyst, onClose, onSuccess }: ShiftEditFormProp
                 <CardTitle className="text-lg">Lunch Break</CardTitle>
               </CardHeader>
               <CardContent className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="lunch_start"
-                  render={({ field }) => (
-                    <FormItem>
+                <FormField control={form.control} name="lunch_start" render={({
+                field
+              }) => <FormItem>
                       <FormLabel>Lunch Start</FormLabel>
                       <FormControl>
                         <Input type="time" {...field} />
                       </FormControl>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    </FormItem>} />
 
-                <FormField
-                  control={form.control}
-                  name="lunch_end"
-                  render={({ field }) => (
-                    <FormItem>
+                <FormField control={form.control} name="lunch_end" render={({
+                field
+              }) => <FormItem>
                       <FormLabel>Lunch End</FormLabel>
                       <FormControl>
                         <Input type="time" {...field} />
                       </FormControl>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    </FormItem>} />
               </CardContent>
             </Card>
 
@@ -224,63 +233,47 @@ export const ShiftEditForm = ({ analyst, onClose, onSuccess }: ShiftEditFormProp
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="break1_start"
-                    render={({ field }) => (
-                      <FormItem>
+                  <FormField control={form.control} name="break1_start" render={({
+                  field
+                }) => <FormItem>
                         <FormLabel>Break 1 Start</FormLabel>
                         <FormControl>
                           <Input type="time" {...field} />
                         </FormControl>
                         <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                      </FormItem>} />
 
-                  <FormField
-                    control={form.control}
-                    name="break1_end"
-                    render={({ field }) => (
-                      <FormItem>
+                  <FormField control={form.control} name="break1_end" render={({
+                  field
+                }) => <FormItem>
                         <FormLabel>Break 1 End</FormLabel>
                         <FormControl>
                           <Input type="time" {...field} />
                         </FormControl>
                         <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                      </FormItem>} />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="break2_start"
-                    render={({ field }) => (
-                      <FormItem>
+                  <FormField control={form.control} name="break2_start" render={({
+                  field
+                }) => <FormItem>
                         <FormLabel>Break 2 Start</FormLabel>
                         <FormControl>
                           <Input type="time" {...field} />
                         </FormControl>
                         <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                      </FormItem>} />
 
-                  <FormField
-                    control={form.control}
-                    name="break2_end"
-                    render={({ field }) => (
-                      <FormItem>
+                  <FormField control={form.control} name="break2_end" render={({
+                  field
+                }) => <FormItem>
                         <FormLabel>Break 2 End</FormLabel>
                         <FormControl>
                           <Input type="time" {...field} />
                         </FormControl>
                         <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                      </FormItem>} />
                 </div>
               </CardContent>
             </Card>
@@ -291,37 +284,23 @@ export const ShiftEditForm = ({ analyst, onClose, onSuccess }: ShiftEditFormProp
                 <CardTitle className="text-lg">Work Schedule</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {days.map((day) => (
-                  <div key={day.key} className="flex items-center justify-between p-3 border rounded-lg">
+                {days.map(day => <div key={day.key} className="flex items-center justify-between p-3 border rounded-lg">
                     <div className="flex items-center gap-4">
-                      <FormField
-                        control={form.control}
-                        name={`work_days.${day.key}.active` as any}
-                        render={({ field }) => (
-                          <FormItem className="flex items-center gap-2">
+                      <FormField control={form.control} name={`work_days.${day.key}.active` as any} render={({
+                    field
+                  }) => <FormItem className="flex items-center gap-2">
                             <FormControl>
-                              <Switch
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
+                              <Switch checked={field.value} onCheckedChange={field.onChange} />
                             </FormControl>
                             <Label className="min-w-[80px]">{day.label}</Label>
-                          </FormItem>
-                        )}
-                      />
+                          </FormItem>} />
                     </div>
 
-                    <FormField
-                      control={form.control}
-                      name={`work_days.${day.key}.mode` as any}
-                      render={({ field }) => (
-                        <FormItem>
+                    <FormField control={form.control} name={`work_days.${day.key}.mode` as any} render={({
+                  field
+                }) => <FormItem>
                           <FormControl>
-                            <Select
-                              value={field.value}
-                              onValueChange={field.onChange}
-                              disabled={!form.watch(`work_days.${day.key}.active` as any)}
-                            >
+                            <Select value={field.value} onValueChange={field.onChange} disabled={!form.watch(`work_days.${day.key}.active` as any)}>
                               <SelectTrigger className="w-24">
                                 <SelectValue />
                               </SelectTrigger>
@@ -331,11 +310,8 @@ export const ShiftEditForm = ({ analyst, onClose, onSuccess }: ShiftEditFormProp
                               </SelectContent>
                             </Select>
                           </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                ))}
+                        </FormItem>} />
+                  </div>)}
               </CardContent>
             </Card>
 
@@ -350,6 +326,5 @@ export const ShiftEditForm = ({ analyst, onClose, onSuccess }: ShiftEditFormProp
           </form>
         </Form>
       </DialogContent>
-    </Dialog>
-  );
+    </Dialog>;
 };
