@@ -338,12 +338,12 @@ export const LeadDashboard = () => {
                   weekday: 'short'
                 }).toLowerCase();
                 const todaySchedule = analyst.work_days?.[today];
-                return <div key={analyst.id} className={`p-4 border rounded-lg bg-background ${!isOnline ? 'opacity-50' : ''}`}>
-                       <div className="flex items-center gap-3 mb-3">
-                         <div className={`h-3 w-3 rounded-full ${isOnline ? 'bg-green-500' : 'bg-gray-400'}`} />
+                return <div key={analyst.id} className={`group p-5 md:p-6 border rounded-xl bg-card shadow-sm transition-colors hover:border-primary/30 ${!isOnline ? '' : ''}`}>
+                       <div className="flex items-center gap-3 mb-4">
+                         <div className={`h-3.5 w-3.5 rounded-full ring-2 ring-background ${isOnline ? 'bg-green-500' : 'bg-gray-400'}`} />
                          <div>
-                           <p className="font-medium">{analyst.name}</p>
-                           <p className="text-xs text-muted-foreground">
+                           <p className="font-semibold text-base leading-tight">{analyst.name}</p>
+                           <p className="text-xs text-muted-foreground/90">
                              {isOnline ? 'Online' : 'Offline'}
                            </p>
                          </div>
