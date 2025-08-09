@@ -53,7 +53,7 @@ const Index = () => {
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           <Card className="border-2 hover:border-primary/50 transition-colors">
-            <CardHeader className="bg-[#0a1069]/[0.31]">
+            <CardHeader className="bg-[#010122]/[0.29]">
               <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                 <Calendar className="h-6 w-6 text-primary" />
               </div>
@@ -65,7 +65,7 @@ const Index = () => {
           </Card>
 
           <Card className="border-2 hover:border-primary/50 transition-colors">
-            <CardHeader className="bg-[#0a1069]/[0.31]">
+            <CardHeader className="bg-[#010124]/[0.29]">
               <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                 <Users className="h-6 w-6 text-primary" />
               </div>
@@ -77,7 +77,7 @@ const Index = () => {
           </Card>
 
           <Card className="border-2 hover:border-primary/50 transition-colors">
-            <CardHeader className="bg-[#0a1069]/[0.31]">
+            <CardHeader className="bg-[#010122]/[0.29]">
               <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                 <Clock className="h-6 w-6 text-primary" />
               </div>
@@ -101,7 +101,7 @@ const Index = () => {
           </div>
           
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <Card className="p-8 bg-[#160331]/[0.31]">
+            <Card className="p-8 bg-[#01011f]/45">
               <CardHeader className="text-center">
                 <CardTitle className="text-2xl mb-4">Analyst Dashboard</CardTitle>
                 <CardDescription>
@@ -118,7 +118,7 @@ const Index = () => {
               </CardContent>
             </Card>
 
-            <Card className="p-8 bg-[#160331]/[0.31]">
+            <Card className="p-8 bg-[#01011f]/45">
               <CardHeader className="text-center">
                 <CardTitle className="text-2xl mb-4">Lead Dashboard</CardTitle>
                 <CardDescription>
