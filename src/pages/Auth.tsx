@@ -107,7 +107,7 @@ const Auth = () => {
                   <Label htmlFor="login-email">Email</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input id="login-email" type="email" placeholder="your@email.com" className="pl-10 bg-slate-700" />
+                    <Input id="login-email" type="email" placeholder="your@email.com" className="pl-10 bg-slate-700" {...loginForm.register('email')} autoComplete="email" />
                   </div>
                   {loginForm.formState.errors.email && <p className="text-sm text-destructive">
                       {loginForm.formState.errors.email.message}
@@ -118,7 +118,7 @@ const Auth = () => {
                   <Label htmlFor="login-password">Password</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input id="login-password" type="password" placeholder="••••••" className="pl-10 bg-slate-700" />
+                    <Input id="login-password" type="password" placeholder="••••••" className="pl-10 bg-slate-700" {...loginForm.register('password')} autoComplete="current-password" />
                   </div>
                   {loginForm.formState.errors.password && <p className="text-sm text-destructive">
                       {loginForm.formState.errors.password.message}
@@ -137,7 +137,7 @@ const Auth = () => {
                   <Label htmlFor="signup-name">Full Name</Label>
                   <div className="relative">
                     <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input id="signup-name" placeholder="Your full name" className="pl-10 bg-slate-700" />
+                    <Input id="signup-name" placeholder="Your full name" className="pl-10 bg-slate-700" {...signupForm.register('name')} autoComplete="name" />
                   </div>
                   {signupForm.formState.errors.name && <p className="text-sm text-destructive">
                       {signupForm.formState.errors.name.message}
@@ -148,7 +148,7 @@ const Auth = () => {
                   <Label htmlFor="signup-email">Email</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input id="signup-email" type="email" placeholder="your@email.com" className="pl-10 bg-slate-700" />
+                    <Input id="signup-email" type="email" placeholder="your@email.com" className="pl-10 bg-slate-700" {...signupForm.register('email')} autoComplete="email" />
                   </div>
                   {signupForm.formState.errors.email && <p className="text-sm text-destructive">
                       {signupForm.formState.errors.email.message}
@@ -159,7 +159,7 @@ const Auth = () => {
                   <Label htmlFor="signup-password">Password</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input id="signup-password" type="password" placeholder="••••••" className="pl-10 bg-slate-700" />
+                    <Input id="signup-password" type="password" placeholder="••••••" className="pl-10 bg-slate-700" {...signupForm.register('password')} autoComplete="new-password" />
                   </div>
                   {signupForm.formState.errors.password && <p className="text-sm text-destructive">
                       {signupForm.formState.errors.password.message}
