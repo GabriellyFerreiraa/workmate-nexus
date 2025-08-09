@@ -107,7 +107,7 @@ const Auth = () => {
                   <Label htmlFor="login-email">Email</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input id="login-email" type="email" placeholder="your@email.com" className="pl-10" {...loginForm.register('email')} />
+                    <Input id="login-email" type="email" placeholder="your@email.com" className="pl-10 bg-slate-700" />
                   </div>
                   {loginForm.formState.errors.email && <p className="text-sm text-destructive">
                       {loginForm.formState.errors.email.message}
@@ -118,7 +118,7 @@ const Auth = () => {
                   <Label htmlFor="login-password">Password</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input id="login-password" type="password" placeholder="••••••" className="pl-10" {...loginForm.register('password')} />
+                    <Input id="login-password" type="password" placeholder="••••••" className="pl-10 bg-slate-700" />
                   </div>
                   {loginForm.formState.errors.password && <p className="text-sm text-destructive">
                       {loginForm.formState.errors.password.message}
