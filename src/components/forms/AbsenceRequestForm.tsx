@@ -11,68 +11,59 @@ import { toast } from '@/hooks/use-toast';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-
-const absenceReasons = [
-  'Service Desk Day',
-  'Examen Leave',
-  'Recognition (ScoreCard)',
-  'Vacation Leave',
-  'Moving Leave',
-  'Sick Leave',
-  'Marriage Leave',
-  'Unpaid Leave'
-] as const;
-
+const absenceReasons = ['Service Desk Day', 'Examen Leave', 'Recognition (ScoreCard)', 'Vacation Leave', 'Moving Leave', 'Sick Leave', 'Marriage Leave', 'Unpaid Leave'] as const;
 const schema = z.object({
   startDate: z.string().min(1, 'Start date is required'),
   endDate: z.string().min(1, 'End date is required'),
-  reason: z.enum(absenceReasons).refine(
-    (val) => absenceReasons.includes(val),
-    { message: 'Please select a valid reason' }
-  ),
+  reason: z.enum(absenceReasons).refine(val => absenceReasons.includes(val), {
+    message: 'Please select a valid reason'
+  }),
   details: z.string().min(10, 'Details must be at least 10 characters')
-}).refine((data) => new Date(data.endDate) >= new Date(data.startDate), {
+}).refine(data => new Date(data.endDate) >= new Date(data.startDate), {
   message: "End date must be after or equal to start date",
   path: ["endDate"]
 });
-
 type FormData = z.infer<typeof schema>;
-
 interface AbsenceRequestFormProps {
   onClose: () => void;
   onSuccess: () => void;
 }
-
-export const AbsenceRequestForm = ({ onClose, onSuccess }: AbsenceRequestFormProps) => {
+export const AbsenceRequestForm = ({
+  onClose,
+  onSuccess
+}: AbsenceRequestFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { user } = useAuth();
-
-  const { register, handleSubmit, control, formState: { errors } } = useForm<FormData>({
+  const {
+    user
+  } = useAuth();
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: {
+      errors
+    }
+  } = useForm<FormData>({
     resolver: zodResolver(schema)
   });
-
   const onSubmit = async (data: FormData) => {
     if (!user) return;
-
     setIsLoading(true);
     try {
-      const { error } = await supabase
-        .from('absence_requests')
-        .insert({
-          analyst_id: user.id,
-          start_date: data.startDate,
-          end_date: data.endDate,
-          reason: `${data.reason} - ${data.details}`,
-          status: 'pending'
-        });
-
+      const {
+        error
+      } = await supabase.from('absence_requests').insert({
+        analyst_id: user.id,
+        start_date: data.startDate,
+        end_date: data.endDate,
+        reason: `${data.reason} - ${data.details}`,
+        status: 'pending'
+      });
       if (error) throw error;
-
       toast({
         title: "Request submitted",
         description: "Your absence request has been submitted for review"
       });
-
       onSuccess();
     } catch (error) {
       console.error('Error creating absence request:', error);
@@ -85,10 +76,8 @@ export const AbsenceRequestForm = ({ onClose, onSuccess }: AbsenceRequestFormPro
       setIsLoading(false);
     }
   };
-
-  return (
-    <Dialog open onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
+  return <Dialog open onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-md bg-[#01012b]">
         <DialogHeader>
           <DialogTitle>New Absence Request</DialogTitle>
           <DialogDescription>
@@ -100,64 +89,38 @@ export const AbsenceRequestForm = ({ onClose, onSuccess }: AbsenceRequestFormPro
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="startDate">Start Date</Label>
-              <Input
-                id="startDate"
-                type="date"
-                {...register('startDate')}
-              />
-              {errors.startDate && (
-                <p className="text-sm text-destructive">{errors.startDate.message}</p>
-              )}
+              <Input id="startDate" type="date" {...register('startDate')} />
+              {errors.startDate && <p className="text-sm text-destructive">{errors.startDate.message}</p>}
             </div>
             
             <div className="space-y-2">
               <Label htmlFor="endDate">End Date</Label>
-              <Input
-                id="endDate"
-                type="date"
-                {...register('endDate')}
-              />
-              {errors.endDate && (
-                <p className="text-sm text-destructive">{errors.endDate.message}</p>
-              )}
+              <Input id="endDate" type="date" {...register('endDate')} />
+              {errors.endDate && <p className="text-sm text-destructive">{errors.endDate.message}</p>}
             </div>
           </div>
           
           <div className="space-y-2">
             <Label htmlFor="reason">Reason</Label>
-            <Controller
-              name="reason"
-              control={control}
-              render={({ field }) => (
-                <Select onValueChange={field.onChange} value={field.value}>
+            <Controller name="reason" control={control} render={({
+            field
+          }) => <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select absence reason" />
                   </SelectTrigger>
                   <SelectContent>
-                    {absenceReasons.map((reason) => (
-                      <SelectItem key={reason} value={reason}>
+                    {absenceReasons.map(reason => <SelectItem key={reason} value={reason}>
                         {reason}
-                      </SelectItem>
-                    ))}
+                      </SelectItem>)}
                   </SelectContent>
-                </Select>
-              )}
-            />
-            {errors.reason && (
-              <p className="text-sm text-destructive">{errors.reason.message}</p>
-            )}
+                </Select>} />
+            {errors.reason && <p className="text-sm text-destructive">{errors.reason.message}</p>}
           </div>
           
           <div className="space-y-2">
             <Label htmlFor="details">Details</Label>
-            <Textarea
-              id="details"
-              placeholder="Provide additional details about your absence request..."
-              {...register('details')}
-            />
-            {errors.details && (
-              <p className="text-sm text-destructive">{errors.details.message}</p>
-            )}
+            <Textarea id="details" placeholder="Provide additional details about your absence request..." {...register('details')} />
+            {errors.details && <p className="text-sm text-destructive">{errors.details.message}</p>}
           </div>
           
           <div className="flex justify-end gap-2">
@@ -170,6 +133,5 @@ export const AbsenceRequestForm = ({ onClose, onSuccess }: AbsenceRequestFormPro
           </div>
         </form>
       </DialogContent>
-    </Dialog>
-  );
+    </Dialog>;
 };
