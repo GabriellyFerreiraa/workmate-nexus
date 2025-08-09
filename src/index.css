@@ -109,8 +109,41 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 
-  /* Landing and auth pages use darker background */
+  /* Cognizant-inspired landing/auth theme with subtle animated gradient */
   .landing-theme {
-    --background: 222.2 84% 4.9%;
+    /* Brand tokens (HSL) */
+    --brand-navy: 240 58% 15%; /* #10103D approx */
+    --brand-violet: 262 83% 49%; /* #6D28D9 */
+    --brand-magenta: 322 100% 34%; /* #A1006B approx */
+    --brand-electric: 197 100% 47%; /* #00B0F0 */
+    --brand-cyan: 201 100% 62%; /* #3DC1FF */
+
+    /* Gradient highlight stops */
+    --brand-hi1: 64 90% 66%;  /* #F0F758 */
+    --brand-hi2: 160 61% 77%; /* #A5E8D1 */
+    --brand-hi3: 266 64% 61%; /* #9A5BDF */
+
+    /* Keep deep navy inside divisions/cards/popovers */
+    --background: var(--brand-navy);
+    --card: var(--brand-navy);
+    --card-foreground: 0 0% 100%;
+    --popover: var(--brand-navy);
+    --popover-foreground: 0 0% 100%;
+
+    /* Subtle animated gradient background */
+    background-image:
+      radial-gradient(1200px 600px at 10% 20%, hsl(var(--brand-violet) / 0.25), transparent 60%),
+      radial-gradient(1000px 500px at 90% 30%, hsl(var(--brand-magenta) / 0.18), transparent 60%),
+      radial-gradient(900px 900px at 50% 80%, hsl(var(--brand-electric) / 0.12), transparent 60%),
+      linear-gradient(135deg, hsl(var(--brand-hi1) / 0.12), hsl(var(--brand-hi2) / 0.10), hsl(var(--brand-hi3) / 0.12)),
+      linear-gradient(180deg, hsl(var(--brand-navy)), hsl(var(--brand-navy)));
+    background-size: 200% 200%;
+    animation: brand-gradient-shift 24s ease-in-out infinite alternate;
   }
+}
+
+@keyframes brand-gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
