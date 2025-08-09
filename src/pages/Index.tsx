@@ -2,10 +2,8 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Shield, Users, Clock, Calendar, ArrowRight } from 'lucide-react';
-
 const Index = () => {
-  return (
-    <div className="min-h-screen bg-background landing-theme">
+  return <div className="min-h-screen bg-background landing-theme">
       {/* Hero Section */}
       <div className="relative">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-primary/5 to-background" />
@@ -55,7 +53,7 @@ const Index = () => {
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           <Card className="border-2 hover:border-primary/50 transition-colors">
-            <CardHeader>
+            <CardHeader className="bg-[#0a1069]/[0.31]">
               <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                 <Calendar className="h-6 w-6 text-primary" />
               </div>
@@ -67,7 +65,7 @@ const Index = () => {
           </Card>
 
           <Card className="border-2 hover:border-primary/50 transition-colors">
-            <CardHeader>
+            <CardHeader className="bg-[#0a1069]/[0.31]">
               <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                 <Users className="h-6 w-6 text-primary" />
               </div>
@@ -79,7 +77,7 @@ const Index = () => {
           </Card>
 
           <Card className="border-2 hover:border-primary/50 transition-colors">
-            <CardHeader>
+            <CardHeader className="bg-[#0a1069]/[0.31]">
               <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                 <Clock className="h-6 w-6 text-primary" />
               </div>
@@ -103,7 +101,7 @@ const Index = () => {
           </div>
           
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <Card className="p-8">
+            <Card className="p-8 bg-[#0a1069]/[0.31]">
               <CardHeader className="text-center">
                 <CardTitle className="text-2xl mb-4">Analyst Dashboard</CardTitle>
                 <CardDescription>
@@ -120,7 +118,7 @@ const Index = () => {
               </CardContent>
             </Card>
 
-            <Card className="p-8">
+            <Card className="p-8 bg-[#0a1069]/[0.31]">
               <CardHeader className="text-center">
                 <CardTitle className="text-2xl mb-4">Lead Dashboard</CardTitle>
                 <CardDescription>
@@ -141,7 +139,7 @@ const Index = () => {
       </div>
 
       {/* CTA Section */}
-      <div className="py-20">
+      <div className="py-20 bg-[#020724]/[0.31]">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to optimize your Service Desk?</h2>
           <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
@@ -156,8 +154,6 @@ const Index = () => {
           </Button>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
