@@ -178,6 +178,18 @@ export const LeadDashboard = () => {
       className: ''
     };
   };
+
+  const getAbsenceStatusBadge = (status: string) => {
+    const statusConfig = {
+      approved: { label: 'Approved', variant: 'success' as const },
+      rejected: { label: 'Rejected', variant: 'destructive' as const },
+      cancelled: { label: 'Cancelled', variant: 'outline' as const },
+      pending: { label: 'Pending', variant: 'secondary' as const }
+    } as const;
+
+    return (statusConfig as any)[status] || { label: status, variant: 'outline' as const };
+  };
+
   const isAnalystOnline = (analyst: any) => {
     const now = new Date();
     const today = now.toLocaleDateString('en-US', {
@@ -438,7 +450,9 @@ export const LeadDashboard = () => {
                           </p>
                           <p className="text-sm mt-1">{request.reason}</p>
                         </div>
-                        <Badge variant="outline">{request.status}</Badge>
+                        <Badge {...getAbsenceStatusBadge(request.status)}>
+                          {getAbsenceStatusBadge(request.status).label}
+                        </Badge>
                       </div>
                       {request.lead_comment && <div className="mt-3 p-3 bg-muted rounded">
                           <p className="text-sm">
