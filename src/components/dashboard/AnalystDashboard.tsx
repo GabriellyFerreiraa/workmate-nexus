@@ -291,7 +291,7 @@ export const AnalystDashboard = () => {
                             <CheckCircle className="h-4 w-4 mr-1" />
                             Complete
                           </Button>}
-                        {task.status === 'completed' && <Button size="sm" variant="outline" onClick={() => deleteTask(task.id)} className="bg-slate-950 hover:bg-slate-800">
+                        {task.status === 'completed' && <Button size="sm" variant="outline" onClick={() => deleteTask(task.id)} className="bg-slate-800 hover:bg-slate-700">
                             <X className="h-4 w-4 mr-1" />
                             Remove
                           </Button>}
