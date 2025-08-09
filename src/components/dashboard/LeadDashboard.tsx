@@ -157,20 +157,25 @@ export const LeadDashboard = () => {
     const statusConfig = {
       pending: {
         label: 'Pending',
-        variant: 'secondary' as const
+        variant: 'secondary' as const,
+        className: 'bg-orange-500 text-white'
       },
       in_progress: {
         label: 'In progress',
-        variant: 'default' as const
+        variant: 'default' as const,
+        className: ''
       },
       completed: {
         label: 'Completed',
-        variant: 'success' as const
+        variant: 'success' as const,
+        className: ''
       }
-    };
-    return statusConfig[status] || {
+    } as const;
+
+    return (statusConfig as any)[status] || {
       label: status,
-      variant: 'outline' as const
+      variant: 'outline' as const,
+      className: ''
     };
   };
   const isAnalystOnline = (analyst: any) => {
