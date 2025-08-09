@@ -73,10 +73,10 @@ All colors MUST be HSL.
     --background: var(--brand-navy);
     --foreground: 210 40% 98%;
 
-    --card: var(--brand-navy);
+    --card: var(--secondary);
     --card-foreground: 210 40% 98%;
 
-    --popover: var(--brand-navy);
+    --popover: var(--secondary);
     --popover-foreground: 210 40% 98%;
 
     /* Keep existing semantic roles */
@@ -158,9 +158,9 @@ All colors MUST be HSL.
 
     /* Keep deep navy inside divisions/cards/popovers */
     --background: var(--brand-navy);
-    --card: var(--brand-navy);
+    --card: var(--secondary);
     --card-foreground: 0 0% 100%;
-    --popover: var(--brand-navy);
+    --popover: var(--secondary);
     --popover-foreground: 0 0% 100%;
 
     /* Subtle animated gradient background */
