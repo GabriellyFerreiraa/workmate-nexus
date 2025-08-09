@@ -275,7 +275,7 @@ export const LeadDashboard = () => {
                           </p>
                           <p className="text-sm mt-1">{request.reason}</p>
                         </div>
-                        <Badge variant="secondary">Pending</Badge>
+                        <Badge variant="secondary" className="bg-orange-500">Pending</Badge>
                       </div>
                       <div className="flex gap-2 mt-3">
                         <Button size="sm" onClick={() => setSelectedRequest(request)}>
