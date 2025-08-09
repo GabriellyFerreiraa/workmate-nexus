@@ -257,7 +257,7 @@ export const LeadDashboard = () => {
               {pendingRequests.length === 0 ? <p className="text-center text-muted-foreground py-4">
                   No pending requests
                 </p> : <div className="space-y-4">
-                  {pendingRequests.map(request => <div key={request.id} className="p-4 border rounded-lg bg-background">
+                  {pendingRequests.map(request => <div key={request.id} className="p-4 border rounded-lg bg-slate-900">
                       <div className="flex justify-between items-start mb-2">
                         <div>
                           <h4 className="font-medium">
