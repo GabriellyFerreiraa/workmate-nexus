@@ -341,7 +341,7 @@ export const AnalystDashboard = () => {
                             </Button>}
                         </div>
                       </div>
-                      {request.lead_comment && <div className="mt-3 p-3 bg-muted rounded">
+                      {request.lead_comment && <div className="mt-3 p-3 rounded bg-[#01012b]">
                           <p className="text-sm">
                             <strong>Lead Comment:</strong> {request.lead_comment}
                           </p>
