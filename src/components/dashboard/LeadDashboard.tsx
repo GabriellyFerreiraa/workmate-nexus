@@ -29,40 +29,36 @@ export const LeadDashboard = () => {
     if (!user) return;
     try {
       // Fetch pending absence requests
-      const { data: requests } = await supabase
-        .from('absence_requests')
-        .select('*, analyst_profile:profiles!absence_requests_analyst_id_fkey(name)')
-        .eq('status', 'pending')
-        .order('created_at', { ascending: false });
+      const {
+        data: requests
+      } = await supabase.from('absence_requests').select('*, analyst_profile:profiles!absence_requests_analyst_id_fkey(name)').eq('status', 'pending').order('created_at', {
+        ascending: false
+      });
 
       // Fetch processed (non-pending) absence requests
-      const { data: processed } = await supabase
-        .from('absence_requests')
-        .select('*, analyst_profile:profiles!absence_requests_analyst_id_fkey(name)')
-        .neq('status', 'pending')
-        .order('updated_at', { ascending: false });
+      const {
+        data: processed
+      } = await supabase.from('absence_requests').select('*, analyst_profile:profiles!absence_requests_analyst_id_fkey(name)').neq('status', 'pending').order('updated_at', {
+        ascending: false
+      });
 
       // Fetch approved absences for today
       const today = new Date().toISOString().split('T')[0];
-      const { data: absences } = await supabase
-        .from('absence_requests')
-        .select('*')
-        .eq('status', 'approved')
-        .lte('start_date', today)
-        .gte('end_date', today);
+      const {
+        data: absences
+      } = await supabase.from('absence_requests').select('*').eq('status', 'approved').lte('start_date', today).gte('end_date', today);
 
       // Fetch all tasks
-      const { data: tasks } = await supabase
-        .from('tasks')
-        .select('*, assigned_to_profile:profiles!tasks_assigned_to_fkey(name)')
-        .order('created_at', { ascending: false });
+      const {
+        data: tasks
+      } = await supabase.from('tasks').select('*, assigned_to_profile:profiles!tasks_assigned_to_fkey(name)').order('created_at', {
+        ascending: false
+      });
 
       // Fetch all analysts
-      const { data: allAnalysts } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('role', 'analyst');
-      
+      const {
+        data: allAnalysts
+      } = await supabase.from('profiles').select('*').eq('role', 'analyst');
       setPendingRequests(requests || []);
       setProcessedRequests(processed || []);
       setApprovedAbsences(absences || []);
@@ -268,12 +264,8 @@ export const LeadDashboard = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {pendingRequests.length === 0 ? (
-                <p className="text-center text-muted-foreground py-4">No pending requests</p>
-              ) : (
-                <div className="space-y-4">
-                  {pendingRequests.map(request => (
-                    <div key={request.id} className="p-4 border rounded-lg bg-slate-900">
+              {pendingRequests.length === 0 ? <p className="text-center text-muted-foreground py-4">No pending requests</p> : <div className="space-y-4">
+                  {pendingRequests.map(request => <div key={request.id} className="p-4 border rounded-lg bg-slate-900">
                       <div className="flex justify-between items-start mb-2">
                         <div>
                           <h4 className="font-medium">{request.analyst_profile?.name}</h4>
@@ -290,10 +282,8 @@ export const LeadDashboard = () => {
                           Review
                         </Button>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+                    </div>)}
+                </div>}
             </CardContent>
           </Card>
         </TabsContent>
@@ -377,7 +367,7 @@ export const LeadDashboard = () => {
                            <p>Not scheduled today</p>
                          </div>}
                         <div className="space-y-2">
-                          <Button size="sm" variant="outline" onClick={() => setSelectedAnalyst(analyst)} className="w-full bg-slate-800 hover:bg-slate-700">
+                          <Button size="sm" variant="outline" onClick={() => setSelectedAnalyst(analyst)} className="w-full bg-slate-700 hover:bg-slate-700 ">
                             Edit Schedule
                           </Button>
                           <Button size="sm" variant="destructive" onClick={() => deleteAnalyst(analyst.user_id, analyst.name)} className="w-full">
@@ -399,14 +389,8 @@ export const LeadDashboard = () => {
               <CardDescription>All tasks marked as completed</CardDescription>
             </CardHeader>
             <CardContent>
-              {allTasks.filter(task => task.status === 'completed').length === 0 ? (
-                <p className="text-center text-muted-foreground py-4">No completed tasks</p>
-              ) : (
-                <div className="space-y-4">
-                  {allTasks
-                    .filter(task => task.status === 'completed')
-                    .map(task => (
-                      <div key={task.id} className="p-4 border rounded-lg bg-slate-900">
+              {allTasks.filter(task => task.status === 'completed').length === 0 ? <p className="text-center text-muted-foreground py-4">No completed tasks</p> : <div className="space-y-4">
+                  {allTasks.filter(task => task.status === 'completed').map(task => <div key={task.id} className="p-4 border rounded-lg bg-slate-900">
                         <div className="flex justify-between items-start mb-2">
                           <div>
                             <h4 className="font-medium">{task.title}</h4>
@@ -424,15 +408,11 @@ export const LeadDashboard = () => {
                             </Badge>
                           </div>
                         </div>
-                        {task.due_date && (
-                          <p className="text-xs text-muted-foreground">
+                        {task.due_date && <p className="text-xs text-muted-foreground">
                             Due: {format(new Date(task.due_date), 'PPp')}
-                          </p>
-                        )}
-                      </div>
-                    ))}
-                </div>
-              )}
+                          </p>}
+                      </div>)}
+                </div>}
             </CardContent>
           </Card>
 
@@ -442,12 +422,8 @@ export const LeadDashboard = () => {
               <CardDescription>Approved, rejected or cancelled</CardDescription>
             </CardHeader>
             <CardContent>
-              {processedRequests.length === 0 ? (
-                <p className="text-center text-muted-foreground py-4">No processed requests</p>
-              ) : (
-                <div className="space-y-4">
-                  {processedRequests.map(request => (
-                    <div key={request.id} className="p-4 border rounded-lg bg-slate-900">
+              {processedRequests.length === 0 ? <p className="text-center text-muted-foreground py-4">No processed requests</p> : <div className="space-y-4">
+                  {processedRequests.map(request => <div key={request.id} className="p-4 border rounded-lg bg-slate-900">
                       <div className="flex justify-between items-start mb-2">
                         <div>
                           <h4 className="font-medium">{request.analyst_profile?.name}</h4>
@@ -459,17 +435,13 @@ export const LeadDashboard = () => {
                         </div>
                         <Badge variant="outline">{request.status}</Badge>
                       </div>
-                      {request.lead_comment && (
-                        <div className="mt-3 p-3 bg-muted rounded">
+                      {request.lead_comment && <div className="mt-3 p-3 bg-muted rounded">
                           <p className="text-sm">
                             <strong>Lead Comment:</strong> {request.lead_comment}
                           </p>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
+                        </div>}
+                    </div>)}
+                </div>}
             </CardContent>
           </Card>
         </TabsContent>
