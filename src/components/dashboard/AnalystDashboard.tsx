@@ -338,7 +338,7 @@ export const AnalystDashboard = () => {
                             <p className="text-sm text-muted-foreground mt-1">{request.reason}</p>
                           </div>
                           <div className="flex items-center gap-2">
-                            <Badge {...getStatusBadge(request.status)}>
+                            <Badge className="bg-orange-500">
                               {getStatusBadge(request.status).label}
                             </Badge>
                           </div>
