@@ -137,7 +137,7 @@ const Auth = () => {
                   <Label htmlFor="signup-name">Full Name</Label>
                   <div className="relative">
                     <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input id="signup-name" placeholder="Your full name" className="pl-10" {...signupForm.register('name')} />
+                    <Input id="signup-name" placeholder="Your full name" className="pl-10 bg-slate-700" />
                   </div>
                   {signupForm.formState.errors.name && <p className="text-sm text-destructive">
                       {signupForm.formState.errors.name.message}
@@ -148,7 +148,7 @@ const Auth = () => {
                   <Label htmlFor="signup-email">Email</Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input id="signup-email" type="email" placeholder="your@email.com" className="pl-10" {...signupForm.register('email')} />
+                    <Input id="signup-email" type="email" placeholder="your@email.com" className="pl-10 bg-slate-700" />
                   </div>
                   {signupForm.formState.errors.email && <p className="text-sm text-destructive">
                       {signupForm.formState.errors.email.message}
@@ -159,7 +159,7 @@ const Auth = () => {
                   <Label htmlFor="signup-password">Password</Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input id="signup-password" type="password" placeholder="••••••" className="pl-10" {...signupForm.register('password')} />
+                    <Input id="signup-password" type="password" placeholder="••••••" className="pl-10 bg-slate-700" />
                   </div>
                   {signupForm.formState.errors.password && <p className="text-sm text-destructive">
                       {signupForm.formState.errors.password.message}
