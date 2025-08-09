@@ -377,10 +377,10 @@ export const LeadDashboard = () => {
       <TeamCalendar />
 
       {/* Task Assignment Form Modal */}
-      {showTaskForm && <TaskAssignmentForm analysts={analysts} onClose={() => setShowTaskForm(false)} onSuccess={() => {
+{showTaskForm && <TaskAssignmentForm analysts={analysts} onClose={() => setShowTaskForm(false)} onSuccess={() => {
       setShowTaskForm(false);
       fetchData();
-    }} className="bg-slate-800 hover:bg-slate-700" />}
+    }} />}
 
       {/* Absence Approval Modal */}
       {selectedRequest && <AbsenceApprovalModal request={selectedRequest} onClose={() => setSelectedRequest(null)} onApprove={comment => {
