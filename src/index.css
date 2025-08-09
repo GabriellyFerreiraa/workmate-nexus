@@ -17,9 +17,8 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    /* Light theme primary uses brand violet for a clean accent */
-    --primary: 262 83% 52%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
 
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
@@ -38,7 +37,7 @@ All colors MUST be HSL.
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 262 83% 52%;
+    --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
 
@@ -121,10 +120,17 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
-  }
 
-  /* Apply animated gradient only in dark mode for better Light theme readability */
-  .dark body {
+    /* Global animated brand gradient background */
+    --brand-navy: 240 58% 15%; /* #10103D approx */
+    --brand-violet: 262 83% 49%; /* #6D28D9 */
+    --brand-magenta: 322 100% 34%; /* #A1006B approx */
+    --brand-electric: 197 100% 47%; /* #00B0F0 */
+    --brand-cyan: 201 100% 62%; /* #3DC1FF */
+    --brand-hi1: 64 90% 66%;  /* #F0F758 */
+    --brand-hi2: 160 61% 77%; /* #A5E8D1 */
+    --brand-hi3: 266 64% 61%; /* #9A5BDF */
+
     background-image:
       radial-gradient(1200px 600px at 10% 20%, hsl(var(--brand-violet) / 0.25), transparent 60%),
       radial-gradient(1000px 500px at 90% 30%, hsl(var(--brand-magenta) / 0.18), transparent 60%),
