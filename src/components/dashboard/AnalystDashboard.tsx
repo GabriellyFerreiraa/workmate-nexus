@@ -332,7 +332,7 @@ export const AnalystDashboard = () => {
                         </div>
                       ))}
                   </div>
-                )
+                )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -352,37 +352,37 @@ export const AnalystDashboard = () => {
               </Button>
             </CardHeader>
             <CardContent>
-                  {absenceRequests.length === 0 ? <p className="text-center text-muted-foreground py-4">
-                  You have no absence requests
-                </p> : <div className="space-y-4">
-                  {absenceRequests.map(request => <div key={request.id} className="p-4 border rounded-lg bg-slate-900">
-                      <div className="flex justify-between items-start mb-2">
-                        <div className="flex-1">
-                          <h4 className="font-medium">
-                            {format(new Date(request.start_date), 'PPP')} - {' '}
-                            {format(new Date(request.end_date), 'PPP')}
-                          </h4>
-                          <p className="text-sm text-muted-foreground mt-1">
-                            {request.reason}
-                          </p>
+              {absenceRequests.filter(req => req.status === 'pending' || req.status === 'cancel_requested').length === 0 ? (
+                <p className="text-center text-muted-foreground py-4">No pending absence requests</p>
+              ) : (
+                <div className="space-y-4">
+                  {absenceRequests
+                    .filter(req => req.status === 'pending' || req.status === 'cancel_requested')
+                    .map(request => (
+                      <div key={request.id} className="p-4 border rounded-lg bg-slate-900">
+                        <div className="flex justify-between items-start mb-2">
+                          <div className="flex-1">
+                            <h4 className="font-medium">
+                              {format(new Date(request.start_date), 'PPP')} - {' '}
+                              {format(new Date(request.end_date), 'PPP')}
+                            </h4>
+                            <p className="text-sm text-muted-foreground mt-1">{request.reason}</p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Badge {...getStatusBadge(request.status)}>
+                              {getStatusBadge(request.status).label}
+                            </Badge>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <Badge {...getStatusBadge(request.status)}>
-                            {getStatusBadge(request.status).label}
-                          </Badge>
-                          {(request.status === 'approved' || request.status === 'rejected') && <Button size="sm" variant="outline" onClick={() => deleteAbsenceRequest(request.id)} className="bg-slate-900 hover:bg-slate-800">
-                              <X className="h-4 w-4 mr-1" />
-                              Remove
-                            </Button>}
-                        </div>
+                        {request.lead_comment && (
+                          <div className="mt-3 p-3 bg-muted rounded">
+                            <p className="text-sm"><strong>Lead Comment:</strong> {request.lead_comment}</p>
+                          </div>
+                        )}
                       </div>
-                      {request.lead_comment && <div className="mt-3 p-3 bg-muted rounded">
-                          <p className="text-sm">
-                            <strong>Lead Comment:</strong> {request.lead_comment}
-                          </p>
-                        </div>}
-                    </div>)}
-                </div>}
+                    ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
