@@ -100,12 +100,12 @@ export const AbsenceApprovalModal = ({
             <Label htmlFor="comment">
               Comentario {action === 'reject' && <span className="text-destructive">*</span>}
             </Label>
-            <Textarea id="comment" placeholder={action === 'approve' ? "Comentario opcional sobre la aprobación..." : action === 'reject' ? "Explica el motivo del rechazo..." : "Agrega un comentario..."} value={comment} onChange={e => setComment(e.target.value)} rows={3} />
+            <Textarea id="comment" placeholder={action === 'approve' ? "Comentario opcional sobre la aprobación..." : action === 'reject' ? "Explica el motivo del rechazo..." : "Agrega un comentario..."} value={comment} onChange={e => setComment(e.target.value)} rows={3} className="bg-slate-800" />
           </div>
           
           {/* Action Buttons */}
           <div className="flex justify-end gap-2 pt-4">
-            <Button variant="outline" onClick={onClose}>
+            <Button variant="outline" onClick={onClose} className="bg-slate-800 hover:bg-slate-700">
               Cancelar
             </Button>
             <Button variant="destructive" onClick={() => {
