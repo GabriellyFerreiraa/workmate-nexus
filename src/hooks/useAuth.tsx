@@ -128,13 +128,35 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      toast({
-        title: "Sign out error",
-        description: error.message,
-        variant: "destructive"
-      });
+    try {
+      // Intento de cierre de sesión global primero
+      const { error } = await supabase.auth.signOut({ scope: 'global' });
+
+      if (error) {
+        const code = (error as any)?.code;
+        const status = (error as any)?.status;
+        const message = (error as any)?.message?.toLowerCase?.() ?? '';
+        const isSessionMissing = code === 'session_not_found' || status === 403 || message.includes('session');
+
+        if (isSessionMissing) {
+          // Si el servidor no encuentra la sesión, hacemos signOut local para limpiar tokens
+          await supabase.auth.signOut({ scope: 'local' });
+        } else {
+          toast({
+            title: "Sign out error",
+            description: (error as any)?.message ?? 'Unknown error',
+            variant: "destructive"
+          });
+          return;
+        }
+      }
+    } catch {
+      // Ignorar; proceder a limpiar estado local
+    } finally {
+      // Asegurar limpieza local del estado para que ProtectedRoute redirija
+      setUserProfile(null);
+      setSession(null);
+      setUser(null);
     }
   };
 
