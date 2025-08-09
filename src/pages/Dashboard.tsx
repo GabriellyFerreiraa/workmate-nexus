@@ -62,7 +62,7 @@ const Dashboard = () => {
               </Button>
             </DropdownMenuTrigger>
             
-            <DropdownMenuContent align="end" className="w-56 bg-background border shadow-lg">
+            <DropdownMenuContent align="end" className="w-56 border shadow-lg bg-slate-900">
               <div className="px-2 py-1.5">
                 <p className="text-sm font-medium">{userProfile.name}</p>
                 <p className="text-xs text-muted-foreground capitalize">
