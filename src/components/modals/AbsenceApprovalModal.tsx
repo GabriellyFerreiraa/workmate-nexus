@@ -7,22 +7,23 @@ import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { CheckCircle, XCircle, Calendar, User } from 'lucide-react';
-
 interface AbsenceApprovalModalProps {
   request: any;
   onClose: () => void;
   onApprove: (comment: string) => void;
   onReject: (comment: string) => void;
 }
-
-export const AbsenceApprovalModal = ({ request, onClose, onApprove, onReject }: AbsenceApprovalModalProps) => {
+export const AbsenceApprovalModal = ({
+  request,
+  onClose,
+  onApprove,
+  onReject
+}: AbsenceApprovalModalProps) => {
   const [comment, setComment] = useState('');
   const [action, setAction] = useState<'approve' | 'reject' | null>(null);
-
   const handleApprove = () => {
     onApprove(comment);
   };
-
   const handleReject = () => {
     if (!comment.trim()) {
       alert('Debes proporcionar un comentario para rechazar la solicitud');
@@ -30,7 +31,6 @@ export const AbsenceApprovalModal = ({ request, onClose, onApprove, onReject }: 
     }
     onReject(comment);
   };
-
   const getDuration = () => {
     const start = new Date(request.start_date);
     const end = new Date(request.end_date);
@@ -38,10 +38,8 @@ export const AbsenceApprovalModal = ({ request, onClose, onApprove, onReject }: 
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
     return diffDays;
   };
-
-  return (
-    <Dialog open onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-lg">
+  return <Dialog open onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-lg bg-slate-900">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Calendar className="h-5 w-5" />
@@ -65,13 +63,17 @@ export const AbsenceApprovalModal = ({ request, onClose, onApprove, onReject }: 
               <div>
                 <Label className="text-muted-foreground">Fecha de inicio</Label>
                 <p className="font-medium">
-                  {format(new Date(request.start_date), 'PPP', { locale: es })}
+                  {format(new Date(request.start_date), 'PPP', {
+                  locale: es
+                })}
                 </p>
               </div>
               <div>
                 <Label className="text-muted-foreground">Fecha de fin</Label>
                 <p className="font-medium">
-                  {format(new Date(request.end_date), 'PPP', { locale: es })}
+                  {format(new Date(request.end_date), 'PPP', {
+                  locale: es
+                })}
                 </p>
               </div>
             </div>
@@ -87,7 +89,9 @@ export const AbsenceApprovalModal = ({ request, onClose, onApprove, onReject }: 
             </div>
             
             <div className="text-xs text-muted-foreground">
-              Solicitado el {format(new Date(request.created_at), 'PPp', { locale: es })}
+              Solicitado el {format(new Date(request.created_at), 'PPp', {
+              locale: es
+            })}
             </div>
           </div>
           
@@ -96,19 +100,7 @@ export const AbsenceApprovalModal = ({ request, onClose, onApprove, onReject }: 
             <Label htmlFor="comment">
               Comentario {action === 'reject' && <span className="text-destructive">*</span>}
             </Label>
-            <Textarea
-              id="comment"
-              placeholder={
-                action === 'approve' 
-                  ? "Comentario opcional sobre la aprobación..." 
-                  : action === 'reject'
-                  ? "Explica el motivo del rechazo..."
-                  : "Agrega un comentario..."
-              }
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
-              rows={3}
-            />
+            <Textarea id="comment" placeholder={action === 'approve' ? "Comentario opcional sobre la aprobación..." : action === 'reject' ? "Explica el motivo del rechazo..." : "Agrega un comentario..."} value={comment} onChange={e => setComment(e.target.value)} rows={3} />
           </div>
           
           {/* Action Buttons */}
@@ -116,30 +108,22 @@ export const AbsenceApprovalModal = ({ request, onClose, onApprove, onReject }: 
             <Button variant="outline" onClick={onClose}>
               Cancelar
             </Button>
-            <Button
-              variant="destructive"
-              onClick={() => {
-                setAction('reject');
-                handleReject();
-              }}
-              className="flex items-center gap-2"
-            >
+            <Button variant="destructive" onClick={() => {
+            setAction('reject');
+            handleReject();
+          }} className="flex items-center gap-2">
               <XCircle className="h-4 w-4" />
               Rechazar
             </Button>
-            <Button
-              onClick={() => {
-                setAction('approve');
-                handleApprove();
-              }}
-              className="flex items-center gap-2"
-            >
+            <Button onClick={() => {
+            setAction('approve');
+            handleApprove();
+          }} className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4" />
               Aprobar
             </Button>
           </div>
         </div>
       </DialogContent>
-    </Dialog>
-  );
+    </Dialog>;
 };
