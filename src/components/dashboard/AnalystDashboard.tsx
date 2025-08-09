@@ -271,7 +271,7 @@ export const AnalystDashboard = () => {
               {tasks.length === 0 ? <p className="text-center text-muted-foreground py-4">
                   You have no assigned tasks
                 </p> : <div className="space-y-4">
-                  {tasks.map(task => <div key={task.id} className="flex items-center justify-between p-4 border rounded-lg bg-background">
+                  {tasks.map(task => <div key={task.id} className="flex items-center justify-between p-4 border rounded-lg bg-slate-900">
                       <div className="flex-1">
                         <h4 className="font-medium">{task.title}</h4>
                         {task.description && <p className="text-sm text-muted-foreground mt-1">
@@ -291,7 +291,7 @@ export const AnalystDashboard = () => {
                             <CheckCircle className="h-4 w-4 mr-1" />
                             Complete
                           </Button>}
-                        {task.status === 'completed' && <Button size="sm" variant="outline" onClick={() => deleteTask(task.id)} className="text-slate-50 bg-[#01012b]">
+                        {task.status === 'completed' && <Button size="sm" variant="outline" onClick={() => deleteTask(task.id)}>
                             <X className="h-4 w-4 mr-1" />
                             Remove
                           </Button>}
@@ -335,13 +335,13 @@ export const AnalystDashboard = () => {
                           <Badge {...getStatusBadge(request.status)}>
                             {getStatusBadge(request.status).label}
                           </Badge>
-                          {(request.status === 'approved' || request.status === 'rejected') && <Button size="sm" variant="outline" onClick={() => deleteAbsenceRequest(request.id)} className="bg-[#01012b]">
+                          {(request.status === 'approved' || request.status === 'rejected') && <Button size="sm" variant="outline" onClick={() => deleteAbsenceRequest(request.id)}>
                               <X className="h-4 w-4 mr-1" />
                               Remove
                             </Button>}
                         </div>
                       </div>
-                      {request.lead_comment && <div className="mt-3 p-3 rounded bg-[#01012b]">
+                      {request.lead_comment && <div className="mt-3 p-3 bg-muted rounded">
                           <p className="text-sm">
                             <strong>Lead Comment:</strong> {request.lead_comment}
                           </p>
@@ -364,7 +364,7 @@ export const AnalystDashboard = () => {
               {onlineAnalysts.length === 0 ? <p className="text-center text-muted-foreground py-4">
                   No other analysts connected
                 </p> : <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {onlineAnalysts.map(analyst => <div key={analyst.id} className="p-3 border rounded-lg bg-[#01012b]">
+                  {onlineAnalysts.map(analyst => <div key={analyst.id} className="p-3 border rounded-lg bg-background">
                       <div className="flex items-center gap-3">
                         <div className="h-8 w-8 rounded-full bg-green-500 flex items-center justify-center">
                           <span className="text-xs font-medium text-white">
