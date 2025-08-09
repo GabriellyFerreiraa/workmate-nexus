@@ -254,7 +254,7 @@ export const AnalystDashboard = () => {
       {/* Main Content */}
       <Tabs defaultValue="tasks" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="tasks" className="bg-[#01012b]">My Tasks</TabsTrigger>
+          <TabsTrigger value="tasks">My Tasks</TabsTrigger>
           <TabsTrigger value="absences">Absence Requests</TabsTrigger>
           <TabsTrigger value="team">Team</TabsTrigger>
         </TabsList>
