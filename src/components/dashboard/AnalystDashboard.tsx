@@ -199,11 +199,11 @@ export const AnalystDashboard = () => {
       {/* Quick Stats */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-[#15032f]/[0.31]">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Current Shift</CardTitle>
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent className="bg-[#160331]/[0.31]">
+          <CardContent>
             <div className="text-2xl font-bold">
               {shiftInfo?.isWorkDay ? shiftInfo.shift : 'Day off'}
             </div>
@@ -217,11 +217,11 @@ export const AnalystDashboard = () => {
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-[#160331]/[0.31]">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Pending Tasks</CardTitle>
             <AlertCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent className="bg-[#160331]/[0.31]">
+          <CardContent>
             <div className="text-2xl font-bold">
               {tasks.filter(task => task.status !== 'completed').length}
             </div>
@@ -229,11 +229,11 @@ export const AnalystDashboard = () => {
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-[#160331]/[0.31]">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Pending Requests</CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent className="bg-[#160331]/[0.31]">
+          <CardContent>
             <div className="text-2xl font-bold">
               {absenceRequests.filter(req => req.status === 'pending').length}
             </div>
@@ -241,11 +241,11 @@ export const AnalystDashboard = () => {
         </Card>
 
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-[#160331]/[0.31]">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Online Analysts</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent className="bg-[#160331]/[0.31]">
+          <CardContent>
             <div className="text-2xl font-bold">{onlineAnalysts.length}</div>
           </CardContent>
         </Card>
@@ -261,13 +261,13 @@ export const AnalystDashboard = () => {
 
         <TabsContent value="tasks" className="space-y-4">
           <Card>
-            <CardHeader className="bg-[#160331]/[0.31]">
+            <CardHeader>
               <CardTitle>Assigned Tasks</CardTitle>
               <CardDescription>
                 Tasks assigned to you by team leads
               </CardDescription>
             </CardHeader>
-            <CardContent className="bg-[#160331]/[0.31]">
+            <CardContent>
               {tasks.length === 0 ? <p className="text-center text-muted-foreground py-4">
                   You have no assigned tasks
                 </p> : <div className="space-y-4">
@@ -317,10 +317,10 @@ export const AnalystDashboard = () => {
               </Button>
             </CardHeader>
             <CardContent>
-              {absenceRequests.length === 0 ? <p className="text-center text-muted-foreground py-4">
+                  {absenceRequests.length === 0 ? <p className="text-center text-muted-foreground py-4">
                   You have no absence requests
                 </p> : <div className="space-y-4">
-                  {absenceRequests.map(request => <div key={request.id} className="p-4 border rounded-lg">
+                  {absenceRequests.map(request => <div key={request.id} className="p-4 border rounded-lg bg-background">
                       <div className="flex justify-between items-start mb-2">
                         <div className="flex-1">
                           <h4 className="font-medium">
@@ -364,7 +364,7 @@ export const AnalystDashboard = () => {
               {onlineAnalysts.length === 0 ? <p className="text-center text-muted-foreground py-4">
                   No other analysts connected
                 </p> : <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {onlineAnalysts.map(analyst => <div key={analyst.id} className="p-3 border rounded-lg">
+                  {onlineAnalysts.map(analyst => <div key={analyst.id} className="p-3 border rounded-lg bg-background">
                       <div className="flex items-center gap-3">
                         <div className="h-8 w-8 rounded-full bg-green-500 flex items-center justify-center">
                           <span className="text-xs font-medium text-white">

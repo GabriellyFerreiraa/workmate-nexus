@@ -286,7 +286,7 @@ export const LeadDashboard = () => {
               ) : (
                 <div className="space-y-4">
                   {pendingRequests.map((request) => (
-                    <div key={request.id} className="p-4 border rounded-lg">
+                    <div key={request.id} className="p-4 border rounded-lg bg-background">
                       <div className="flex justify-between items-start mb-2">
                         <div>
                           <h4 className="font-medium">
@@ -382,7 +382,7 @@ export const LeadDashboard = () => {
                   const todaySchedule = analyst.work_days?.[today];
                   
                    return (
-                     <div key={analyst.id} className={`p-4 border rounded-lg ${!isOnline ? 'opacity-50' : ''}`}>
+                     <div key={analyst.id} className={`p-4 border rounded-lg bg-background ${!isOnline ? 'opacity-50' : ''}`}>
                        <div className="flex items-center gap-3 mb-3">
                          <div className={`h-3 w-3 rounded-full ${isOnline ? 'bg-green-500' : 'bg-gray-400'}`} />
                          <div>
