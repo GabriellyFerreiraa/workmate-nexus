@@ -215,9 +215,9 @@ export const TeamCalendar = ({
                 {getSelectedDateAbsences().map((request, index) => {
               const displayInfo = formatAbsenceDisplay(request);
               const color = getAnalystColor(request.analyst_id, index);
-              return <div key={request.id} className="p-2 rounded-md border-l-4 bg-muted/30" style={{
+              return <div key={request.id} style={{
                 borderLeftColor: color
-              }}>
+              }} className="p-2 rounded-md border-l-4 bg-slate-900">
                       <p className="text-sm font-medium">
                         {displayInfo.title}
                       </p>
