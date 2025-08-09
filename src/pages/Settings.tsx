@@ -75,7 +75,7 @@ const Settings = () => {
   return <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b bg-card">
-        <div className="flex h-16 items-center justify-between px-6">
+        <div className="flex h-16 items-center justify-between px-6 bg-[#01012b]">
           <div className="flex items-center space-x-4">
             <Button variant="ghost" size="sm" onClick={() => navigate('/dashboard')}>
               <ArrowLeft className="h-4 w-4 mr-2" />
