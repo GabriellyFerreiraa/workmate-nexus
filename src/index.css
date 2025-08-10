@@ -59,6 +59,8 @@ All colors MUST be HSL.
 
     /* Surface for navbars/cards: dark=slate-900, light=slate-300 */
     --panel: 214.3 31.8% 91.4%;
+    /* Form field surface token */
+    --field: 214.3 31.8% 91.4%;
   }
 
   .dark, .force-dark {
@@ -116,6 +118,8 @@ All colors MUST be HSL.
 
     /* Panel surface for dark theme (slate-900) */
     --panel: 222.2 47.4% 11.2%;
+    /* Form field surface for dark theme (slate-800) */
+    --field: 215 27.9% 16.9%;
   }
 }
 
