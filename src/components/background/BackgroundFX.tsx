@@ -42,7 +42,7 @@ export const BackgroundFX = () => {
   }, []);
 
   return (
-    <div ref={ref} className="interactive-bg fixed inset-0 z-30 pointer-events-none" aria-hidden="true">
+    <div ref={ref} className="interactive-bg fixed inset-0 z-0 pointer-events-none">
       <div className={`mouse-blur transition-opacity duration-300 ease-out ${active ? "opacity-70" : "opacity-0"}`} />
       <div className={`mouse-color transition-opacity duration-300 ease-out ${active ? "opacity-60" : "opacity-0"}`} />
     </div>
