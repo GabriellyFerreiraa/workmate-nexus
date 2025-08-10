@@ -84,6 +84,7 @@ const Settings = () => {
         title: "Success",
         description: "Profile updated successfully"
       });
+      await refreshProfile?.();
     } catch (error) {
       console.error('Error updating profile:', error);
       toast({

@@ -17,6 +17,7 @@ interface AbsenceRequest {
   status: string;
   analyst_profile?: {
     name: string;
+    avatar_url?: string | null;
   };
 }
 interface Analyst {
@@ -27,6 +28,7 @@ interface Analyst {
   start_time: string;
   end_time: string;
   work_days: any;
+  avatar_url?: string | null;
 }
 interface TeamCalendarProps {
   className?: string;
@@ -55,7 +57,7 @@ export const TeamCalendar = ({
       const {
         data: absenceData,
         error: absenceError
-      } = await supabase.from('absence_requests').select('*, analyst_profile:profiles!absence_requests_analyst_id_fkey(name)').eq('status', 'approved').order('start_date', {
+      } = await supabase.from('absence_requests').select('*, analyst_profile:profiles!absence_requests_analyst_id_fkey(name, avatar_url)').eq('status', 'approved').order('start_date', {
         ascending: true
       });
       if (absenceError) throw absenceError;
