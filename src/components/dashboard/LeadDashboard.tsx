@@ -293,8 +293,8 @@ export const LeadDashboard = () => {
             </CardHeader>
             <CardContent>
               {pendingRequests.length === 0 ? <p className="text-center text-muted-foreground py-4">No pending requests</p> : <div className="space-y-4">
-                  {pendingRequests.map(request => <div key={request.id} className="p-4 border rounded-lg bg-slate-900">
-                      <div className="flex justify-between items-start mb-2 bg-slate-900">
+                  {pendingRequests.map(request => <div key={request.id} className="p-4 border rounded-lg bg-[hsl(var(--panel))]">
+                      <div className="flex justify-between items-start mb-2">
                         <div>
                           <h4 className="font-medium">{request.analyst_profile?.name}</h4>
                           <p className="text-sm text-muted-foreground">
@@ -334,7 +334,7 @@ export const LeadDashboard = () => {
               {allTasks.filter(task => task.status === 'pending').length === 0 ? <p className="text-center text-muted-foreground py-4">
                   No pending tasks
                 </p> : <div className="space-y-4">
-                  {allTasks.filter(task => task.status === 'pending').map(task => <div key={task.id} className="p-4 border rounded-lg bg-slate-900">
+                  {allTasks.filter(task => task.status === 'pending').map(task => <div key={task.id} className="p-4 border rounded-lg bg-[hsl(var(--panel))]">
                       <div className="flex justify-between items-start mb-2">
                         <div>
                           <h4 className="font-medium">{task.title}</h4>
@@ -395,7 +395,7 @@ export const LeadDashboard = () => {
                            <p>Not scheduled today</p>
                          </div>}
                         <div className="space-y-2">
-                          <Button size="sm" variant="outline" onClick={() => setSelectedAnalyst(analyst)} className="w-full bg-slate-700 hover:bg-slate-700 ">
+                          <Button size="sm" variant="outline" onClick={() => setSelectedAnalyst(analyst)} className="w-full">
                             Edit Schedule
                           </Button>
                           <Button size="sm" variant="destructive" onClick={() => deleteAnalyst(analyst.user_id, analyst.name)} className="w-full">
@@ -418,7 +418,7 @@ export const LeadDashboard = () => {
             </CardHeader>
             <CardContent>
               {allTasks.filter(task => task.status === 'completed').length === 0 ? <p className="text-center text-muted-foreground py-4">No completed tasks</p> : <div className="space-y-4">
-                  {allTasks.filter(task => task.status === 'completed').map(task => <div key={task.id} className="p-4 border rounded-lg bg-slate-900">
+                  {allTasks.filter(task => task.status === 'completed').map(task => <div key={task.id} className="p-4 border rounded-lg bg-[hsl(var(--panel))]">
                         <div className="flex justify-between items-start mb-2">
                           <div>
                             <h4 className="font-medium">{task.title}</h4>
@@ -451,7 +451,7 @@ export const LeadDashboard = () => {
             </CardHeader>
             <CardContent>
               {processedRequests.length === 0 ? <p className="text-center text-muted-foreground py-4">No processed requests</p> : <div className="space-y-4">
-                  {processedRequests.map(request => <div key={request.id} className="p-4 border rounded-lg bg-slate-900">
+                  {processedRequests.map(request => <div key={request.id} className="p-4 border rounded-lg bg-[hsl(var(--panel))]">
                       <div className="flex justify-between items-start mb-2">
                         <div>
                           <h4 className="font-medium">{request.analyst_profile?.name}</h4>

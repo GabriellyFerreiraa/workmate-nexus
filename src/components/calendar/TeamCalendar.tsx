@@ -175,7 +175,7 @@ export const TeamCalendar = ({
               const dayName = dayNames[getDay(selectedDate)];
               const workDay = analyst.work_days && typeof analyst.work_days === 'object' ? analyst.work_days[dayName] : null;
               const color = getAnalystColor(analyst.user_id, index);
-              return <div key={analyst.id} className="p-3 rounded-lg border space-y-2 bg-slate-900">
+              return <div key={analyst.id} className="p-3 rounded-lg border space-y-2 bg-[hsl(var(--panel))]">
                       <div className="flex items-center justify-between">
                         <p className="font-medium text-sm" style={{
                     color
@@ -217,7 +217,7 @@ export const TeamCalendar = ({
               const color = getAnalystColor(request.analyst_id, index);
               return <div key={request.id} style={{
                 borderLeftColor: color
-              }} className="p-2 rounded-md border-l-4 bg-slate-900">
+              }} className="p-2 rounded-md border-l-4 bg-[hsl(var(--panel))]">
                       <p className="text-sm font-medium">
                         {displayInfo.title}
                       </p>
