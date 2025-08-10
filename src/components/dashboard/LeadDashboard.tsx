@@ -22,7 +22,6 @@ export const LeadDashboard = () => {
   const [analysts, setAnalysts] = useState([]);
   const [approvedAbsences, setApprovedAbsences] = useState([]);
   const [processedRequests, setProcessedRequests] = useState([]);
-  const [cancelRequests, setCancelRequests] = useState([]);
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [selectedAnalyst, setSelectedAnalyst] = useState(null);
@@ -40,30 +39,15 @@ export const LeadDashboard = () => {
       // Fetch processed (non-pending) absence requests
       const {
         data: processed
-      } = await supabase
-        .from('absence_requests')
-        .select('*, analyst_profile:profiles!absence_requests_analyst_id_fkey(name, avatar_url)')
-        .neq('status', 'pending')
-        .order('updated_at', { ascending: false });
-
-      // Fetch cancellation requests awaiting approval
-      const { data: cancelReqs } = await supabase
-        .from('absence_requests')
-        .select('*, analyst_profile:profiles!absence_requests_analyst_id_fkey(name, avatar_url)')
-        .eq('status', 'cancel_pending')
-        .order('updated_at', { ascending: false });
+      } = await supabase.from('absence_requests').select('*, analyst_profile:profiles!absence_requests_analyst_id_fkey(name, avatar_url)').neq('status', 'pending').order('updated_at', {
+        ascending: false
+      });
 
       // Fetch approved absences for today
       const today = new Date().toISOString().split('T')[0];
       const {
         data: absences
-      } = await supabase
-        .from('absence_requests')
-        .select('*')
-        .eq('status', 'approved')
-        .eq('approved', true)
-        .lte('start_date', today)
-        .gte('end_date', today);
+      } = await supabase.from('absence_requests').select('*').eq('status', 'approved').lte('start_date', today).gte('end_date', today);
 
       // Fetch all tasks
       const {
@@ -78,7 +62,6 @@ export const LeadDashboard = () => {
       } = await supabase.from('profiles').select('*').eq('role', 'analyst');
       setPendingRequests(requests || []);
       setProcessedRequests(processed || []);
-      setCancelRequests(cancelReqs || []);
       setApprovedAbsences(absences || []);
       setAllTasks(tasks || []);
       setAnalysts(allAnalysts || []);
@@ -100,8 +83,7 @@ export const LeadDashboard = () => {
       } = await supabase.from('absence_requests').update({
         status: 'approved',
         lead_comment: comment,
-        approved_by: user.id,
-        approved: true
+        approved_by: user.id
       }).eq('id', requestId);
       if (error) throw error;
       toast({
@@ -141,45 +123,6 @@ export const LeadDashboard = () => {
       });
     }
   };
-  const approveCancel = async (requestId: string, comment = '') => {
-    try {
-      const { error } = await supabase
-        .from('absence_requests')
-        .update({
-          status: 'canceled',
-          approved: false,
-          canceled_at: new Date().toISOString(),
-          lead_comment: comment
-        })
-        .eq('id', requestId);
-      if (error) throw error;
-      toast({ title: 'Cancellation approved', description: 'The absence was canceled' });
-      fetchData();
-    } catch (error) {
-      console.error('Error approving cancellation:', error);
-      toast({ title: 'Error', description: 'Could not approve cancellation', variant: 'destructive' });
-    }
-  };
-
-  const rejectCancel = async (requestId: string, comment = '') => {
-    try {
-      const { error } = await supabase
-        .from('absence_requests')
-        .update({
-          status: 'approved',
-          approved: true,
-          lead_comment: comment
-        })
-        .eq('id', requestId);
-      if (error) throw error;
-      toast({ title: 'Cancellation rejected', description: 'The absence remains approved' });
-      fetchData();
-    } catch (error) {
-      console.error('Error rejecting cancellation:', error);
-      toast({ title: 'Error', description: 'Could not reject cancellation', variant: 'destructive' });
-    }
-  };
-
   const deleteAnalyst = async (analystId: string, analystName: string) => {
     if (!confirm(`Are you sure you want to delete ${analystName}? This will permanently remove all their data including tasks and absence requests.`)) {
       return;
@@ -237,13 +180,27 @@ export const LeadDashboard = () => {
   };
   const getAbsenceStatusBadge = (status: string) => {
     const statusConfig = {
-      approved: { label: 'Approved', variant: 'success' as const },
-      rejected: { label: 'Rejected', variant: 'destructive' as const },
-      canceled: { label: 'Canceled', variant: 'outline' as const },
-      cancel_pending: { label: 'Cancel pending (awaiting lead)', variant: 'secondary' as const },
-      pending: { label: 'Pending', variant: 'secondary' as const },
+      approved: {
+        label: 'Approved',
+        variant: 'success' as const
+      },
+      rejected: {
+        label: 'Rejected',
+        variant: 'destructive' as const
+      },
+      cancelled: {
+        label: 'Cancelled',
+        variant: 'outline' as const
+      },
+      pending: {
+        label: 'Pending',
+        variant: 'secondary' as const
+      }
     } as const;
-    return (statusConfig as any)[status] || { label: status, variant: 'outline' as const };
+    return (statusConfig as any)[status] || {
+      label: status,
+      variant: 'outline' as const
+    };
   };
   const isAnalystOnline = (analyst: any) => {
     const now = new Date();
@@ -336,12 +293,8 @@ export const LeadDashboard = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {pendingRequests.length === 0 ? (
-                <p className="text-center text-muted-foreground py-4">No pending requests</p>
-              ) : (
-                <div className="space-y-4">
-                  {pendingRequests.map(request => (
-                    <div key={request.id} className="p-4 border rounded-lg bg-[hsl(var(--panel))]">
+              {pendingRequests.length === 0 ? <p className="text-center text-muted-foreground py-4">No pending requests</p> : <div className="space-y-4">
+                  {pendingRequests.map(request => <div key={request.id} className="p-4 border rounded-lg bg-[hsl(var(--panel))]">
                       <div className="flex justify-between items-start mb-2">
                         <div>
                           <div className="flex items-center gap-2">
@@ -349,7 +302,7 @@ export const LeadDashboard = () => {
                             <h4 className="font-medium">{request.analyst_profile?.name}</h4>
                           </div>
                           <p className="text-sm text-muted-foreground">
-                            {format(new Date(request.start_date), 'PPP')} -{' '}
+                            {format(new Date(request.start_date), 'PPP')} - {' '}
                             {format(new Date(request.end_date), 'PPP')}
                           </p>
                           <p className="text-sm mt-1">{request.reason}</p>
@@ -361,52 +314,8 @@ export const LeadDashboard = () => {
                           Review
                         </Button>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Pending Cancellation Requests</CardTitle>
-              <CardDescription>
-                Cancellations awaiting your decision
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {cancelRequests.length === 0 ? (
-                <p className="text-center text-muted-foreground py-4">No pending cancellations</p>
-              ) : (
-                <div className="space-y-4">
-                  {cancelRequests.map(request => (
-                    <div key={request.id} className="p-4 border rounded-lg bg-[hsl(var(--panel))]">
-                      <div className="flex justify-between items-start mb-2">
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <UserAvatar src={request.analyst_profile?.avatar_url} name={request.analyst_profile?.name} size="sm" />
-                            <h4 className="font-medium">{request.analyst_profile?.name}</h4>
-                          </div>
-                          <p className="text-sm text-muted-foreground">
-                            {format(new Date(request.start_date), 'PPP')} -{' '}
-                            {format(new Date(request.end_date), 'PPP')}
-                          </p>
-                          {request.cancel_reason && (
-                            <p className="text-sm mt-1">Reason: {request.cancel_reason}</p>
-                          )}
-                        </div>
-                        <Badge variant="secondary">Cancel pending</Badge>
-                      </div>
-                      <div className="flex gap-2 mt-3">
-                        <Button size="sm" onClick={() => setSelectedRequest(request)}>
-                          Review
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+                    </div>)}
+                </div>}
             </CardContent>
           </Card>
         </TabsContent>
@@ -552,8 +461,8 @@ export const LeadDashboard = () => {
               <CardDescription>Approved, rejected or cancelled</CardDescription>
             </CardHeader>
             <CardContent>
-              {processedRequests.filter(r => r.status !== 'cancel_pending').length === 0 ? <p className="text-center text-muted-foreground py-4">No processed requests</p> : <div className="space-y-4">
-                  {processedRequests.filter(r => r.status !== 'cancel_pending').map(request => <div key={request.id} className="p-4 border rounded-lg bg-[hsl(var(--panel))]">
+              {processedRequests.length === 0 ? <p className="text-center text-muted-foreground py-4">No processed requests</p> : <div className="space-y-4">
+                  {processedRequests.map(request => <div key={request.id} className="p-4 border rounded-lg bg-[hsl(var(--panel))]">
                       <div className="flex justify-between items-start mb-2">
                         <div>
                           <div className="flex items-center gap-2">
@@ -592,28 +501,14 @@ export const LeadDashboard = () => {
       fetchData();
     }} />}
 
-      {selectedRequest && (
-        <AbsenceApprovalModal
-          request={selectedRequest}
-          onClose={() => setSelectedRequest(null)}
-          onApprove={(comment) => {
-            if (selectedRequest.status === 'cancel_pending') {
-              approveCancel(selectedRequest.id, comment);
-            } else {
-              approveRequest(selectedRequest.id, comment);
-            }
-            setSelectedRequest(null);
-          }}
-          onReject={(comment) => {
-            if (selectedRequest.status === 'cancel_pending') {
-              rejectCancel(selectedRequest.id, comment);
-            } else {
-              rejectRequest(selectedRequest.id, comment);
-            }
-            setSelectedRequest(null);
-          }}
-        />
-      )}
+      {/* Absence Approval Modal */}
+      {selectedRequest && <AbsenceApprovalModal request={selectedRequest} onClose={() => setSelectedRequest(null)} onApprove={comment => {
+      approveRequest(selectedRequest.id, comment);
+      setSelectedRequest(null);
+    }} onReject={comment => {
+      rejectRequest(selectedRequest.id, comment);
+      setSelectedRequest(null);
+    }} />}
 
       {/* Shift Edit Modal */}
       {selectedAnalyst && <ShiftEditForm analyst={selectedAnalyst} onClose={() => setSelectedAnalyst(null)} onSuccess={() => {

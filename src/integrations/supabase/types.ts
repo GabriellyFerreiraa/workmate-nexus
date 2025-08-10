@@ -17,12 +17,9 @@ export type Database = {
       absence_requests: {
         Row: {
           analyst_id: string
-          approved: boolean
           approved_by: string | null
           cancel_reason: string | null
-          canceled_at: string | null
           created_at: string
-          dismissed_by_analyst: boolean
           end_date: string
           id: string
           lead_comment: string | null
@@ -33,12 +30,9 @@ export type Database = {
         }
         Insert: {
           analyst_id: string
-          approved?: boolean
           approved_by?: string | null
           cancel_reason?: string | null
-          canceled_at?: string | null
           created_at?: string
-          dismissed_by_analyst?: boolean
           end_date: string
           id?: string
           lead_comment?: string | null
@@ -49,12 +43,9 @@ export type Database = {
         }
         Update: {
           analyst_id?: string
-          approved?: boolean
           approved_by?: string | null
           cancel_reason?: string | null
-          canceled_at?: string | null
           created_at?: string
-          dismissed_by_analyst?: boolean
           end_date?: string
           id?: string
           lead_comment?: string | null
@@ -202,10 +193,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      dismiss_absence_request: {
-        Args: { _id: string }
-        Returns: undefined
-      }
       get_user_role: {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["app_role"]
@@ -225,8 +212,6 @@ export type Database = {
         | "rejected"
         | "cancel_requested"
         | "cancelled"
-        | "cancel_pending"
-        | "canceled"
       app_role: "admin" | "lead" | "analyst"
       task_status: "pending" | "in_progress" | "completed"
       work_mode: "office" | "home"
@@ -363,8 +348,6 @@ export const Constants = {
         "rejected",
         "cancel_requested",
         "cancelled",
-        "cancel_pending",
-        "canceled",
       ],
       app_role: ["admin", "lead", "analyst"],
       task_status: ["pending", "in_progress", "completed"],
