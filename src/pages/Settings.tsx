@@ -108,7 +108,7 @@ const Settings = () => {
                 </AvatarFallback>
               </Avatar>
               <div className="space-y-2">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" className="bg-slate-600 hover:bg-slate-500">
                   Change Avatar
                 </Button>
                 <p className="text-xs text-muted-foreground">
@@ -123,7 +123,7 @@ const Settings = () => {
                 <Input id="name" value={profileData.name} onChange={e => setProfileData(prev => ({
                 ...prev,
                 name: e.target.value
-              }))} placeholder="Enter your name" className="bg-[hsl(var(--panel))] bg-slate-300" />
+              }))} placeholder="Enter your name" className="bg-[hsl(var(--panel))] bg-slate-500" />
               </div>
 
               <div className="space-y-2">
@@ -131,7 +131,7 @@ const Settings = () => {
                 <Input id="area" value={profileData.area} onChange={e => setProfileData(prev => ({
                 ...prev,
                 area: e.target.value
-              }))} placeholder="Enter your work area" className="bg-[hsl(var(--panel))] bg-slate-300" />
+              }))} placeholder="Enter your work area" className="bg-[hsl(var(--panel))] bg-slate-500" />
               </div>
             </div>
 
@@ -283,7 +283,7 @@ const Settings = () => {
                   Update your account password
                 </p>
               </div>
-               <Button variant="outline" size="sm">
+               <Button variant="outline" size="sm" className="bg-slate-600 hover:bg-slate-500">
                 Change Password
               </Button>
             </div>
@@ -297,7 +297,7 @@ const Settings = () => {
                   Add an extra layer of security to your account
                 </p>
               </div>
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" className="bg-slate-600 hover:bg-slate-500">
                 Enable 2FA
               </Button>
             </div>
