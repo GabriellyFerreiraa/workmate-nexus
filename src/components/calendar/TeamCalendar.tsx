@@ -80,6 +80,16 @@ export const TeamCalendar = ({
   };
   useEffect(() => {
     fetchData();
+
+    const channel = supabase
+      .channel('team-calendar')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, () => fetchData())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'absence_requests' }, () => fetchData())
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [user]);
   const getAbsencesForDate = (date: Date) => {
     return absenceRequests.filter(request => {
