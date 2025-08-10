@@ -75,7 +75,7 @@ const Settings = () => {
   return <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b bg-card">
-        <div className="flex h-16 items-center justify-between px-6 bg-slate-900">
+        <div className="flex h-16 items-center justify-between px-6 bg-card">
           <div className="flex items-center space-x-4">
             <Button variant="ghost" size="sm" onClick={() => navigate('/dashboard')}>
               <ArrowLeft className="h-4 w-4 mr-2" />
@@ -89,8 +89,8 @@ const Settings = () => {
       {/* Main Content */}
       <main className="p-6 max-w-4xl mx-auto space-y-6">
         {/* Profile Settings */}
-        <Card className="bg-slate-900">
-          <CardHeader className="bg-slate-900">
+        <Card className="bg-card">
+          <CardHeader className="bg-card">
             <CardTitle className="flex items-center gap-2">
               <User className="h-5 w-5" />
               Profile Settings
@@ -99,7 +99,7 @@ const Settings = () => {
               Manage your personal information and preferences
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6 bg-slate-900">
+          <CardContent className="space-y-6 bg-card">
             <div className="flex items-center gap-6">
               <Avatar className="h-20 w-20">
                 <AvatarImage src={userProfile?.avatar_url} />
@@ -108,7 +108,7 @@ const Settings = () => {
                 </AvatarFallback>
               </Avatar>
               <div className="space-y-2">
-                <Button variant="outline" size="sm" className="bg-slate-700 hover:bg-slate-600">
+                <Button variant="outline" size="sm">
                   Change Avatar
                 </Button>
                 <p className="text-xs text-muted-foreground">
@@ -123,7 +123,7 @@ const Settings = () => {
                 <Input id="name" value={profileData.name} onChange={e => setProfileData(prev => ({
                 ...prev,
                 name: e.target.value
-              }))} placeholder="Enter your name" className="bg-slate-700" />
+              }))} placeholder="Enter your name" />
               </div>
 
               <div className="space-y-2">
@@ -131,7 +131,7 @@ const Settings = () => {
                 <Input id="area" value={profileData.area} onChange={e => setProfileData(prev => ({
                 ...prev,
                 area: e.target.value
-              }))} placeholder="Enter your work area" className="bg-slate-700" />
+              }))} placeholder="Enter your work area" />
               </div>
             </div>
 
@@ -160,8 +160,8 @@ const Settings = () => {
         </Card>
 
         {/* Appearance Settings */}
-        <Card className="bg-slate-900">
-          <CardHeader className="bg-slate-900">
+        <Card className="bg-card">
+          <CardHeader className="bg-card">
             <CardTitle className="flex items-center gap-2">
               {getThemeIcon()}
               Appearance
@@ -170,7 +170,7 @@ const Settings = () => {
               Customize the look and feel of your dashboard
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4 bg-slate-900">
+          <CardContent className="space-y-4 bg-card">
             <div className="flex items-center justify-between">
               <div>
                 <Label>Theme</Label>
@@ -193,8 +193,8 @@ const Settings = () => {
         </Card>
 
         {/* Notification Settings */}
-        <Card className="bg-slate-900">
-          <CardHeader className="bg-slate-900">
+        <Card className="bg-card">
+          <CardHeader className="bg-card">
             <CardTitle className="flex items-center gap-2">
               <Bell className="h-5 w-5" />
               Notifications
@@ -203,7 +203,7 @@ const Settings = () => {
               Manage how you receive notifications
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4 bg-slate-900">
+          <CardContent className="space-y-4 bg-card">
             <div className="flex items-center justify-between">
               <div>
                 <Label>Email Notifications</Label>
@@ -265,8 +265,8 @@ const Settings = () => {
         </Card>
 
         {/* Security Settings */}
-        <Card className="bg-slate-900">
-          <CardHeader className="bg-slate-900">
+        <Card className="bg-card">
+          <CardHeader className="bg-card">
             <CardTitle className="flex items-center gap-2">
               <Shield className="h-5 w-5" />
               Security
@@ -275,7 +275,7 @@ const Settings = () => {
               Manage your account security settings
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4 bg-slate-900">
+          <CardContent className="space-y-4 bg-card">
             <div className="flex items-center justify-between">
               <div>
                 <Label>Change Password</Label>
@@ -283,7 +283,7 @@ const Settings = () => {
                   Update your account password
                 </p>
               </div>
-               <Button variant="outline" size="sm" className="bg-slate-800 hover:bg-slate-700">
+               <Button variant="outline" size="sm">
                 Change Password
               </Button>
             </div>
@@ -297,7 +297,7 @@ const Settings = () => {
                   Add an extra layer of security to your account
                 </p>
               </div>
-              <Button variant="outline" size="sm" className="bg-slate-800 hover:bg-slate-700">
+              <Button variant="outline" size="sm">
                 Enable 2FA
               </Button>
             </div>
