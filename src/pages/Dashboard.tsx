@@ -35,7 +35,7 @@ const Dashboard = () => {
   return <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b bg-card">
-        <div className="flex h-16 items-center justify-between px-6">
+        <div className="flex h-16 items-center justify-between px-6 bg-slate-900">
           <div className="flex items-center space-x-4">
             <h1 className="text-xl font-bold">DeskControl</h1>
             <div className="hidden md:block text-sm text-muted-foreground">

@@ -171,25 +171,36 @@ export const LeadDashboard = () => {
         className: ''
       }
     } as const;
-
     return (statusConfig as any)[status] || {
       label: status,
       variant: 'outline' as const,
       className: ''
     };
   };
-
   const getAbsenceStatusBadge = (status: string) => {
     const statusConfig = {
-      approved: { label: 'Approved', variant: 'success' as const },
-      rejected: { label: 'Rejected', variant: 'destructive' as const },
-      cancelled: { label: 'Cancelled', variant: 'outline' as const },
-      pending: { label: 'Pending', variant: 'secondary' as const }
+      approved: {
+        label: 'Approved',
+        variant: 'success' as const
+      },
+      rejected: {
+        label: 'Rejected',
+        variant: 'destructive' as const
+      },
+      cancelled: {
+        label: 'Cancelled',
+        variant: 'outline' as const
+      },
+      pending: {
+        label: 'Pending',
+        variant: 'secondary' as const
+      }
     } as const;
-
-    return (statusConfig as any)[status] || { label: status, variant: 'outline' as const };
+    return (statusConfig as any)[status] || {
+      label: status,
+      variant: 'outline' as const
+    };
   };
-
   const isAnalystOnline = (analyst: any) => {
     const now = new Date();
     const today = now.toLocaleDateString('en-US', {
@@ -282,8 +293,8 @@ export const LeadDashboard = () => {
             </CardHeader>
             <CardContent>
               {pendingRequests.length === 0 ? <p className="text-center text-muted-foreground py-4">No pending requests</p> : <div className="space-y-4">
-                  {pendingRequests.map(request => <div key={request.id} className="p-4 border rounded-lg bg-card">
-                      <div className="flex justify-between items-start mb-2">
+                  {pendingRequests.map(request => <div key={request.id} className="p-4 border rounded-lg bg-slate-900">
+                      <div className="flex justify-between items-start mb-2 bg-slate-900">
                         <div>
                           <h4 className="font-medium">{request.analyst_profile?.name}</h4>
                           <p className="text-sm text-muted-foreground">
