@@ -214,7 +214,7 @@ const Settings = () => {
               <Switch checked={notifications.email} onCheckedChange={checked => setNotifications(prev => ({
               ...prev,
               email: checked
-            }))} />
+            }))} className="bg-slate-900 hover:bg-slate-800 text-slate-200" />
             </div>
 
             <Separator />
@@ -229,7 +229,7 @@ const Settings = () => {
               <Switch checked={notifications.desktop} onCheckedChange={checked => setNotifications(prev => ({
               ...prev,
               desktop: checked
-            }))} className="text-slate-200 bg-slate-200 hover:bg-slate-100" />
+            }))} className="text-slate-200 bg-slate-900 hover:bg-slate-800" />
             </div>
 
             <Separator />
