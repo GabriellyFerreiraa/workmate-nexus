@@ -79,7 +79,7 @@ const Dashboard = () => {
               
               <DropdownMenuSeparator />
               
-              <DropdownMenuItem className="cursor-pointer text-destructive hover:text-destructive" onClick={signOut}>
+              <DropdownMenuItem onClick={signOut} className="cursor-pointer text-destructive hover:text-destructive bg-slate-800">
                 <LogOut className="mr-2 h-4 w-4" />
                 Logout
               </DropdownMenuItem>
