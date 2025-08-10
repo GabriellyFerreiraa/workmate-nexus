@@ -418,7 +418,7 @@ export const LeadDashboard = () => {
             </CardHeader>
             <CardContent>
               {allTasks.filter(task => task.status === 'completed').length === 0 ? <p className="text-center text-muted-foreground py-4">No completed tasks</p> : <div className="space-y-4">
-                  {allTasks.filter(task => task.status === 'completed').map(task => <div key={task.id} className="p-4 border rounded-lg bg-card">
+                  {allTasks.filter(task => task.status === 'completed').map(task => <div key={task.id} className="p-4 border rounded-lg bg-slate-900">
                         <div className="flex justify-between items-start mb-2">
                           <div>
                             <h4 className="font-medium">{task.title}</h4>
@@ -451,7 +451,7 @@ export const LeadDashboard = () => {
             </CardHeader>
             <CardContent>
               {processedRequests.length === 0 ? <p className="text-center text-muted-foreground py-4">No processed requests</p> : <div className="space-y-4">
-                  {processedRequests.map(request => <div key={request.id} className="p-4 border rounded-lg bg-card">
+                  {processedRequests.map(request => <div key={request.id} className="p-4 border rounded-lg bg-slate-900">
                       <div className="flex justify-between items-start mb-2">
                         <div>
                           <h4 className="font-medium">{request.analyst_profile?.name}</h4>
