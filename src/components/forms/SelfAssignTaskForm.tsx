@@ -11,30 +11,38 @@ import { toast } from '@/hooks/use-toast';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-
 const schema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters'),
   description: z.string().optional(),
   priority: z.number().min(1).max(5),
   dueDate: z.string().optional()
 });
-
 type FormData = z.infer<typeof schema>;
-
 interface SelfAssignTaskFormProps {
   onClose: () => void;
   onSuccess: () => void;
 }
-
-export const SelfAssignTaskForm = ({ onClose, onSuccess }: SelfAssignTaskFormProps) => {
+export const SelfAssignTaskForm = ({
+  onClose,
+  onSuccess
+}: SelfAssignTaskFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { user } = useAuth();
-
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormData>({
+  const {
+    user
+  } = useAuth();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: {
+      errors
+    }
+  } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { priority: 1 }
+    defaultValues: {
+      priority: 1
+    }
   });
-
   const onSubmit = async (data: FormData) => {
     if (!user) return;
     setIsLoading(true);
@@ -46,12 +54,14 @@ export const SelfAssignTaskForm = ({ onClose, onSuccess }: SelfAssignTaskFormPro
         assigned_by: user.id,
         priority: data.priority,
         status: 'pending' as const,
-        ...(data.dueDate && { due_date: new Date(data.dueDate).toISOString() })
+        ...(data.dueDate && {
+          due_date: new Date(data.dueDate).toISOString()
+        })
       };
-
-      const { error } = await supabase.from('tasks').insert(taskData);
+      const {
+        error
+      } = await supabase.from('tasks').insert(taskData);
       if (error) throw error;
-
       toast({
         title: 'Task Self-assigned',
         description: 'Your task has been created successfully'
@@ -68,9 +78,7 @@ export const SelfAssignTaskForm = ({ onClose, onSuccess }: SelfAssignTaskFormPro
       setIsLoading(false);
     }
   };
-
-  return (
-    <Dialog open onOpenChange={onClose}>
+  return <Dialog open onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md bg-slate-900">
         <DialogHeader>
           <DialogTitle>Self-assign Task</DialogTitle>
@@ -92,7 +100,7 @@ export const SelfAssignTaskForm = ({ onClose, onSuccess }: SelfAssignTaskFormPro
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="priority">Priority</Label>
-              <Select onValueChange={(value) => setValue('priority', parseInt(value))}>
+              <Select onValueChange={value => setValue('priority', parseInt(value))}>
                 <SelectTrigger>
                   <SelectValue placeholder="Priority" />
                 </SelectTrigger>
@@ -122,6 +130,5 @@ export const SelfAssignTaskForm = ({ onClose, onSuccess }: SelfAssignTaskFormPro
           </div>
         </form>
       </DialogContent>
-    </Dialog>
-  );
+    </Dialog>;
 };
