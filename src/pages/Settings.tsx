@@ -108,7 +108,7 @@ const Settings = () => {
                 </AvatarFallback>
               </Avatar>
               <div className="space-y-2">
-                <Button variant="outline" size="sm" className="bg-slate-600 hover:bg-slate-500">
+                <Button variant="outline" size="sm" className="bg-slate-500 hover:bg-slate-400">
                   Change Avatar
                 </Button>
                 <p className="text-xs text-muted-foreground">
@@ -229,7 +229,7 @@ const Settings = () => {
               <Switch checked={notifications.desktop} onCheckedChange={checked => setNotifications(prev => ({
               ...prev,
               desktop: checked
-            }))} className="bg-slate-200 hover:bg-slate-100" />
+            }))} className="text-slate-200 bg-slate-200 hover:bg-slate-100" />
             </div>
 
             <Separator />
