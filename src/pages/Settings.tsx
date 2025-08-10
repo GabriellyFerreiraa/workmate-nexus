@@ -123,7 +123,7 @@ const Settings = () => {
                 <Input id="name" value={profileData.name} onChange={e => setProfileData(prev => ({
                 ...prev,
                 name: e.target.value
-              }))} placeholder="Enter your name" className="bg-[hsl(var(--panel))]" />
+              }))} placeholder="Enter your name" className="bg-[hsl(var(--panel))] bg-slate-300" />
               </div>
 
               <div className="space-y-2">
@@ -131,7 +131,7 @@ const Settings = () => {
                 <Input id="area" value={profileData.area} onChange={e => setProfileData(prev => ({
                 ...prev,
                 area: e.target.value
-              }))} placeholder="Enter your work area" className="bg-[hsl(var(--panel))]" />
+              }))} placeholder="Enter your work area" className="bg-[hsl(var(--panel))] bg-slate-300" />
               </div>
             </div>
 
@@ -229,7 +229,7 @@ const Settings = () => {
               <Switch checked={notifications.desktop} onCheckedChange={checked => setNotifications(prev => ({
               ...prev,
               desktop: checked
-            }))} />
+            }))} className="bg-slate-200 hover:bg-slate-100" />
             </div>
 
             <Separator />
