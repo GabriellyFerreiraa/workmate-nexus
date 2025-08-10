@@ -123,7 +123,7 @@ const Settings = () => {
                 <Input id="name" value={profileData.name} onChange={e => setProfileData(prev => ({
                 ...prev,
                 name: e.target.value
-              }))} placeholder="Enter your name" className="bg-slate-400" />
+              }))} placeholder="Enter your name" className="bg-slate-700" />
               </div>
 
               <div className="space-y-2">
