@@ -280,7 +280,7 @@ export const AnalystDashboard = () => {
               {tasks.filter(task => task.status !== 'completed').length === 0 ? <p className="text-center text-muted-foreground py-4">
                     You have no active tasks
                   </p> : <div className="space-y-4">
-                    {tasks.filter(task => task.status !== 'completed').map(task => <div key={task.id} className="flex items-center justify-between p-4 border rounded-lg bg-slate-900">
+                    {tasks.filter(task => task.status !== 'completed').map(task => <div key={task.id} className="flex items-center justify-between p-4 border rounded-lg bg-[hsl(var(--panel))]">
                           <div className="flex-1">
                             <h4 className="font-medium">{task.title}</h4>
                             {task.description && <p className="text-sm text-muted-foreground mt-1">
@@ -301,7 +301,7 @@ export const AnalystDashboard = () => {
                                 <CheckCircle className="h-4 w-4 mr-1" />
                                 Complete
                               </Button>}
-                            {task.status === 'completed' && <Button size="sm" variant="outline" onClick={() => deleteTask(task.id)} className="bg-slate-900 hover:bg-slate-800">
+                            {task.status === 'completed' && <Button size="sm" variant="outline" onClick={() => deleteTask(task.id)} className="bg-[hsl(var(--panel))] hover:bg-[hsl(var(--panel))]">
                                 <X className="h-4 w-4 mr-1" />
                                 Remove
                               </Button>}
@@ -328,7 +328,7 @@ export const AnalystDashboard = () => {
             </CardHeader>
             <CardContent>
               {absenceRequests.filter(req => req.status === 'pending' || req.status === 'cancel_requested').length === 0 ? <p className="text-center text-muted-foreground py-4">No pending absence requests</p> : <div className="space-y-4">
-                  {absenceRequests.filter(req => req.status === 'pending' || req.status === 'cancel_requested').map(request => <div key={request.id} className="p-4 border rounded-lg bg-slate-900">
+                  {absenceRequests.filter(req => req.status === 'pending' || req.status === 'cancel_requested').map(request => <div key={request.id} className="p-4 border rounded-lg bg-[hsl(var(--panel))]">
                         <div className="flex justify-between items-start mb-2">
                           <div className="flex-1">
                             <h4 className="font-medium">
@@ -364,7 +364,7 @@ export const AnalystDashboard = () => {
               {onlineAnalysts.length === 0 ? <p className="text-center text-muted-foreground py-4">
                   No other analysts connected
                 </p> : <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {onlineAnalysts.map(analyst => <div key={analyst.id} className="p-3 border rounded-lg bg-slate-900">
+                  {onlineAnalysts.map(analyst => <div key={analyst.id} className="p-3 border rounded-lg bg-[hsl(var(--panel))]">
                       <div className="flex items-center gap-3">
                         <div className="h-8 w-8 rounded-full bg-green-500 flex items-center justify-center">
                           <span className="text-xs font-medium text-white">
@@ -392,7 +392,7 @@ export const AnalystDashboard = () => {
             </CardHeader>
             <CardContent>
               {tasks.filter(task => task.status === 'completed').length === 0 ? <p className="text-center text-muted-foreground py-4">No completed tasks</p> : <div className="space-y-4">
-                  {tasks.filter(task => task.status === 'completed').map(task => <div key={task.id} className="flex items-center justify-between p-4 border rounded-lg bg-slate-900">
+                  {tasks.filter(task => task.status === 'completed').map(task => <div key={task.id} className="flex items-center justify-between p-4 border rounded-lg bg-[hsl(var(--panel))]">
                         <div className="flex-1">
                           <h4 className="font-medium">{task.title}</h4>
                           {task.description && <p className="text-sm text-muted-foreground mt-1">{task.description}</p>}
@@ -407,7 +407,7 @@ export const AnalystDashboard = () => {
                           </div>
                         </div>
                         <div className="flex gap-2 ml-4">
-                          <Button size="sm" variant="outline" onClick={() => deleteTask(task.id)} className="bg-slate-900 hover:bg-slate-800">
+                          <Button size="sm" variant="outline" onClick={() => deleteTask(task.id)} className="bg-[hsl(var(--panel))] hover:bg-[hsl(var(--panel))]">
                             <X className="h-4 w-4 mr-1" />
                             Remove
                           </Button>
@@ -424,7 +424,7 @@ export const AnalystDashboard = () => {
             </CardHeader>
             <CardContent>
               {absenceRequests.filter(req => ['approved', 'rejected', 'cancelled'].includes(req.status)).length === 0 ? <p className="text-center text-muted-foreground py-4">No processed requests</p> : <div className="space-y-4">
-                  {absenceRequests.filter(req => ['approved', 'rejected', 'cancelled'].includes(req.status)).map(request => <div key={request.id} className="p-4 border rounded-lg bg-slate-900 px-[16px] py-[16px] mx-0">
+                  {absenceRequests.filter(req => ['approved', 'rejected', 'cancelled'].includes(req.status)).map(request => <div key={request.id} className="p-4 border rounded-lg bg-[hsl(var(--panel))] px-[16px] py-[16px] mx-0">
                         <div className="flex justify-between items-start mb-2">
                           <div className="flex-1">
                             <h4 className="font-medium">
@@ -437,7 +437,7 @@ export const AnalystDashboard = () => {
                             <Badge {...getStatusBadge(request.status)}>
                               {getStatusBadge(request.status).label}
                             </Badge>
-                            <Button size="sm" variant="outline" onClick={() => deleteAbsenceRequest(request.id)} className="bg-slate-900 hover:bg-slate-800">
+                            <Button size="sm" variant="outline" onClick={() => deleteAbsenceRequest(request.id)} className="bg-[hsl(var(--panel))] hover:bg-[hsl(var(--panel))]">
                               <X className="h-4 w-4 mr-1" />
                               Remove
                             </Button>

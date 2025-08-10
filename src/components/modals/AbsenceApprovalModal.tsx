@@ -39,7 +39,7 @@ export const AbsenceApprovalModal = ({
     return diffDays;
   };
   return <Dialog open onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-lg bg-slate-900">
+      <DialogContent className="sm:max-w-lg bg-[hsl(var(--panel))]">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Calendar className="h-5 w-5" />
@@ -100,12 +100,12 @@ export const AbsenceApprovalModal = ({
             <Label htmlFor="comment">
               Comment {action === 'reject' && <span className="text-destructive">*</span>}
             </Label>
-            <Textarea id="comment" placeholder={action === 'approve' ? "Optional comment about the approval..." : action === 'reject' ? "Explain the reason for the rejection..." : "Add a comment..."} value={comment} onChange={e => setComment(e.target.value)} rows={3} className="bg-slate-800" />
+            <Textarea id="comment" placeholder={action === 'approve' ? "Optional comment about the approval..." : action === 'reject' ? "Explain the reason for the rejection..." : "Add a comment..."} value={comment} onChange={e => setComment(e.target.value)} rows={3} />
           </div>
           
           {/* Action Buttons */}
           <div className="flex justify-end gap-2 pt-4">
-            <Button variant="outline" onClick={onClose} className="bg-slate-800 hover:bg-slate-700">
+            <Button variant="outline" onClick={onClose}>
               Cancel
             </Button>
             <Button variant="destructive" onClick={() => {

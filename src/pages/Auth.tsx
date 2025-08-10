@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
@@ -25,6 +25,13 @@ const signupSchema = z.object({
 type LoginForm = z.infer<typeof loginSchema>;
 type SignupForm = z.infer<typeof signupSchema>;
 const Auth = () => {
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.add('force-dark');
+    return () => {
+      root.classList.remove('force-dark');
+    };
+  }, []);
   const [isLoading, setIsLoading] = useState(false);
   const {
     signIn,

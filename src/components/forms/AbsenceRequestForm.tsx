@@ -77,7 +77,7 @@ export const AbsenceRequestForm = ({
     }
   };
   return <Dialog open onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md bg-slate-900">
+      <DialogContent className="sm:max-w-md bg-[hsl(var(--panel))]">
         <DialogHeader>
           <DialogTitle>New Absence Request</DialogTitle>
           <DialogDescription>
@@ -89,13 +89,13 @@ export const AbsenceRequestForm = ({
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="startDate">Start Date</Label>
-              <Input id="startDate" type="date" className="bg-slate-800" />
+              <Input id="startDate" type="date" />
               {errors.startDate && <p className="text-sm text-destructive">{errors.startDate.message}</p>}
             </div>
             
             <div className="space-y-2">
               <Label htmlFor="endDate">End Date</Label>
-              <Input id="endDate" type="date" className="bg-slate-800" />
+              <Input id="endDate" type="date" />
               {errors.endDate && <p className="text-sm text-destructive">{errors.endDate.message}</p>}
             </div>
           </div>
@@ -119,12 +119,12 @@ export const AbsenceRequestForm = ({
           
           <div className="space-y-2">
             <Label htmlFor="details">Details</Label>
-            <Textarea id="details" placeholder="Provide additional details about your absence request..." className="bg-slate-800" />
+            <Textarea id="details" placeholder="Provide additional details about your absence request..." />
             {errors.details && <p className="text-sm text-destructive">{errors.details.message}</p>}
           </div>
           
           <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={onClose} className="bg-slate-800 hover:bg-slate-700">
+            <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
             <Button type="submit" disabled={isLoading}>

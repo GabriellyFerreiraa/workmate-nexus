@@ -61,7 +61,7 @@ All colors MUST be HSL.
     --panel: 214.3 31.8% 91.4%;
   }
 
-  .dark {
+  .dark, .force-dark {
     /* Brand tokens for dark theme */
     --brand-navy: 240 58% 15%; /* #10103D approx */
     --brand-violet: 262 83% 49%; /* #6D28D9 */

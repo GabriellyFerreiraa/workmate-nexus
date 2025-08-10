@@ -82,7 +82,7 @@ export const TaskAssignmentForm = ({
     }
   };
   return <Dialog open onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md bg-slate-900">
+      <DialogContent className="sm:max-w-md bg-[hsl(var(--panel))]">
         <DialogHeader>
           <DialogTitle>Assign New Task</DialogTitle>
           <DialogDescription>
@@ -93,13 +93,13 @@ export const TaskAssignmentForm = ({
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="title">Task Title</Label>
-            <Input id="title" placeholder="Descriptive task title" className="bg-slate-800" />
+            <Input id="title" placeholder="Descriptive task title" />
             {errors.title && <p className="text-sm text-destructive">{errors.title.message}</p>}
           </div>
           
           <div className="space-y-2">
             <Label htmlFor="description">Description (optional)</Label>
-            <Textarea id="description" placeholder="Additional details about the task..." className="bg-slate-800" />
+            <Textarea id="description" placeholder="Additional details about the task..." />
           </div>
           
           <div className="space-y-2">
@@ -136,12 +136,12 @@ export const TaskAssignmentForm = ({
             
             <div className="space-y-2">
               <Label htmlFor="dueDate">Due Date (optional)</Label>
-              <Input id="dueDate" type="datetime-local" className="bg-slate-800" />
+              <Input id="dueDate" type="datetime-local" />
             </div>
           </div>
           
           <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={onClose} className="bg-slate-800 hover:bg-slate-700">
+            <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
             <Button type="submit" disabled={isLoading}>

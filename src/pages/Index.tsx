@@ -1,8 +1,16 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Shield, Users, Clock, Calendar, ArrowRight } from 'lucide-react';
 const Index = () => {
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.add('force-dark');
+    return () => {
+      root.classList.remove('force-dark');
+    };
+  }, []);
   return <div className="min-h-screen bg-background landing-theme">
       {/* Hero Section */}
       <div className="relative">
