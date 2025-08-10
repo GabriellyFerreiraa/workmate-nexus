@@ -44,7 +44,12 @@ export const AbsenceRequestForm = ({
       errors
     }
   } = useForm<FormData>({
-    resolver: zodResolver(schema)
+    resolver: zodResolver(schema),
+    defaultValues: {
+      startDate: '',
+      endDate: '',
+      details: ''
+    }
   });
   const onSubmit = async (data: FormData) => {
     if (!user) return;
@@ -89,13 +94,13 @@ export const AbsenceRequestForm = ({
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="startDate">Start Date</Label>
-              <Input id="startDate" type="date" />
+              <Input id="startDate" type="date" {...register("startDate")} />
               {errors.startDate && <p className="text-sm text-destructive">{errors.startDate.message}</p>}
             </div>
             
             <div className="space-y-2">
               <Label htmlFor="endDate">End Date</Label>
-              <Input id="endDate" type="date" />
+              <Input id="endDate" type="date" {...register("endDate")} />
               {errors.endDate && <p className="text-sm text-destructive">{errors.endDate.message}</p>}
             </div>
           </div>
@@ -119,7 +124,7 @@ export const AbsenceRequestForm = ({
           
           <div className="space-y-2">
             <Label htmlFor="details">Details</Label>
-            <Textarea id="details" placeholder="Provide additional details about your absence request..." />
+            <Textarea id="details" placeholder="Provide additional details about your absence request..." {...register("details")} />
             {errors.details && <p className="text-sm text-destructive">{errors.details.message}</p>}
           </div>
           
