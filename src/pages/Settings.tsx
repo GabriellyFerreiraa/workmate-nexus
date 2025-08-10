@@ -52,10 +52,11 @@ const Settings = () => {
 
       const { data } = supabase.storage.from('avatars').getPublicUrl(path);
       const publicUrl = data.publicUrl;
+      const cacheBustedUrl = `${publicUrl}?t=${Date.now()}`;
 
       const { error: updateError } = await supabase
         .from('profiles')
-        .update({ avatar_url: publicUrl })
+        .update({ avatar_url: cacheBustedUrl })
         .eq('user_id', user.id);
       if (updateError) throw updateError;
 
