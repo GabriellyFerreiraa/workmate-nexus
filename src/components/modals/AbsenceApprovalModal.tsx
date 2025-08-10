@@ -22,14 +22,12 @@ export const AbsenceApprovalModal = ({
 }: AbsenceApprovalModalProps) => {
   const [comment, setComment] = useState('');
   const [action, setAction] = useState<'approve' | 'reject' | null>(null);
+  const isCancelFlow = request?.status === 'cancel_pending';
+
   const handleApprove = () => {
     onApprove(comment);
   };
   const handleReject = () => {
-    if (!comment.trim()) {
-      alert('You must provide a comment to reject the request');
-      return;
-    }
     onReject(comment);
   };
   const getDuration = () => {
@@ -44,10 +42,10 @@ export const AbsenceApprovalModal = ({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Calendar className="h-5 w-5" />
-            Review Absence Request
+            {isCancelFlow ? 'Review Cancellation Request' : 'Review Absence Request'}
           </DialogTitle>
           <DialogDescription>
-            Review and decide on this absence request
+            {isCancelFlow ? 'Decide whether to cancel this approved absence' : 'Review and decide on this absence request'}
           </DialogDescription>
         </DialogHeader>
         
@@ -57,7 +55,7 @@ export const AbsenceApprovalModal = ({
             <div className="flex items-center gap-2">
               <UserAvatar src={request.analyst_profile?.avatar_url} name={request.analyst_profile?.name} size="xs" />
               <span className="font-medium">{request.analyst_profile?.name}</span>
-              <Badge variant="secondary">Pending</Badge>
+              <Badge variant="secondary">{isCancelFlow ? 'Cancel pending' : 'Pending'}</Badge>
             </div>
             
             <div className="grid grid-cols-2 gap-4 text-sm">

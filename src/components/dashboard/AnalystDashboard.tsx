@@ -127,31 +127,13 @@ export const AnalystDashboard = () => {
   }, [user]);
   const getStatusBadge = (status: string) => {
     const statusConfig = {
-      pending: {
-        label: 'Pending',
-        variant: 'secondary' as const
-      },
-      approved: {
-        label: 'Approved',
-        variant: 'success' as const
-      },
-      rejected: {
-        label: 'Rejected',
-        variant: 'destructive' as const
-      },
-      cancel_requested: {
-        label: 'Cancellation requested',
-        variant: 'secondary' as const
-      },
-      cancelled: {
-        label: 'Cancelled',
-        variant: 'outline' as const
-      }
-    };
-    return statusConfig[status] || {
-      label: status,
-      variant: 'outline' as const
-    };
+      pending: { label: 'Pending', variant: 'secondary' as const },
+      approved: { label: 'Approved', variant: 'success' as const },
+      rejected: { label: 'Rejected', variant: 'destructive' as const },
+      cancel_pending: { label: 'Cancel pending (awaiting lead)', variant: 'secondary' as const },
+      canceled: { label: '🚫 Canceled', variant: 'outline' as const },
+    } as const;
+    return (statusConfig as any)[status] || { label: status, variant: 'outline' as const };
   };
   const getTaskStatusBadge = (status: string) => {
     const statusConfig = {

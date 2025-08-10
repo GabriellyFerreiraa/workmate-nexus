@@ -57,9 +57,11 @@ export const TeamCalendar = ({
       const {
         data: absenceData,
         error: absenceError
-      } = await supabase.from('absence_requests').select('*, analyst_profile:profiles!absence_requests_analyst_id_fkey(name, avatar_url)').eq('status', 'approved').order('start_date', {
-        ascending: true
-      });
+      } = await supabase.from('absence_requests')
+        .select('*, analyst_profile:profiles!absence_requests_analyst_id_fkey(name, avatar_url)')
+        .eq('status', 'approved')
+        .eq('approved', true)
+        .order('start_date', { ascending: true });
       if (absenceError) throw absenceError;
       setAbsenceRequests(absenceData || []);
 
