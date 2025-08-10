@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import Index from "./pages/Index";
@@ -52,6 +52,16 @@ const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+const ThemedWrapper = ({ children }: { children: React.ReactNode }) => {
+  const location = useLocation();
+  const isPublic = location.pathname === '/' || location.pathname === '/auth';
+  return (
+    <div className={`${isPublic ? 'landing-theme ' : ''}min-h-screen relative`}>
+      {children}
+    </div>
+  );
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider defaultTheme="dark" storageKey="deskcontrol-theme">
@@ -59,11 +69,11 @@ const App = () => (
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <div className="landing-theme min-h-screen relative">
-            {/* Interactive background behind all content */}
-            <BackgroundFX />
-            <div className="relative z-10">
-              <BrowserRouter>
+          <BrowserRouter>
+            <ThemedWrapper>
+              {/* Interactive background behind all content */}
+              <BackgroundFX />
+              <div className="relative z-10">
                 <Routes>
                   <Route path="/" element={
                     <PublicRoute>
@@ -88,9 +98,9 @@ const App = () => (
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
-              </BrowserRouter>
-            </div>
-          </div>
+              </div>
+            </ThemedWrapper>
+          </BrowserRouter>
         </TooltipProvider>
       </AuthProvider>
     </ThemeProvider>
