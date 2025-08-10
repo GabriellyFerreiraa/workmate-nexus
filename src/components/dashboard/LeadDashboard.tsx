@@ -334,7 +334,7 @@ export const LeadDashboard = () => {
               {allTasks.filter(task => task.status === 'pending').length === 0 ? <p className="text-center text-muted-foreground py-4">
                   No pending tasks
                 </p> : <div className="space-y-4">
-                  {allTasks.filter(task => task.status === 'pending').map(task => <div key={task.id} className="p-4 border rounded-lg bg-card">
+                  {allTasks.filter(task => task.status === 'pending').map(task => <div key={task.id} className="p-4 border rounded-lg bg-slate-900">
                       <div className="flex justify-between items-start mb-2">
                         <div>
                           <h4 className="font-medium">{task.title}</h4>
