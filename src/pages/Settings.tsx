@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,10 +14,7 @@ import { useTheme } from "@/components/ThemeProvider";
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 const Settings = () => {
-  const {
-    userProfile,
-    user
-  } = useAuth();
+  const { userProfile, user, refreshProfile } = useAuth();
   const navigate = useNavigate();
   const {
     theme,
@@ -36,6 +33,42 @@ const Settings = () => {
     taskReminders: true,
     absenceUpdates: true
   });
+
+  // Avatar upload handlers
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const handleAvatarClick = () => fileInputRef.current?.click();
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    setLoading(true);
+    try {
+      const ext = file.name.split('.').pop() || 'png';
+      const path = `${user.id}/avatar.${ext}`;
+      const { error: uploadError } = await supabase
+        .storage
+        .from('avatars')
+        .upload(path, file, { upsert: true, contentType: file.type });
+      if (uploadError) throw uploadError;
+
+      const { data } = supabase.storage.from('avatars').getPublicUrl(path);
+      const publicUrl = data.publicUrl;
+
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ avatar_url: publicUrl })
+        .eq('user_id', user.id);
+      if (updateError) throw updateError;
+
+      toast({ title: 'Avatar updated', description: 'Your profile picture has been updated.' });
+      await refreshProfile?.();
+    } catch (err) {
+      console.error('Avatar upload error', err);
+      toast({ title: 'Upload failed', description: 'Could not update avatar.', variant: 'destructive' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleProfileUpdate = async () => {
     if (!user) return;
     setLoading(true);
@@ -108,9 +141,16 @@ const Settings = () => {
                 </AvatarFallback>
               </Avatar>
               <div className="space-y-2">
-                <Button variant="outline" size="sm" className="bg-slate-500 hover:bg-slate-400">
+                <Button variant="outline" size="sm" onClick={handleAvatarClick} disabled={loading} className="bg-slate-500 hover:bg-slate-400">
                   Change Avatar
                 </Button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleAvatarChange}
+                  className="hidden"
+                />
                 <p className="text-xs text-muted-foreground">
                   Upload a new profile picture
                 </p>

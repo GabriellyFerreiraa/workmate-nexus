@@ -12,6 +12,7 @@ import { TaskAssignmentForm } from '@/components/forms/TaskAssignmentForm';
 import { AbsenceApprovalModal } from '@/components/modals/AbsenceApprovalModal';
 import { TeamCalendar } from '@/components/calendar/TeamCalendar';
 import { ShiftEditForm } from '@/components/forms/ShiftEditForm';
+import { UserAvatar } from '@/components/UserAvatar';
 export const LeadDashboard = () => {
   const {
     user
@@ -31,14 +32,14 @@ export const LeadDashboard = () => {
       // Fetch pending absence requests
       const {
         data: requests
-      } = await supabase.from('absence_requests').select('*, analyst_profile:profiles!absence_requests_analyst_id_fkey(name)').eq('status', 'pending').order('created_at', {
+      } = await supabase.from('absence_requests').select('*, analyst_profile:profiles!absence_requests_analyst_id_fkey(name, avatar_url)').eq('status', 'pending').order('created_at', {
         ascending: false
       });
 
       // Fetch processed (non-pending) absence requests
       const {
         data: processed
-      } = await supabase.from('absence_requests').select('*, analyst_profile:profiles!absence_requests_analyst_id_fkey(name)').neq('status', 'pending').order('updated_at', {
+      } = await supabase.from('absence_requests').select('*, analyst_profile:profiles!absence_requests_analyst_id_fkey(name, avatar_url)').neq('status', 'pending').order('updated_at', {
         ascending: false
       });
 
@@ -51,7 +52,7 @@ export const LeadDashboard = () => {
       // Fetch all tasks
       const {
         data: tasks
-      } = await supabase.from('tasks').select('*, assigned_to_profile:profiles!tasks_assigned_to_fkey(name)').order('created_at', {
+      } = await supabase.from('tasks').select('*, assigned_to_profile:profiles!tasks_assigned_to_fkey(name, avatar_url)').order('created_at', {
         ascending: false
       });
 
@@ -296,7 +297,10 @@ export const LeadDashboard = () => {
                   {pendingRequests.map(request => <div key={request.id} className="p-4 border rounded-lg bg-[hsl(var(--panel))]">
                       <div className="flex justify-between items-start mb-2">
                         <div>
-                          <h4 className="font-medium">{request.analyst_profile?.name}</h4>
+                          <div className="flex items-center gap-2">
+                            <UserAvatar src={request.analyst_profile?.avatar_url} name={request.analyst_profile?.name} size="sm" />
+                            <h4 className="font-medium">{request.analyst_profile?.name}</h4>
+                          </div>
                           <p className="text-sm text-muted-foreground">
                             {format(new Date(request.start_date), 'PPP')} - {' '}
                             {format(new Date(request.end_date), 'PPP')}
@@ -338,9 +342,11 @@ export const LeadDashboard = () => {
                       <div className="flex justify-between items-start mb-2">
                         <div>
                           <h4 className="font-medium">{task.title}</h4>
-                          <p className="text-sm text-muted-foreground">
-                            Assigned to: {task.assigned_to_profile?.name}
-                          </p>
+                          <div className="text-sm text-muted-foreground flex items-center gap-2">
+                            <span>Assigned to:</span>
+                            <UserAvatar src={task.assigned_to_profile?.avatar_url} name={task.assigned_to_profile?.name} size="xs" />
+                            <span>{task.assigned_to_profile?.name}</span>
+                          </div>
                           {task.description && <p className="text-sm mt-1">{task.description}</p>}
                         </div>
                         <div className="flex items-center gap-2">
@@ -380,11 +386,14 @@ export const LeadDashboard = () => {
                 return <div key={analyst.id} className={`group p-5 md:p-6 border rounded-xl bg-card shadow-sm transition-colors hover:border-primary/30 ${!isOnline ? '' : ''}`}>
                        <div className="flex items-center gap-3 mb-4">
                          <div className={`h-3.5 w-3.5 rounded-full ring-2 ring-background ${isOnline ? 'bg-green-500' : 'bg-gray-400'}`} />
-                         <div>
-                           <p className="font-semibold text-base leading-tight">{analyst.name}</p>
-                           <p className="text-xs text-muted-foreground/90">
-                             {isOnline ? 'Online' : 'Offline'}
-                           </p>
+                         <div className="flex items-center gap-2">
+                           <UserAvatar src={analyst.avatar_url} name={analyst.name} size="sm" />
+                           <div>
+                             <p className="font-semibold text-base leading-tight">{analyst.name}</p>
+                             <p className="text-xs text-muted-foreground/90">
+                               {isOnline ? 'Online' : 'Offline'}
+                             </p>
+                           </div>
                          </div>
                        </div>
                        {todaySchedule?.active && <div className="text-sm text-muted-foreground mb-3">
@@ -422,9 +431,11 @@ export const LeadDashboard = () => {
                         <div className="flex justify-between items-start mb-2">
                           <div>
                             <h4 className="font-medium">{task.title}</h4>
-                            <p className="text-sm text-muted-foreground">
-                              Assigned to: {task.assigned_to_profile?.name}
-                            </p>
+                            <div className="text-sm text-muted-foreground flex items-center gap-2">
+                              <span>Assigned to:</span>
+                              <UserAvatar src={task.assigned_to_profile?.avatar_url} name={task.assigned_to_profile?.name} size="xs" />
+                              <span>{task.assigned_to_profile?.name}</span>
+                            </div>
                             {task.description && <p className="text-sm mt-1">{task.description}</p>}
                           </div>
                           <div className="flex items-center gap-2">
@@ -454,7 +465,10 @@ export const LeadDashboard = () => {
                   {processedRequests.map(request => <div key={request.id} className="p-4 border rounded-lg bg-[hsl(var(--panel))]">
                       <div className="flex justify-between items-start mb-2">
                         <div>
-                          <h4 className="font-medium">{request.analyst_profile?.name}</h4>
+                          <div className="flex items-center gap-2">
+                            <UserAvatar src={request.analyst_profile?.avatar_url} name={request.analyst_profile?.name} size="xs" />
+                            <h4 className="font-medium">{request.analyst_profile?.name}</h4>
+                          </div>
                           <p className="text-sm text-muted-foreground">
                             {format(new Date(request.start_date), 'PPP')} - {' '}
                             {format(new Date(request.end_date), 'PPP')}

@@ -7,6 +7,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { format, isSameDay, parseISO, getDay } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { MapPin, Clock, User } from 'lucide-react';
+import { UserAvatar } from '@/components/UserAvatar';
 interface AbsenceRequest {
   id: string;
   analyst_id: string;
@@ -177,11 +178,12 @@ export const TeamCalendar = ({
               const color = getAnalystColor(analyst.user_id, index);
               return <div key={analyst.id} className="p-3 rounded-lg border space-y-2 bg-[hsl(var(--panel))]">
                       <div className="flex items-center justify-between">
-                        <p className="font-medium text-sm" style={{
-                    color
-                  }}>
-                          {analyst.name}
-                        </p>
+                        <div className="flex items-center gap-2">
+                          <UserAvatar src={analyst.avatar_url as any} name={analyst.name} size="xs" />
+                          <p className="font-medium text-sm" style={{ color }}>
+                            {analyst.name}
+                          </p>
+                        </div>
                         <Badge variant="outline" className="text-xs">
                           {analyst.role}
                         </Badge>
@@ -218,9 +220,12 @@ export const TeamCalendar = ({
               return <div key={request.id} style={{
                 borderLeftColor: color
               }} className="p-2 rounded-md border-l-4 bg-[hsl(var(--panel))]">
-                      <p className="text-sm font-medium">
-                        {displayInfo.title}
-                      </p>
+                      <div className="flex items-center gap-2">
+                        <UserAvatar src={request.analyst_profile?.avatar_url as any} name={displayInfo.title} size="xs" />
+                        <p className="text-sm font-medium">
+                          {displayInfo.title}
+                        </p>
+                      </div>
                       <p className="text-xs text-muted-foreground">
                         {displayInfo.subtitle}
                       </p>

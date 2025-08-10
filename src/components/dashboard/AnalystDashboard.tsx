@@ -12,6 +12,7 @@ import { format } from 'date-fns';
 import { AbsenceRequestForm } from '@/components/forms/AbsenceRequestForm';
 import { SelfAssignTaskForm } from '@/components/forms/SelfAssignTaskForm';
 import { TeamCalendar } from '@/components/calendar/TeamCalendar';
+import { UserAvatar } from '@/components/UserAvatar';
 export const AnalystDashboard = () => {
   const {
     userProfile,
@@ -36,7 +37,7 @@ export const AnalystDashboard = () => {
       // Fetch tasks
       const {
         data: userTasks
-      } = await supabase.from('tasks').select('*, assigned_by_profile:profiles!tasks_assigned_by_fkey(name)').eq('assigned_to', user.id).order('created_at', {
+      } = await supabase.from('tasks').select('*, assigned_by_profile:profiles!tasks_assigned_by_fkey(name, avatar_url)').eq('assigned_to', user.id).order('created_at', {
         ascending: false
       });
 
@@ -286,15 +287,25 @@ export const AnalystDashboard = () => {
                             {task.description && <p className="text-sm text-muted-foreground mt-1">
                                 {task.description}
                               </p>}
-                            <div className="flex items-center gap-2 mt-2">
-                              <Badge className="bg-orange-500">
-                                {getTaskStatusBadge(task.status).label}
-                              </Badge>
-                              {task.assigned_by === task.assigned_to ? <Badge variant="outline">Self-assigned</Badge> : <Badge variant="outline">{`Lead-assigned${task.assigned_by_profile?.name ? ` by ${task.assigned_by_profile.name}` : ''}`}</Badge>}
-                              {task.due_date && <span className="text-xs text-muted-foreground">
-                                  Due: {format(new Date(task.due_date), 'PPp')}
-                                </span>}
-                            </div>
+                              <div className="flex items-center gap-2 mt-2">
+                                <Badge className="bg-orange-500">
+                                  {getTaskStatusBadge(task.status).label}
+                                </Badge>
+                                {task.assigned_by === task.assigned_to ? (
+                                  <Badge variant="outline">Self-assigned</Badge>
+                                ) : (
+                                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                    <span>Lead-assigned by</span>
+                                    <UserAvatar src={task.assigned_by_profile?.avatar_url} name={task.assigned_by_profile?.name} size="xs" />
+                                    <span>{task.assigned_by_profile?.name}</span>
+                                  </div>
+                                )}
+                                {task.due_date && (
+                                  <span className="text-xs text-muted-foreground">
+                                    Due: {format(new Date(task.due_date), 'PPp')}
+                                  </span>
+                                )}
+                              </div>
                           </div>
                           <div className="flex gap-2 ml-4">
                             {task.status !== 'completed' && <Button size="sm" onClick={() => markTaskCompleted(task.id)}>
@@ -366,11 +377,7 @@ export const AnalystDashboard = () => {
                 </p> : <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                   {onlineAnalysts.map(analyst => <div key={analyst.id} className="p-3 border rounded-lg bg-[hsl(var(--panel))]">
                       <div className="flex items-center gap-3">
-                        <div className="h-8 w-8 rounded-full bg-green-500 flex items-center justify-center">
-                          <span className="text-xs font-medium text-white">
-                            {analyst.name.charAt(0).toUpperCase()}
-                          </span>
-                        </div>
+                        <UserAvatar src={analyst.avatar_url} name={analyst.name} size="sm" />
                         <div>
                           <p className="font-medium">{analyst.name}</p>
                           <p className="text-xs text-muted-foreground capitalize">
@@ -400,10 +407,20 @@ export const AnalystDashboard = () => {
                             <Badge {...getTaskStatusBadge(task.status)}>
                               {getTaskStatusBadge(task.status).label}
                             </Badge>
-                            {task.assigned_by === task.assigned_to ? <Badge variant="outline">Self-assigned</Badge> : <Badge variant="outline">{`Lead-assigned${task.assigned_by_profile?.name ? ` by ${task.assigned_by_profile.name}` : ''}`}</Badge>}
-                            {task.due_date && <span className="text-xs text-muted-foreground">
+                            {task.assigned_by === task.assigned_to ? (
+                              <Badge variant="outline">Self-assigned</Badge>
+                            ) : (
+                              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                <span>Lead-assigned by</span>
+                                <UserAvatar src={task.assigned_by_profile?.avatar_url} name={task.assigned_by_profile?.name} size="xs" />
+                                <span>{task.assigned_by_profile?.name}</span>
+                              </div>
+                            )}
+                            {task.due_date && (
+                              <span className="text-xs text-muted-foreground">
                                 Due: {format(new Date(task.due_date), 'PPp')}
-                              </span>}
+                              </span>
+                            )}
                           </div>
                         </div>
                         <div className="flex gap-2 ml-4">

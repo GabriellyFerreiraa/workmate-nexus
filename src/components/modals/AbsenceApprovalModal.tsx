@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { UserAvatar } from '@/components/UserAvatar';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -54,7 +55,7 @@ export const AbsenceApprovalModal = ({
           {/* Request Details */}
           <div className="p-4 border rounded-lg space-y-3">
             <div className="flex items-center gap-2">
-              <User className="h-4 w-4 text-muted-foreground" />
+              <UserAvatar src={request.analyst_profile?.avatar_url} name={request.analyst_profile?.name} size="xs" />
               <span className="font-medium">{request.analyst_profile?.name}</span>
               <Badge variant="secondary">Pending</Badge>
             </div>
