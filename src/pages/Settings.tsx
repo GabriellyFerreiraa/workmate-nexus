@@ -75,7 +75,7 @@ const Settings = () => {
   return <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b bg-card">
-        <div className="flex h-16 items-center justify-between px-6 bg-slate-900">
+        <div className="flex h-16 items-center justify-between px-6 bg-[hsl(var(--panel))]">
           <div className="flex items-center space-x-4">
             <Button variant="ghost" size="sm" onClick={() => navigate('/dashboard')}>
               <ArrowLeft className="h-4 w-4 mr-2" />
@@ -89,8 +89,8 @@ const Settings = () => {
       {/* Main Content */}
       <main className="p-6 max-w-4xl mx-auto space-y-6">
         {/* Profile Settings */}
-        <Card className="bg-slate-900">
-          <CardHeader className="bg-slate-900">
+        <Card className="bg-[hsl(var(--panel))]">
+          <CardHeader className="bg-[hsl(var(--panel))]">
             <CardTitle className="flex items-center gap-2">
               <User className="h-5 w-5" />
               Profile Settings
@@ -99,7 +99,7 @@ const Settings = () => {
               Manage your personal information and preferences
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6 bg-slate-900">
+          <CardContent className="space-y-6 bg-[hsl(var(--panel))]">
             <div className="flex items-center gap-6">
               <Avatar className="h-20 w-20">
                 <AvatarImage src={userProfile?.avatar_url} />
@@ -160,8 +160,8 @@ const Settings = () => {
         </Card>
 
         {/* Appearance Settings */}
-        <Card className="bg-slate-900">
-          <CardHeader className="bg-slate-900">
+        <Card className="bg-[hsl(var(--panel))]">
+          <CardHeader className="bg-[hsl(var(--panel))]">
             <CardTitle className="flex items-center gap-2">
               {getThemeIcon()}
               Appearance
@@ -170,7 +170,7 @@ const Settings = () => {
               Customize the look and feel of your dashboard
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4 bg-slate-900">
+          <CardContent className="space-y-4 bg-[hsl(var(--panel))]">
             <div className="flex items-center justify-between">
               <div>
                 <Label>Theme</Label>
@@ -193,8 +193,8 @@ const Settings = () => {
         </Card>
 
         {/* Notification Settings */}
-        <Card className="bg-slate-900">
-          <CardHeader className="bg-slate-900">
+        <Card className="bg-[hsl(var(--panel))]">
+          <CardHeader className="bg-[hsl(var(--panel))]">
             <CardTitle className="flex items-center gap-2">
               <Bell className="h-5 w-5" />
               Notifications
@@ -203,7 +203,7 @@ const Settings = () => {
               Manage how you receive notifications
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4 bg-slate-900">
+          <CardContent className="space-y-4 bg-[hsl(var(--panel))]">
             <div className="flex items-center justify-between">
               <div>
                 <Label>Email Notifications</Label>
@@ -265,8 +265,8 @@ const Settings = () => {
         </Card>
 
         {/* Security Settings */}
-        <Card className="bg-slate-900">
-          <CardHeader className="bg-slate-900">
+        <Card className="bg-[hsl(var(--panel))]">
+          <CardHeader className="bg-[hsl(var(--panel))]">
             <CardTitle className="flex items-center gap-2">
               <Shield className="h-5 w-5" />
               Security
@@ -275,7 +275,7 @@ const Settings = () => {
               Manage your account security settings
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4 bg-slate-900">
+          <CardContent className="space-y-4 bg-[hsl(var(--panel))]">
             <div className="flex items-center justify-between">
               <div>
                 <Label>Change Password</Label>

@@ -35,7 +35,7 @@ const Dashboard = () => {
   return <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="border-b bg-card">
-        <div className="flex h-16 items-center justify-between px-6 bg-slate-900">
+        <div className="flex h-16 items-center justify-between px-6 bg-[hsl(var(--panel))]">
           <div className="flex items-center space-x-4">
             <h1 className="text-xl font-bold">DeskControl</h1>
             <div className="hidden md:block text-sm text-muted-foreground">
@@ -62,7 +62,7 @@ const Dashboard = () => {
               </Button>
             </DropdownMenuTrigger>
             
-            <DropdownMenuContent align="end" className="w-56 border shadow-lg bg-slate-900">
+            <DropdownMenuContent align="end" className="w-56 border shadow-lg bg-[hsl(var(--panel))]">
               <div className="px-2 py-1.5">
                 <p className="text-sm font-medium">{userProfile.name}</p>
                 <p className="text-xs text-muted-foreground capitalize">
