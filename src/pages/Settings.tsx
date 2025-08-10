@@ -214,7 +214,7 @@ const Settings = () => {
               <Switch checked={notifications.email} onCheckedChange={checked => setNotifications(prev => ({
               ...prev,
               email: checked
-            }))} className="bg-slate-900 hover:bg-slate-800 text-slate-200" />
+            }))} className="text-slate-200 bg-slate-800 hover:bg-slate-700" />
             </div>
 
             <Separator />
@@ -229,7 +229,7 @@ const Settings = () => {
               <Switch checked={notifications.desktop} onCheckedChange={checked => setNotifications(prev => ({
               ...prev,
               desktop: checked
-            }))} className="text-slate-200 bg-slate-900 hover:bg-slate-800" />
+            }))} className="text-slate-200 bg-slate-800 hover:bg-slate-700" />
             </div>
 
             <Separator />
@@ -244,7 +244,7 @@ const Settings = () => {
               <Switch checked={notifications.taskReminders} onCheckedChange={checked => setNotifications(prev => ({
               ...prev,
               taskReminders: checked
-            }))} className="text-slate-200 bg-slate-900 hover:bg-slate-800" />
+            }))} className="text-slate-200 bg-slate-800 hover:bg-slate-700" />
             </div>
 
             <Separator />
@@ -259,7 +259,7 @@ const Settings = () => {
               <Switch checked={notifications.absenceUpdates} onCheckedChange={checked => setNotifications(prev => ({
               ...prev,
               absenceUpdates: checked
-            }))} className="text-slate-200 bg-slate-900 hover:bg-slate-800" />
+            }))} className="text-slate-200 bg-slate-800 hover:bg-slate-700" />
             </div>
           </CardContent>
         </Card>
