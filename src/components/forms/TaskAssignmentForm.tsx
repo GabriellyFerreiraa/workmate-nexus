@@ -93,13 +93,13 @@ export const TaskAssignmentForm = ({
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="title">Task Title</Label>
-            <Input id="title" placeholder="Descriptive task title" />
+            <Input id="title" placeholder="Descriptive task title" {...register('title')} />
             {errors.title && <p className="text-sm text-destructive">{errors.title.message}</p>}
           </div>
           
           <div className="space-y-2">
             <Label htmlFor="description">Description (optional)</Label>
-            <Textarea id="description" placeholder="Additional details about the task..." />
+            <Textarea id="description" placeholder="Additional details about the task..." {...register('description')} />
           </div>
           
           <div className="space-y-2">
@@ -114,6 +114,7 @@ export const TaskAssignmentForm = ({
                   </SelectItem>)}
               </SelectContent>
             </Select>
+            <input type="hidden" {...register('assignedTo')} />
             {errors.assignedTo && <p className="text-sm text-destructive">{errors.assignedTo.message}</p>}
           </div>
           
@@ -132,11 +133,12 @@ export const TaskAssignmentForm = ({
                   <SelectItem value="5">5 - Critical</SelectItem>
                 </SelectContent>
               </Select>
+              <input type="hidden" {...register('priority', { valueAsNumber: true })} />
             </div>
             
             <div className="space-y-2">
               <Label htmlFor="dueDate">Due Date (optional)</Label>
-              <Input id="dueDate" type="datetime-local" />
+              <Input id="dueDate" type="datetime-local" {...register('dueDate')} />
             </div>
           </div>
           
