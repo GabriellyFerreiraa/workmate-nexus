@@ -244,7 +244,7 @@ const Settings = () => {
               <Switch checked={notifications.taskReminders} onCheckedChange={checked => setNotifications(prev => ({
               ...prev,
               taskReminders: checked
-            }))} />
+            }))} className="text-slate-200 bg-slate-900 hover:bg-slate-800" />
             </div>
 
             <Separator />
@@ -259,7 +259,7 @@ const Settings = () => {
               <Switch checked={notifications.absenceUpdates} onCheckedChange={checked => setNotifications(prev => ({
               ...prev,
               absenceUpdates: checked
-            }))} />
+            }))} className="text-slate-200 bg-slate-900 hover:bg-slate-800" />
             </div>
           </CardContent>
         </Card>
