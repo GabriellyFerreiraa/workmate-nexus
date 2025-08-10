@@ -79,7 +79,7 @@ export const SelfAssignTaskForm = ({
     }
   };
   return <Dialog open onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md bg-[hsl(var(--panel))]">
+      <DialogContent className="sm:max-w-md bg-slate-900">
         <DialogHeader>
           <DialogTitle>Self-assign Task</DialogTitle>
           <DialogDescription>Create a task for yourself</DialogDescription>
@@ -88,13 +88,13 @@ export const SelfAssignTaskForm = ({
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="title">Task Title</Label>
-            <Input id="title" placeholder="Descriptive task title" {...register('title')} />
+            <Input id="title" placeholder="Descriptive task title" className="bg-slate-800" />
             {errors.title && <p className="text-sm text-destructive">{errors.title.message}</p>}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="description">Description (optional)</Label>
-            <Textarea id="description" placeholder="Additional details about the task..." {...register('description')} />
+            <Textarea id="description" placeholder="Additional details about the task..." className="bg-slate-800" />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -116,12 +116,12 @@ export const SelfAssignTaskForm = ({
 
             <div className="space-y-2">
               <Label htmlFor="dueDate">Due Date (optional)</Label>
-              <Input id="dueDate" type="datetime-local" {...register('dueDate')} />
+              <Input id="dueDate" type="datetime-local" className="bg-slate-800" />
             </div>
           </div>
 
           <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={onClose}>
+            <Button type="button" variant="outline" onClick={onClose} className="bg-slate-800 hover:bg-slate-700">
               Cancel
             </Button>
             <Button type="submit" disabled={isLoading}>
