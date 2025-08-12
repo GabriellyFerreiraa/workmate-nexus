@@ -238,7 +238,7 @@ export const LeadDashboard = () => {
             <AlertCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-[hsl(var(--destructive))]">{pendingRequests.length}</div>
+            <div className={`text-2xl font-bold ${pendingRequests.length > 0 ? 'text-[hsl(var(--destructive))]' : ''}`}>{pendingRequests.length}</div>
           </CardContent>
         </Card>
 
@@ -248,7 +248,7 @@ export const LeadDashboard = () => {
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-[hsl(var(--warning))]">
+            <div className={`text-2xl font-bold ${allTasks.filter(task => task.status !== 'completed').length > 0 ? 'text-[hsl(var(--warning))]' : ''}`}>
               {allTasks.filter(task => task.status !== 'completed').length}
             </div>
           </CardContent>
@@ -260,7 +260,7 @@ export const LeadDashboard = () => {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-[hsl(var(--success))]">{onlineAnalysts.length}</div>
+            <div className={`text-2xl font-bold ${onlineAnalysts.length > 0 ? 'text-[hsl(var(--success))]' : ''}`}>{onlineAnalysts.length}</div>
           </CardContent>
         </Card>
 

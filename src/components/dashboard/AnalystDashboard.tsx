@@ -257,7 +257,7 @@ export const AnalystDashboard = () => {
             <AlertCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-[hsl(var(--warning))]">
+            <div className={`text-2xl font-bold ${tasks.filter(task => task.status !== 'completed').length > 0 ? 'text-[hsl(var(--warning))]' : ''}`}>
               {tasks.filter(task => task.status !== 'completed').length}
             </div>
           </CardContent>
@@ -269,7 +269,7 @@ export const AnalystDashboard = () => {
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-[hsl(var(--destructive))]">
+            <div className={`text-2xl font-bold ${absenceRequests.filter(req => req.status === 'pending').length > 0 ? 'text-[hsl(var(--destructive))]' : ''}`}>
               {absenceRequests.filter(req => req.status === 'pending').length}
             </div>
           </CardContent>
@@ -281,7 +281,7 @@ export const AnalystDashboard = () => {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-[hsl(var(--success))]">{onlineNow.length}</div>
+            <div className={`text-2xl font-bold ${onlineNow.length > 0 ? 'text-[hsl(var(--success))]' : ''}`}>{onlineNow.length}</div>
           </CardContent>
         </Card>
       </div>
