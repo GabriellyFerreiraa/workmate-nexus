@@ -33,14 +33,14 @@ export const LeadDashboard = () => {
       // Fetch pending absence requests
       const {
         data: requests
-      } = await supabase.from('absence_requests').select('*, analyst_profile:profiles!absence_requests_analyst_id_fkey(name, avatar_url)').in('status', ['pending', 'cancel_pending']).order('created_at', {
+      } = await supabase.from('absence_requests').select('*, analyst_profile:profiles!absence_requests_analyst_id_fkey(name, avatar_url)').in('status', ['pending', 'cancel_requested']).order('created_at', {
         ascending: false
       });
 
       // Fetch processed (non-pending) absence requests
       const {
         data: processed
-      } = await supabase.from('absence_requests').select('*, analyst_profile:profiles!absence_requests_analyst_id_fkey(name, avatar_url)').in('status', ['approved', 'rejected', 'canceled']).order('updated_at', {
+      } = await supabase.from('absence_requests').select('*, analyst_profile:profiles!absence_requests_analyst_id_fkey(name, avatar_url)').in('status', ['approved', 'rejected', 'cancelled']).order('updated_at', {
         ascending: false
       });
 
@@ -128,7 +128,7 @@ export const LeadDashboard = () => {
     try {
       const { error } = await supabase
         .from('absence_requests')
-        .update({ status: 'canceled', canceled_at: new Date().toISOString(), lead_comment: comment })
+        .update({ status: 'cancelled', canceled_at: new Date().toISOString(), lead_comment: comment })
         .eq('id', requestId);
       if (error) throw error;
       toast({ title: 'Cancellation approved', description: 'The absence has been canceled.' });
@@ -152,6 +152,7 @@ export const LeadDashboard = () => {
       toast({ title: 'Error', description: 'Could not reject cancellation', variant: 'destructive' });
     }
   };
+  const deleteAnalyst = async (analystId: string, analystName: string) => {
     if (!confirm(`Are you sure you want to delete ${analystName}? This will permanently remove all their data including tasks and absence requests.`)) {
       return;
     }
@@ -216,7 +217,7 @@ export const LeadDashboard = () => {
         label: 'Rejected',
         variant: 'destructive' as const
       },
-      canceled: {
+      cancelled: {
         label: 'Cancelled',
         variant: 'outline' as const
       },
@@ -335,7 +336,7 @@ export const LeadDashboard = () => {
                           </p>
                           <p className="text-sm mt-1">{request.reason}</p>
                         </div>
-                        <Badge variant="secondary" className="bg-orange-500">{request.status === 'cancel_pending' ? 'Cancellation requested' : 'Pending'}</Badge>
+                        <Badge variant="secondary" className="bg-orange-500">{request.status === 'cancel_requested' ? 'Cancellation requested' : 'Pending'}</Badge>
                       </div>
                       <div className="flex gap-2 mt-3">
                         <Button size="sm" onClick={() => setSelectedRequest(request)}>
@@ -531,14 +532,14 @@ export const LeadDashboard = () => {
 
       {/* Absence Approval Modal */}
       {selectedRequest && <AbsenceApprovalModal request={selectedRequest} onClose={() => setSelectedRequest(null)} onApprove={comment => {
-      if (selectedRequest.status === 'cancel_pending') {
+      if (selectedRequest.status === 'cancel_requested') {
         approveCancellation(selectedRequest.id, comment);
       } else {
         approveRequest(selectedRequest.id, comment);
       }
       setSelectedRequest(null);
     }} onReject={comment => {
-      if (selectedRequest.status === 'cancel_pending') {
+      if (selectedRequest.status === 'cancel_requested') {
         rejectCancellation(selectedRequest.id, comment);
       } else {
         rejectRequest(selectedRequest.id, comment);

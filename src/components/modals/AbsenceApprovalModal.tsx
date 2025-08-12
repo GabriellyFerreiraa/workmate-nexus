@@ -22,7 +22,7 @@ export const AbsenceApprovalModal = ({
 }: AbsenceApprovalModalProps) => {
   const [comment, setComment] = useState('');
   const [action, setAction] = useState<'approve' | 'reject' | null>(null);
-  const isCancel = request.status === 'cancel_pending';
+  const isCancel = request.status === 'cancel_requested';
   const handleApprove = () => {
     onApprove(comment);
   };
