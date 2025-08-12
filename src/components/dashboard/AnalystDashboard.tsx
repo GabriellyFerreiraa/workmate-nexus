@@ -54,7 +54,7 @@ export const AnalystDashboard = () => {
       const { data: absencesToday } = await supabase
         .from('absence_requests')
         .select('*')
-        .eq('status', 'approved')
+        .in('status', ['approved', 'cancel_pending'])
         .lte('start_date', today)
         .gte('end_date', today);
 
@@ -136,6 +136,44 @@ export const AnalystDashboard = () => {
       });
     }
   };
+
+  const cancelPendingRequest = async (requestId: string) => {
+    try {
+      const { error } = await supabase
+        .from('absence_requests')
+        .update({ status: 'canceled', canceled_at: new Date().toISOString() })
+        .eq('id', requestId)
+        .eq('status', 'pending');
+      if (error) throw error;
+      toast({ title: 'Request canceled', description: 'Your request was canceled before approval.' });
+      fetchData();
+    } catch (error) {
+      console.error('Error canceling request:', error);
+      toast({ title: 'Error', description: 'Could not cancel request', variant: 'destructive' });
+    }
+  };
+
+  const requestCancellation = async (requestId: string) => {
+    try {
+      const reason = window.prompt('Please provide a reason for the cancellation request:');
+      if (!reason || !reason.trim()) {
+        toast({ title: 'Cancellation reason required', description: 'Please enter a reason to proceed.' });
+        return;
+      }
+      const { error } = await supabase
+        .from('absence_requests')
+        .update({ status: 'cancel_pending', cancel_reason: reason.trim() })
+        .eq('id', requestId)
+        .eq('status', 'approved');
+      if (error) throw error;
+      toast({ title: 'Cancellation requested', description: 'Waiting for lead approval.' });
+      fetchData();
+    } catch (error) {
+      console.error('Error requesting cancellation:', error);
+      toast({ title: 'Error', description: 'Could not request cancellation', variant: 'destructive' });
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, [user]);
@@ -153,16 +191,16 @@ export const AnalystDashboard = () => {
         label: 'Rejected',
         variant: 'destructive' as const
       },
-      cancel_requested: {
+      cancel_pending: {
         label: 'Cancellation requested',
         variant: 'secondary' as const
       },
-      cancelled: {
-        label: 'Cancelled',
+      canceled: {
+        label: 'Canceled',
         variant: 'outline' as const
       }
-    };
-    return statusConfig[status] || {
+    } as const;
+    return (statusConfig as any)[status] || {
       label: status,
       variant: 'outline' as const
     };
@@ -371,8 +409,8 @@ export const AnalystDashboard = () => {
               </Button>
             </CardHeader>
             <CardContent>
-              {absenceRequests.filter(req => req.status === 'pending' || req.status === 'cancel_requested').length === 0 ? <p className="text-center text-muted-foreground py-4">No pending absence requests</p> : <div className="space-y-4">
-                  {absenceRequests.filter(req => req.status === 'pending' || req.status === 'cancel_requested').map(request => <div key={request.id} className="p-4 border rounded-lg bg-[hsl(var(--panel))]">
+              {absenceRequests.filter(req => req.status === 'pending' || req.status === 'cancel_pending').length === 0 ? <p className="text-center text-muted-foreground py-4">No pending absence requests</p> : <div className="space-y-4">
+                  {absenceRequests.filter(req => req.status === 'pending' || req.status === 'cancel_pending').map(request => <div key={request.id} className="p-4 border rounded-lg bg-[hsl(var(--panel))]">
                         <div className="flex justify-between items-start mb-2">
                           <div className="flex-1">
                             <h4 className="font-medium">
@@ -390,6 +428,13 @@ export const AnalystDashboard = () => {
                         {request.lead_comment && <div className="mt-3 p-3 bg-muted rounded">
                             <p className="text-sm"><strong>Lead Comment:</strong> {request.lead_comment}</p>
                           </div>}
+                        {request.status === 'pending' && (
+                          <div className="mt-3 flex gap-2">
+                            <Button size="sm" variant="outline" onClick={() => cancelPendingRequest(request.id)}>
+                              Cancel Request
+                            </Button>
+                          </div>
+                        )}
                       </div>)}
                 </div>}
             </CardContent>
@@ -487,8 +532,8 @@ export const AnalystDashboard = () => {
               <CardDescription>Approved, rejected or cancelled</CardDescription>
             </CardHeader>
             <CardContent>
-              {absenceRequests.filter(req => ['approved', 'rejected', 'cancelled'].includes(req.status)).length === 0 ? <p className="text-center text-muted-foreground py-4">No processed requests</p> : <div className="space-y-4">
-                  {absenceRequests.filter(req => ['approved', 'rejected', 'cancelled'].includes(req.status)).map(request => <div key={request.id} className="p-4 border rounded-lg bg-[hsl(var(--panel))] px-[16px] py-[16px] mx-0">
+              {absenceRequests.filter(req => ['approved', 'rejected', 'canceled'].includes(req.status)).length === 0 ? <p className="text-center text-muted-foreground py-4">No processed requests</p> : <div className="space-y-4">
+                  {absenceRequests.filter(req => ['approved', 'rejected', 'canceled'].includes(req.status)).map(request => <div key={request.id} className="p-4 border rounded-lg bg-[hsl(var(--panel))] px-[16px] py-[16px] mx-0">
                         <div className="flex justify-between items-start mb-2">
                           <div className="flex-1">
                             <h4 className="font-medium">
@@ -497,15 +542,20 @@ export const AnalystDashboard = () => {
                             </h4>
                             <p className="text-sm text-muted-foreground mt-1">{request.reason}</p>
                           </div>
-                          <div className="flex items-center gap-2">
-                            <Badge {...getStatusBadge(request.status)}>
-                              {getStatusBadge(request.status).label}
-                            </Badge>
-                            <Button size="sm" variant="outline" onClick={() => deleteAbsenceRequest(request.id)} className="bg-[hsl(var(--panel))] hover:bg-[hsl(var(--panel))]">
-                              <X className="h-4 w-4 mr-1" />
-                              Remove
-                            </Button>
-                          </div>
+                            <div className="flex items-center gap-2">
+                              <Badge {...getStatusBadge(request.status)}>
+                                {getStatusBadge(request.status).label}
+                              </Badge>
+                              {request.status === 'approved' && (
+                                <Button size="sm" onClick={() => requestCancellation(request.id)}>
+                                  Request Cancellation
+                                </Button>
+                              )}
+                              <Button size="sm" variant="outline" onClick={() => deleteAbsenceRequest(request.id)} className="bg-[hsl(var(--panel))] hover:bg-[hsl(var(--panel))]">
+                                <X className="h-4 w-4 mr-1" />
+                                Remove
+                              </Button>
+                            </div>
                         </div>
                         {request.lead_comment && <div className="mt-3 p-3 bg-muted rounded">
                             <p className="text-sm">

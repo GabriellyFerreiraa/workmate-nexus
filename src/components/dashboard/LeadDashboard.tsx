@@ -33,14 +33,14 @@ export const LeadDashboard = () => {
       // Fetch pending absence requests
       const {
         data: requests
-      } = await supabase.from('absence_requests').select('*, analyst_profile:profiles!absence_requests_analyst_id_fkey(name, avatar_url)').eq('status', 'pending').order('created_at', {
+      } = await supabase.from('absence_requests').select('*, analyst_profile:profiles!absence_requests_analyst_id_fkey(name, avatar_url)').in('status', ['pending', 'cancel_pending']).order('created_at', {
         ascending: false
       });
 
       // Fetch processed (non-pending) absence requests
       const {
         data: processed
-      } = await supabase.from('absence_requests').select('*, analyst_profile:profiles!absence_requests_analyst_id_fkey(name, avatar_url)').neq('status', 'pending').order('updated_at', {
+      } = await supabase.from('absence_requests').select('*, analyst_profile:profiles!absence_requests_analyst_id_fkey(name, avatar_url)').in('status', ['approved', 'rejected', 'canceled']).order('updated_at', {
         ascending: false
       });
 
@@ -124,7 +124,34 @@ export const LeadDashboard = () => {
       });
     }
   };
-  const deleteAnalyst = async (analystId: string, analystName: string) => {
+  const approveCancellation = async (requestId: string, comment = '') => {
+    try {
+      const { error } = await supabase
+        .from('absence_requests')
+        .update({ status: 'canceled', canceled_at: new Date().toISOString(), lead_comment: comment })
+        .eq('id', requestId);
+      if (error) throw error;
+      toast({ title: 'Cancellation approved', description: 'The absence has been canceled.' });
+      fetchData();
+    } catch (error) {
+      console.error('Error approving cancellation:', error);
+      toast({ title: 'Error', description: 'Could not approve cancellation', variant: 'destructive' });
+    }
+  };
+  const rejectCancellation = async (requestId: string, comment: string) => {
+    try {
+      const { error } = await supabase
+        .from('absence_requests')
+        .update({ status: 'approved', lead_comment: comment })
+        .eq('id', requestId);
+      if (error) throw error;
+      toast({ title: 'Cancellation rejected', description: 'The absence remains approved.' });
+      fetchData();
+    } catch (error) {
+      console.error('Error rejecting cancellation:', error);
+      toast({ title: 'Error', description: 'Could not reject cancellation', variant: 'destructive' });
+    }
+  };
     if (!confirm(`Are you sure you want to delete ${analystName}? This will permanently remove all their data including tasks and absence requests.`)) {
       return;
     }
@@ -189,7 +216,7 @@ export const LeadDashboard = () => {
         label: 'Rejected',
         variant: 'destructive' as const
       },
-      cancelled: {
+      canceled: {
         label: 'Cancelled',
         variant: 'outline' as const
       },
@@ -308,7 +335,7 @@ export const LeadDashboard = () => {
                           </p>
                           <p className="text-sm mt-1">{request.reason}</p>
                         </div>
-                        <Badge variant="secondary" className="bg-orange-500">Pending</Badge>
+                        <Badge variant="secondary" className="bg-orange-500">{request.status === 'cancel_pending' ? 'Cancellation requested' : 'Pending'}</Badge>
                       </div>
                       <div className="flex gap-2 mt-3">
                         <Button size="sm" onClick={() => setSelectedRequest(request)}>
@@ -459,7 +486,7 @@ export const LeadDashboard = () => {
           <Card>
             <CardHeader>
               <CardTitle>Processed Absence Requests</CardTitle>
-              <CardDescription>Approved, rejected or cancelled</CardDescription>
+              <CardDescription>Approved, rejected or canceled</CardDescription>
             </CardHeader>
             <CardContent>
               {processedRequests.length === 0 ? <p className="text-center text-muted-foreground py-4">No processed requests</p> : <div className="space-y-4">
@@ -504,10 +531,18 @@ export const LeadDashboard = () => {
 
       {/* Absence Approval Modal */}
       {selectedRequest && <AbsenceApprovalModal request={selectedRequest} onClose={() => setSelectedRequest(null)} onApprove={comment => {
-      approveRequest(selectedRequest.id, comment);
+      if (selectedRequest.status === 'cancel_pending') {
+        approveCancellation(selectedRequest.id, comment);
+      } else {
+        approveRequest(selectedRequest.id, comment);
+      }
       setSelectedRequest(null);
     }} onReject={comment => {
-      rejectRequest(selectedRequest.id, comment);
+      if (selectedRequest.status === 'cancel_pending') {
+        rejectCancellation(selectedRequest.id, comment);
+      } else {
+        rejectRequest(selectedRequest.id, comment);
+      }
       setSelectedRequest(null);
     }} />}
 
