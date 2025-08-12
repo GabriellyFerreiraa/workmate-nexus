@@ -25,6 +25,7 @@ export const AnalystDashboard = () => {
   const [showRequestForm, setShowRequestForm] = useState(false);
   const [showSelfTaskForm, setShowSelfTaskForm] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('tasks');
   const fetchData = async () => {
     if (!user) return;
     try {
@@ -251,7 +252,7 @@ export const AnalystDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card onClick={() => setActiveTab('tasks')} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setActiveTab('tasks')} tabIndex={0} className="cursor-pointer focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Pending Tasks</CardTitle>
             <AlertCircle className="h-4 w-4 text-muted-foreground" />
@@ -263,7 +264,7 @@ export const AnalystDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card onClick={() => setActiveTab('absences')} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setActiveTab('absences')} tabIndex={0} className="cursor-pointer focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Pending Requests</CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
@@ -275,7 +276,7 @@ export const AnalystDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card onClick={() => setActiveTab('team')} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setActiveTab('team')} tabIndex={0} className="cursor-pointer focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Online Analysts</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
@@ -287,7 +288,7 @@ export const AnalystDashboard = () => {
       </div>
 
       {/* Main Content */}
-      <Tabs defaultValue="tasks" className="space-y-4">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList>
           <TabsTrigger value="tasks">My Tasks</TabsTrigger>
           <TabsTrigger value="absences">Absence Requests</TabsTrigger>

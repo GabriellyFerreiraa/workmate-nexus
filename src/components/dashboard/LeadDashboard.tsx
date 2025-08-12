@@ -26,6 +26,7 @@ export const LeadDashboard = () => {
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [selectedAnalyst, setSelectedAnalyst] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('requests');
   const fetchData = async () => {
     if (!user) return;
     try {
@@ -232,7 +233,7 @@ export const LeadDashboard = () => {
   return <div className="space-y-6">
       {/* Quick Stats */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
+        <Card onClick={() => setActiveTab('requests')} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setActiveTab('requests')} tabIndex={0} className="cursor-pointer focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Pending Requests</CardTitle>
             <AlertCircle className="h-4 w-4 text-muted-foreground" />
@@ -242,7 +243,7 @@ export const LeadDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card onClick={() => setActiveTab('tasks')} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setActiveTab('tasks')} tabIndex={0} className="cursor-pointer focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Active Tasks</CardTitle>
             <Clock className="h-4 w-4 text-muted-foreground" />
@@ -254,7 +255,7 @@ export const LeadDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card onClick={() => setActiveTab('team')} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setActiveTab('team')} tabIndex={0} className="cursor-pointer focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Online Analysts</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
@@ -264,7 +265,7 @@ export const LeadDashboard = () => {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card onClick={() => setActiveTab('team')} onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setActiveTab('team')} tabIndex={0} className="cursor-pointer focus:outline-none focus:ring-2 focus:ring-[hsl(var(--primary))]">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Analysts</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
@@ -276,7 +277,7 @@ export const LeadDashboard = () => {
       </div>
 
       {/* Main Content */}
-      <Tabs defaultValue="requests" className="space-y-4">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList>
           <TabsTrigger value="requests">Absence Requests</TabsTrigger>
           <TabsTrigger value="tasks">Task Management</TabsTrigger>
