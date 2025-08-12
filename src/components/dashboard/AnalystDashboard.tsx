@@ -472,7 +472,9 @@ export const AnalystDashboard = () => {
                         {todaySchedule?.active ? (
                           <div className="text-xs text-muted-foreground">
                             <p>Schedule: {String(analyst.start_time).slice(0,5)} - {String(analyst.end_time).slice(0,5)}</p>
-                            <p>Mode: {todaySchedule.mode === 'home' ? 'Home' : 'Office'}</p>
+                            <p>Lunch: {analyst.lunch_start ? String(analyst.lunch_start).slice(0,5) : '—'}</p>
+                            <p>Break 1: {analyst.break1_start ? String(analyst.break1_start).slice(0,5) : '—'}</p>
+                            <p>Break 2: {analyst.break2_start ? String(analyst.break2_start).slice(0,5) : '—'}</p>
                           </div>
                         ) : (
                           <div className="text-xs text-muted-foreground">Not scheduled today</div>
