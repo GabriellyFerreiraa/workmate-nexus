@@ -427,9 +427,7 @@ export const LeadDashboard = () => {
                        </div>
                        {todaySchedule?.active && <div className="text-sm text-muted-foreground mb-3">
                            <p>Schedule: {analyst.start_time} - {analyst.end_time}</p>
-                            <p>Lunch: {analyst.lunch_start ? analyst.lunch_start.slice(0, 5) : '—'}</p>
-                            <p>Break 1: {analyst.break1_start ? analyst.break1_start.slice(0, 5) : '—'}</p>
-                            <p>Break 2: {analyst.break2_start ? analyst.break2_start.slice(0, 5) : '—'}</p>
+                           <p>Mode: {todaySchedule.mode === 'home' ? 'Home' : 'Office'}</p>
                          </div>}
                        {!todaySchedule?.active && <div className="text-sm text-muted-foreground mb-3">
                            <p>Not scheduled today</p>
