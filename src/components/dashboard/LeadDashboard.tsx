@@ -238,7 +238,7 @@ export const LeadDashboard = () => {
             <AlertCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{pendingRequests.length}</div>
+            <div className="text-2xl font-bold text-[hsl(var(--destructive))]">{pendingRequests.length}</div>
           </CardContent>
         </Card>
 
@@ -248,7 +248,7 @@ export const LeadDashboard = () => {
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-2xl font-bold text-[hsl(var(--warning))]">
               {allTasks.filter(task => task.status !== 'completed').length}
             </div>
           </CardContent>
@@ -260,7 +260,7 @@ export const LeadDashboard = () => {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{onlineAnalysts.length}</div>
+            <div className="text-2xl font-bold text-[hsl(var(--success))]">{onlineAnalysts.length}</div>
           </CardContent>
         </Card>
 
@@ -278,7 +278,7 @@ export const LeadDashboard = () => {
       {/* Main Content */}
       <Tabs defaultValue="requests" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="requests">Pending Requests</TabsTrigger>
+          <TabsTrigger value="requests">Absence Requests</TabsTrigger>
           <TabsTrigger value="tasks">Task Management</TabsTrigger>
           <TabsTrigger value="team">Team</TabsTrigger>
           <TabsTrigger value="reports">Reports</TabsTrigger>

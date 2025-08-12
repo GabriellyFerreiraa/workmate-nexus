@@ -21,6 +21,7 @@ export const AnalystDashboard = () => {
   const [absenceRequests, setAbsenceRequests] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [onlineAnalysts, setOnlineAnalysts] = useState([]);
+  const [approvedAbsences, setApprovedAbsences] = useState([]);
   const [showRequestForm, setShowRequestForm] = useState(false);
   const [showSelfTaskForm, setShowSelfTaskForm] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -41,13 +42,25 @@ export const AnalystDashboard = () => {
         ascending: false
       });
 
-      // Fetch online analysts (simplified for now)
-      const {
-        data: analysts
-      } = await supabase.from('profiles').select('*').neq('user_id', user.id);
+      // Fetch all analysts (team) excluding current user
+      const { data: analysts } = await supabase
+        .from('profiles')
+        .select('*')
+        .neq('user_id', user.id);
+
+      // Fetch approved absences for today (to exclude from online count)
+      const today = new Date().toISOString().split('T')[0];
+      const { data: absencesToday } = await supabase
+        .from('absence_requests')
+        .select('*')
+        .eq('status', 'approved')
+        .lte('start_date', today)
+        .gte('end_date', today);
+
       setAbsenceRequests(absences || []);
       setTasks(userTasks || []);
       setOnlineAnalysts(analysts || []);
+      setApprovedAbsences(absencesToday || []);
     } catch (error) {
       console.error('Error fetching data:', error);
       toast({
@@ -173,6 +186,24 @@ export const AnalystDashboard = () => {
       variant: 'outline' as const
     };
   };
+
+  const isAnalystOnline = (analyst: any) => {
+    const now = new Date();
+    const today = now.toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase();
+    const todaySchedule = analyst.work_days?.[today];
+    if (!todaySchedule?.active) return false;
+
+    // Exclude analysts with approved absence today
+    const hasAbsenceToday = approvedAbsences.some((a: any) => a.analyst_id === analyst.user_id);
+    if (hasAbsenceToday) return false;
+
+    // Check current time within work hours
+    const currentTime = now.toTimeString().slice(0, 5); // HH:MM
+    const startTime = (analyst.start_time || '09:00').slice(0, 5);
+    const endTime = (analyst.end_time || '18:00').slice(0, 5);
+    return currentTime >= startTime && currentTime <= endTime;
+  };
+
   const getCurrentShiftInfo = () => {
     if (!userProfile?.work_days) return null;
     const today = new Date().toLocaleDateString('en-US', {
@@ -195,6 +226,7 @@ export const AnalystDashboard = () => {
     };
   };
   const shiftInfo = getCurrentShiftInfo();
+  const onlineNow = onlineAnalysts.filter((a: any) => isAnalystOnline(a));
   if (loading) {
     return <div className="p-6">Loading dashboard...</div>;
   }
@@ -225,7 +257,7 @@ export const AnalystDashboard = () => {
             <AlertCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-2xl font-bold text-[hsl(var(--warning))]">
               {tasks.filter(task => task.status !== 'completed').length}
             </div>
           </CardContent>
@@ -237,7 +269,7 @@ export const AnalystDashboard = () => {
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-2xl font-bold text-[hsl(var(--destructive))]">
               {absenceRequests.filter(req => req.status === 'pending').length}
             </div>
           </CardContent>
@@ -249,7 +281,7 @@ export const AnalystDashboard = () => {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{onlineAnalysts.length}</div>
+            <div className="text-2xl font-bold text-[hsl(var(--success))]">{onlineNow.length}</div>
           </CardContent>
         </Card>
       </div>
@@ -366,26 +398,40 @@ export const AnalystDashboard = () => {
         <TabsContent value="team" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Online Team</CardTitle>
+              <CardTitle>Team Information</CardTitle>
               <CardDescription>
-                Currently connected analysts
+                Shift information for each analyst
               </CardDescription>
             </CardHeader>
             <CardContent>
               {onlineAnalysts.length === 0 ? <p className="text-center text-muted-foreground py-4">
                   No other analysts connected
                 </p> : <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {onlineAnalysts.map(analyst => <div key={analyst.id} className="p-3 border rounded-lg bg-[hsl(var(--panel))]">
-                      <div className="flex items-center gap-3">
-                        <UserAvatar src={analyst.avatar_url} name={analyst.name} size="sm" />
-                        <div>
-                          <p className="font-medium">{analyst.name}</p>
-                          <p className="text-xs text-muted-foreground capitalize">
-                            {analyst.role}
-                          </p>
+                  {onlineAnalysts.map((analyst) => {
+                    const isOnline = onlineNow.includes(analyst);
+                    const today = new Date().toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase();
+                    const todaySchedule = analyst.work_days?.[today];
+                    return (
+                      <div key={analyst.id} className="p-4 border rounded-lg bg-[hsl(var(--panel))]">
+                        <div className="flex items-center gap-3 mb-2">
+                          <div className={`h-3 w-3 rounded-full ring-2 ring-background ${isOnline ? 'bg-[hsl(var(--success))]' : 'bg-muted'}`} />
+                          <UserAvatar src={analyst.avatar_url} name={analyst.name} size="sm" />
+                          <div>
+                            <p className="font-medium">{analyst.name}</p>
+                            <p className="text-xs text-muted-foreground capitalize">{analyst.role}</p>
+                          </div>
                         </div>
+                        {todaySchedule?.active ? (
+                          <div className="text-xs text-muted-foreground">
+                            <p>Schedule: {String(analyst.start_time).slice(0,5)} - {String(analyst.end_time).slice(0,5)}</p>
+                            <p>Mode: {todaySchedule.mode === 'home' ? 'Home' : 'Office'}</p>
+                          </div>
+                        ) : (
+                          <div className="text-xs text-muted-foreground">Not scheduled today</div>
+                        )}
                       </div>
-                    </div>)}
+                    );
+                  })}
                 </div>}
             </CardContent>
           </Card>
