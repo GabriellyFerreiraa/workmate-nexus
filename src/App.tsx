@@ -10,7 +10,7 @@ import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
-import BackgroundFX from "@/components/background/BackgroundFX";
+
 
 const queryClient = new QueryClient();
 
@@ -71,8 +71,6 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <ThemedWrapper>
-              {/* Interactive background behind all content */}
-              <BackgroundFX />
               <div className="relative z-10">
                 <Routes>
                   <Route path="/" element={
