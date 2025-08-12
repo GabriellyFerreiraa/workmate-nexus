@@ -519,12 +519,6 @@ export const AnalystDashboard = () => {
                             )}
                           </div>
                         </div>
-                        <div className="flex gap-2 ml-4">
-                          <Button size="sm" variant="outline" onClick={() => deleteTask(task.id)} className="bg-[hsl(var(--panel))] hover:bg-[hsl(var(--panel))]">
-                            <X className="h-4 w-4 mr-1" />
-                            Remove
-                          </Button>
-                        </div>
                       </div>)}
                 </div>}
             </CardContent>
@@ -555,10 +549,6 @@ export const AnalystDashboard = () => {
                                   Request Cancellation
                                 </Button>
                               )}
-                              <Button size="sm" variant="outline" onClick={() => deleteAbsenceRequest(request.id)} className="bg-[hsl(var(--panel))] hover:bg-[hsl(var(--panel))]">
-                                <X className="h-4 w-4 mr-1" />
-                                Remove
-                              </Button>
                             </div>
                         </div>
                         {request.lead_comment && <div className="mt-3 p-3 bg-muted rounded">
