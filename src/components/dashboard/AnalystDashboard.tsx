@@ -13,6 +13,7 @@ import { AbsenceRequestForm } from '@/components/forms/AbsenceRequestForm';
 import { SelfAssignTaskForm } from '@/components/forms/SelfAssignTaskForm';
 import { TeamCalendar } from '@/components/calendar/TeamCalendar';
 import { UserAvatar } from '@/components/UserAvatar';
+import { CancellationRequestModal } from '@/components/modals/CancellationRequestModal';
 export const AnalystDashboard = () => {
   const {
     userProfile,
@@ -26,6 +27,8 @@ export const AnalystDashboard = () => {
   const [showSelfTaskForm, setShowSelfTaskForm] = useState(false);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('tasks');
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [selectedRequestId, setSelectedRequestId] = useState<string | null>(null);
   const fetchData = async () => {
     if (!user) return;
     try {
@@ -153,9 +156,8 @@ export const AnalystDashboard = () => {
     }
   };
 
-  const requestCancellation = async (requestId: string) => {
+  const requestCancellation = async (requestId: string, reason: string) => {
     try {
-      const reason = window.prompt('Please provide a reason for the cancellation request:');
       if (!reason || !reason.trim()) {
         toast({ title: 'Cancellation reason required', description: 'Please enter a reason to proceed.' });
         return;
@@ -547,7 +549,7 @@ export const AnalystDashboard = () => {
                                 {getStatusBadge(request.status).label}
                               </Badge>
                               {request.status === 'approved' && (
-                                <Button size="sm" onClick={() => requestCancellation(request.id)}>
+                                <Button size="sm" onClick={() => { setSelectedRequestId(request.id); setShowCancelModal(true); }}>
                                   Request Cancellation
                                 </Button>
                               )}
@@ -583,5 +585,17 @@ export const AnalystDashboard = () => {
       setShowSelfTaskForm(false);
       fetchData();
     }} />}
+
+      {/* Cancellation Request Modal */}
+      {showCancelModal && selectedRequestId && (
+        <CancellationRequestModal
+          onClose={() => { setShowCancelModal(false); setSelectedRequestId(null); }}
+          onConfirm={async (reason) => {
+            await requestCancellation(selectedRequestId, reason);
+            setShowCancelModal(false);
+            setSelectedRequestId(null);
+          }}
+        />
+      )}
     </div>;
 };
