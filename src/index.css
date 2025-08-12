@@ -191,6 +191,18 @@ All colors MUST be HSL.
   }
 }
 
+/* Global Scrollbar Styling (uses semantic HSL tokens) */
+@layer base {
+  /* Firefox */
+  * { scrollbar-width: thin; scrollbar-color: hsl(var(--muted-foreground) / 0.5) hsl(var(--secondary)); }
+
+  /* WebKit */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: hsl(var(--secondary)); }
+  ::-webkit-scrollbar-thumb { background-color: hsl(var(--muted-foreground) / 0.5); border-radius: 9999px; border: 2px solid hsl(var(--secondary)); }
+  ::-webkit-scrollbar-thumb:hover { background-color: hsl(var(--muted-foreground) / 0.7); }
+}
+
 /* Interactive mouse-follow background overlays */
 @layer components {
   .interactive-bg { /* container only */ }
